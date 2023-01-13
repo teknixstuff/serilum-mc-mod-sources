@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "tntbreaksbedrock",
+  "version": "3.0",
+
+  "name": "TNT Breaks Bedrock",
+  "description": "Allows TNT to break bedrock. Now you've finally got easy access to the nether roof.",
+  "authors": [ "Rick South" ],
+  "contact": {
+    "homepage": "https://curseforge.com/minecraft/mc-mods/tnt-breaks-bedrock",
+    "sources": "https://github.com/ricksouth/serilum-mc-mod-sources/tree/main/sources/TNT%20Breaks%20Bedrock",
+    "issues": "https://github.com/ricksouth/serilum-mc-mods/labels/Mod:%20TNT%20Breaks%20Bedrock"
+  },
+
+  "license": "All Right Reserved",
+  "icon": "icon.png",
+
+  "environment": "*",
+  "entrypoints": { "main": [ "com.natamus.tntbreaksbedrock.ModFabric" ] },
+
+  "depends": {
+    "fabricloader": ">=0.12.5",
+    "fabric": "*",
+    "minecraft": ">=1.19",
+    "java": ">=17",
+    "collective": ">=6.7"
+  },
+
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/vFren9YzzN",
+        "Donate <3" : "https://ricksouth.com/donate"
+      }
+    }
+  },
+
+  "contributors": [
+	  " ",
+	  "Thank you very much to my Membership sponsors for supporting the development of this mod!",
+	  " ",
+	  "If you would like to contribute too, check out https://ricksouth.com/donate.",
+	  " ",
+	  "Membership sponsors:",
+	  " Adam E",
+	  " Alister",
+	  " aternosorg",
+	  " Cherriesaurus",
+	  " Kreezxil",
+	  " Michael W. S.",
+	  " Mir3JonCZ",
+	  " Rebecca Hb.",
+	  " Robert Gilbert",
+	  " Shana Gitnick",
+	  " Sija",
+	  " Tyler Behl",
+	  " Wendi S"
+  ]
+}
