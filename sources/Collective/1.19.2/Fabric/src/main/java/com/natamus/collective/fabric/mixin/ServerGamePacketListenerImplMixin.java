@@ -34,7 +34,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.concurrent.CompletableFuture;
 
-@Mixin(value = ServerGamePacketListenerImpl.class, priority = 1001, remap = false)
+@Mixin(value = ServerGamePacketListenerImpl.class, priority = 1001)
 public abstract class ServerGamePacketListenerImplMixin {
     @Shadow public ServerPlayer player;
 
