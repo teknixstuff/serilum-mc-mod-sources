@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.natamus.biggerspongeabsorptionradius.forge.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "biggerspongeabsorptionradius_forge.refmap.json",
+  "mixins": [
+    "SpongeBlockMixin"
+  ],
+  "client": [
+  ],
+  "server": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

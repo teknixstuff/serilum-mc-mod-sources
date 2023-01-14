@@ -1,0 +1,77 @@
+/*
+ * This is the latest source code of Hoe Tweaks.
+ * Minecraft version: 1.19.2.
+ *
+ * Please don't distribute without permission.
+ * For all Minecraft modding projects, feel free to visit my profile page on CurseForge or Modrinth.
+ *  CurseForge: https://curseforge.com/members/serilum/projects
+ *  Modrinth: https://modrinth.com/user/serilum
+ *  Overview: https://serilum.com/
+ *
+ * If you are feeling generous and would like to support the development of the mods, you can!
+ *  https://ricksouth.com/donate contains all the information. <3
+ *
+ * Thanks for looking at the source code! Hope it's of some use to your project. Happy modding!
+ */
+
+package com.natamus.hoetweaks.config;
+
+import com.natamus.collective.config.DuskConfig;
+import com.natamus.hoetweaks.util.Reference;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
+public class ConfigHandler extends DuskConfig {
+	public static HashMap<String, List<String>> configMetaData = new HashMap<String, List<String>>();
+
+	@Entry public static boolean onlyUntillWithOtherHandEmpty = true;
+	@Entry public static double cropBlockBreakSpeedModifier = 8.0;
+	@Entry public static boolean mustCrouchToHaveBiggerHoeRange = true;
+	@Entry public static int woodenTierHoeRange = 0;
+	@Entry public static int stoneTierHoeRange = 1;
+	@Entry public static int goldTierHoeRange = 2;
+	@Entry public static int ironTierHoeRange = 2;
+	@Entry public static int diamondTierHoeRange = 3;
+	@Entry public static int netheriteTierHoeRange = 4;
+
+	public static void initConfig() {
+		configMetaData.put("onlyUntillWithOtherHandEmpty", Arrays.asList(
+			"When enabled, only allows the un-till function to work when the other hand is empty. Allows placing seeds with hoe in other hand."
+		));
+		configMetaData.put("cropBlockBreakSpeedModifier", Arrays.asList(
+			"How much quicker a cropblock (pumpkin/melon) is broken than by default.",
+			"min: 0.0, max: 20.0"
+		));
+		configMetaData.put("mustCrouchToHaveBiggerHoeRange", Arrays.asList(
+			"Whether the bigger hoe range should only be used if the player is crouching when right-clicking the center block."
+		));
+		configMetaData.put("woodenTierHoeRange", Arrays.asList(
+			"The wooden hoe till range (default while crouching). 0 = 1x1",
+			"min: 0, max: 32"
+		));
+		configMetaData.put("stoneTierHoeRange", Arrays.asList(
+			"The wooden hoe till range (default while crouching). 1 = 3x3",
+			"min: 0, max: 32"
+		));
+		configMetaData.put("goldTierHoeRange", Arrays.asList(
+			"The wooden hoe till range (default while crouching). 2 = 5x5",
+			"min: 0, max: 32"
+		));
+		configMetaData.put("ironTierHoeRange", Arrays.asList(
+			"The wooden hoe till range (default while crouching). 2 = 5x5",
+			"min: 0, max: 32"
+		));
+		configMetaData.put("diamondTierHoeRange", Arrays.asList(
+			"The wooden hoe till range (default while crouching). 3 = 7x7",
+			"min: 0, max: 32"
+		));
+		configMetaData.put("netheriteTierHoeRange", Arrays.asList(
+			"The wooden hoe till range (default while crouching). 4 = 9x9",
+			"min: 0, max: 32"
+		));
+
+		DuskConfig.init(Reference.NAME, Reference.MOD_ID, ConfigHandler.class);
+	}
+}
