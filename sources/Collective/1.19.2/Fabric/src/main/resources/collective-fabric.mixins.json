@@ -21,6 +21,7 @@
     "MagmaCubeMixin",
     "MinecraftServerMixin",
     "NaturalSpawnerMixin",
+    "PistonBaseBlockMixin",
     "PlayerListMixin",
     "PlayerMixin",
     "PortalShapeMixin",
