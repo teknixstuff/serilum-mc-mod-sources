@@ -25,8 +25,8 @@ import net.minecraft.world.level.Level;
 public class CollectivePistonEvents {
 	private CollectivePistonEvents() { }
 	 
-    public static final Event<Explosion_Detonate> PRE_PISTON_ACTIVATE = EventFactory.createArrayBacked(Explosion_Detonate.class, callbacks -> (level, blockPos, direction, isExtending) -> {
-        for (Explosion_Detonate callback : callbacks) {
+    public static final Event<Piston_Activate> PRE_PISTON_ACTIVATE = EventFactory.createArrayBacked(Piston_Activate.class, callbacks -> (level, blockPos, direction, isExtending) -> {
+        for (Piston_Activate callback : callbacks) {
         	if (!callback.onPistonActivate(level, blockPos, direction, isExtending)) {
 				return false;
 			}
@@ -35,7 +35,7 @@ public class CollectivePistonEvents {
     });
     
 	@FunctionalInterface
-	public interface Explosion_Detonate {
+	public interface Piston_Activate {
 		 boolean onPistonActivate(Level level, BlockPos blockPos, Direction direction, boolean isExtending);
 	}
 }

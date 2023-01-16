@@ -12,6 +12,7 @@
     "BlockMixin",
     "BoneMealItemMixin",
     "CommandsMixin",
+    "EntityTypeMixin",
     "ExplosionMixin",
     "FishingHookMixin",
     "ItemEntityMixin",

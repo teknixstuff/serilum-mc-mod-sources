@@ -191,4 +191,9 @@ public class EntityFunctions {
 		}
 		return entity.getTags().contains(CollectiveReference.MOD_ID + ".fromspawner");
 	}
+
+	public static void setEntitySize(Entity entity, EntityDimensions entityDimensions, float eyeHight) {
+		entity.dimensions = entityDimensions;
+		entity.eyeHeight = eyeHight;
+	}
 }

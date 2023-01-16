@@ -18,6 +18,7 @@ package com.natamus.collective.fabric.mixin;
 
 import com.mojang.authlib.minecraft.UserApiService;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
+import com.natamus.collective.data.Constants;
 import com.natamus.collective.fabric.callbacks.CollectiveLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
@@ -40,7 +41,7 @@ public class MinecraftMixin {
     @Inject(method = "createUserApiService", at = @At(value = "HEAD"), cancellable = true)
     public void Minecraft_createUserApiService(YggdrasilAuthenticationService yggdrasilAuthenticationService, GameConfig gameConfig, CallbackInfoReturnable<UserApiService> cir) {
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-            System.out.println("Failed to verify authentication");
+            Constants.LOG.info("Failed to verify authentication");
             cir.setReturnValue(UserApiService.OFFLINE);
         }
     }

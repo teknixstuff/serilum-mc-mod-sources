@@ -17,6 +17,7 @@
 package com.natamus.collective.functions;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.natamus.collective.data.Constants;
 import com.natamus.collective.util.CollectiveReference;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -252,7 +253,7 @@ public class PlayerFunctions {
 		int newlinecount = gearspl.length;
 
 		if (newlinecount < 40) {
-			System.out.println("[Error] (Collective) setPlayerGearFromString: The gear config does not contain 40 lines and is invalid.");
+			Constants.LOG.info("[Error] (Collective) setPlayerGearFromString: The gear config does not contain 40 lines and is invalid.");
 			return;
 		}
 
@@ -268,7 +269,7 @@ public class PlayerFunctions {
 
 			String[] lspl = line.split(" : ");
 			if (lspl.length != 2) {
-				System.out.println("[Error] (Collective) setPlayerGearFromString: The line " + line + " is invalid.");
+				Constants.LOG.info("[Error] (Collective) setPlayerGearFromString: The line " + line + " is invalid.");
 				return;
 			}
 
@@ -302,7 +303,7 @@ public class PlayerFunctions {
 			}
 
 			if (itemstack == null) {
-				System.out.println("[Error] (Collective) setPlayerGearFromString: Unable to get the correct itemstack data from data " + data);
+				Constants.LOG.info("[Error] (Collective) setPlayerGearFromString: Unable to get the correct itemstack data from data " + data);
 				return;
 			}
 
