@@ -115,7 +115,11 @@ public class DoorEvent {
 		}
 	}
 	
-	public static boolean onDoorClick(Level world, Player player, InteractionHand hand, BlockPos cpos, BlockHitResult hitVec) {
+	public static boolean onDoorClick(Level level, Player player, InteractionHand hand, BlockPos cpos, BlockHitResult hitVec) {
+		if (level.isClientSide) {
+			return true;
+		}
+
 		if (!hand.equals(InteractionHand.MAIN_HAND)) {
 			return true;
 		}
@@ -124,7 +128,7 @@ public class DoorEvent {
 			return true;
 		}
 		
-		BlockState clickstate = world.getBlockState(cpos);
+		BlockState clickstate = level.getBlockState(cpos);
 
 		if (!Util.isDoorBlock(clickstate)) {
 			return true;
@@ -133,6 +137,6 @@ public class DoorEvent {
 			return true;
 		}
 
-		return !Util.processDoor(player, world, cpos, clickstate, null, true);
+		return !Util.processDoor(player, level, cpos, clickstate, null, true);
 	}
 }

@@ -20,7 +20,7 @@ import com.natamus.collective.config.CollectiveConfigHandler;
 import com.natamus.collective.data.GlobalVariables;
 import com.natamus.collective.fakeplayer.FakePlayer;
 import com.natamus.collective.fakeplayer.FakePlayerFactory;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -54,28 +54,28 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class ItemFunctions {
-	public static void generateEntityDropsFromLootTable(Level world) {
-		MinecraftServer server = world.getServer();
+	public static void generateEntityDropsFromLootTable(Level level) {
+		MinecraftServer server = level.getServer();
 		if (server == null) {
 			return;
 		}
 		
 		GlobalVariables.entitydrops = new HashMap<EntityType<?>, List<Item>>();
 		
-		FakePlayer fakeplayer = FakePlayerFactory.getMinecraft((ServerLevel)world);
+		FakePlayer fakeplayer = FakePlayerFactory.getMinecraft((ServerLevel)level);
 		Vec3 vec = new Vec3(0, 0, 0);
 		
 		ItemStack lootingsword = new ItemStack(Items.DIAMOND_SWORD, 1);
 		lootingsword.enchant(Enchantments.MOB_LOOTING, 10);
 		fakeplayer.setItemSlot(EquipmentSlot.MAINHAND, lootingsword);
 		
-		Collection<Entry<ResourceKey<EntityType<?>>, EntityType<?>>> entitytypes = BuiltInRegistries.ENTITY_TYPE.entrySet();
+		Collection<Entry<ResourceKey<EntityType<?>>, EntityType<?>>> entitytypes = level.registryAccess().registryOrThrow(Registries.ENTITY_TYPE).entrySet();
 		for (Entry<ResourceKey<EntityType<?>>, EntityType<?>> entry : entitytypes) {
 			EntityType<?> type = entry.getValue();
 			if (type == null) {
 				continue;
 			}
-			Entity entity = type.create(world);
+			Entity entity = type.create(level);
 			if (!(entity instanceof LivingEntity)) {
 				continue;
 			}
@@ -84,8 +84,8 @@ public class ItemFunctions {
 			ResourceLocation lootlocation = le.getType().getDefaultLootTable();
 			
 			LootTable loottable = server.getLootTables().get(lootlocation);
-			LootContext context = new LootContext.Builder((ServerLevel) world)
-	                .withRandom(world.getRandom())
+			LootContext context = new LootContext.Builder((ServerLevel) level)
+	                .withRandom(level.getRandom())
 	                .withLuck(1000000F)
 	                .withParameter(LootContextParams.THIS_ENTITY, entity)
 	                .withParameter(LootContextParams.ORIGIN, vec)
