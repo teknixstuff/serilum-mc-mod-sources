@@ -16,11 +16,8 @@
 
 package com.natamus.humblingbundle.events;
 
-import com.natamus.collective.data.GlobalVariables;
-import com.natamus.collective.functions.ItemFunctions;
 import com.natamus.collective.functions.TaskFunctions;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -33,14 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntityDroppingEvent {
-	public static void onWorldLoad(ServerLevel level) {
-		if (GlobalVariables.entitydrops != null) {
-			return;
-		}
-
-		ItemFunctions.generateEntityDropsFromLootTable(level);
-	}
-
 	public static void mobItemDrop(Level level, Entity entity, DamageSource damageSource) {
 		if (level.isClientSide) {
 			return;

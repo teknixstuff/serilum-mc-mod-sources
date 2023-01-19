@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="humblingbundle"
-version="2.0"
+version="2.1"
 displayName="Humbling Bundle"
 displayURL="https://curseforge.com/minecraft/mc-mods/humbling-bundle"
 authors="Rick South"
