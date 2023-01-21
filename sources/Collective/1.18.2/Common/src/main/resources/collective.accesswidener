@@ -13,3 +13,6 @@ accessible field net/minecraft/world/entity/LivingEntity DATA_HEALTH_ID Lnet/min
 accessible field net/minecraft/world/entity/projectile/FishingHook biting Z
 accessible field net/minecraft/world/entity/Entity dimensions Lnet/minecraft/world/entity/EntityDimensions;
 accessible field net/minecraft/world/entity/Entity eyeHeight F
+accessible field net/minecraft/world/entity/Mob goalSelector Lnet/minecraft/world/entity/ai/goal/GoalSelector;
+accessible field net/minecraft/world/entity/Mob targetSelector Lnet/minecraft/world/entity/ai/goal/GoalSelector;
+accessible method net/minecraft/world/damagesource/DamageSource <init> (Ljava/lang/String;)V

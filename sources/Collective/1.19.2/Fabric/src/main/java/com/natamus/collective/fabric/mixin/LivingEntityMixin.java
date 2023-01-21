@@ -48,12 +48,12 @@ public abstract class LivingEntityMixin {
 		CollectiveEntityEvents.LIVING_TICK.invoker().onTick(world, entity);
 	}
 	
-	@Inject(method = "die(Lnet/minecraft/world/damagesource/DamageSource;)V", at = @At(value = "HEAD")) 
+	@Inject(method = "die(Lnet/minecraft/world/damagesource/DamageSource;)V", at = @At(value = "HEAD"), cancellable = true)
 	public void LivingEntity_die(DamageSource damageSource, CallbackInfo ci) {
 		Entity entity = (Entity)(Object)this;
-		Level world = entity.getCommandSenderWorld();
-		
-		CollectiveEntityEvents.LIVING_ENTITY_DEATH.invoker().onDeath(world, entity, damageSource);
+		if (!CollectiveEntityEvents.LIVING_ENTITY_DEATH.invoker().onDeath(entity.getCommandSenderWorld(), entity, damageSource)) {
+			ci.cancel();
+		}
 	}
 	
 	@Inject(method = "calculateFallDamage(FF)I", at = @At(value = "RETURN"), cancellable = true)

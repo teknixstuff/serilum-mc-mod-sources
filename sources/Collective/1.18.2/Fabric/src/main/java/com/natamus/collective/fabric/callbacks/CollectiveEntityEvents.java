@@ -20,6 +20,7 @@ import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.level.Level;
 
 public final class CollectiveEntityEvents {
@@ -33,8 +34,11 @@ public final class CollectiveEntityEvents {
 	
     public static final Event<CollectiveEntityEvents.Living_Entity_Death> LIVING_ENTITY_DEATH = EventFactory.createArrayBacked(CollectiveEntityEvents.Living_Entity_Death.class, callbacks -> (world, entity, source) -> {
         for (CollectiveEntityEvents.Living_Entity_Death callback : callbacks) {
-        	callback.onDeath(world, entity, source);
+        	if (!callback.onDeath(world, entity, source)) {
+				return false;
+			}
         }
+		return true;
     }); 
     
     public static final Event<CollectiveEntityEvents.Pre_Entity_Join_World> PRE_ENTITY_JOIN_WORLD = EventFactory.createArrayBacked(CollectiveEntityEvents.Pre_Entity_Join_World.class, callbacks -> (world, entity) -> {
@@ -96,6 +100,15 @@ public final class CollectiveEntityEvents {
 		}
 		return true;
 	});
+
+	public static final Event<Entity_On_Lightning_Strike> ON_ENTITY_LIGHTNING_STRIKE = EventFactory.createArrayBacked(Entity_On_Lightning_Strike.class, callbacks -> (world, entity, lightningBolt) -> {
+		for (Entity_On_Lightning_Strike callback : callbacks) {
+			if (!callback.onLightningStrike(world, entity, lightningBolt)) {
+				return false;
+			}
+		}
+		return true;
+	});
     
 	@FunctionalInterface
 	public interface Living_Tick {
@@ -104,7 +117,7 @@ public final class CollectiveEntityEvents {
     
 	@FunctionalInterface
 	public interface Living_Entity_Death {
-		 void onDeath(Level world, Entity entity, DamageSource source);
+		 boolean onDeath(Level world, Entity entity, DamageSource source);
 	}
 	
 	@FunctionalInterface
@@ -140,5 +153,10 @@ public final class CollectiveEntityEvents {
 	@FunctionalInterface
 	public interface Entity_On_Teleport_Command {
 		boolean onTeleportCommand(Level world, Entity entity, double targetX, double targetY, double targetZ);
+	}
+
+	@FunctionalInterface
+	public interface Entity_On_Lightning_Strike {
+		boolean onLightningStrike(Level world, Entity entity, LightningBolt bolt);
 	}
 }

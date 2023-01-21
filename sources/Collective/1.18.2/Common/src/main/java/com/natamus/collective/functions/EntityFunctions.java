@@ -24,6 +24,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.MushroomCow;
 import net.minecraft.world.entity.animal.Pig;
@@ -195,5 +196,12 @@ public class EntityFunctions {
 	public static void setEntitySize(Entity entity, EntityDimensions entityDimensions, float eyeHight) {
 		entity.dimensions = entityDimensions;
 		entity.eyeHeight = eyeHight;
+	}
+
+	public static GoalSelector getGoalSelector(Mob mob) {
+		return mob.goalSelector;
+	}
+	public static GoalSelector getTargetSelector(Mob mob) {
+		return mob.targetSelector;
 	}
 }

@@ -21,8 +21,11 @@ import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+
+import javax.annotation.Nullable;
 
 public final class CollectivePlayerEvents {
 	private CollectivePlayerEvents() { }
@@ -55,6 +58,12 @@ public final class CollectivePlayerEvents {
         
         return -1;
     });
+
+    public static final Event<Player_Picked_Up_Item> ON_ITEM_PICKED_UP = EventFactory.createArrayBacked(Player_Picked_Up_Item.class, callbacks -> (level, player, itemStack) -> {
+        for (Player_Picked_Up_Item callback : callbacks) {
+        	callback.onItemPickedUp(level, player, itemStack);
+        }
+    });
     
     public static final Event<CollectivePlayerEvents.Player_Logged_In> PLAYER_LOGGED_IN = EventFactory.createArrayBacked(CollectivePlayerEvents.Player_Logged_In.class, callbacks -> (world, player) -> {
         for (CollectivePlayerEvents.Player_Logged_In callback : callbacks) {
@@ -86,6 +95,11 @@ public final class CollectivePlayerEvents {
 	@FunctionalInterface
 	public interface Player_Dig_Speed_Calc {
 		 float onDigSpeedCalc(Level world, Player player, float digSpeed, BlockState state);
+	}
+
+	@FunctionalInterface
+	public interface Player_Picked_Up_Item {
+		 void onItemPickedUp(Level level, Player player, @Nullable ItemStack itemStack);
 	}
 	
 	@FunctionalInterface
