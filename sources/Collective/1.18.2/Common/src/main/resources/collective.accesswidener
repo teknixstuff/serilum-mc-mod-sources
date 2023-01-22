@@ -16,3 +16,5 @@ accessible field net/minecraft/world/entity/Entity eyeHeight F
 accessible field net/minecraft/world/entity/Mob goalSelector Lnet/minecraft/world/entity/ai/goal/GoalSelector;
 accessible field net/minecraft/world/entity/Mob targetSelector Lnet/minecraft/world/entity/ai/goal/GoalSelector;
 accessible method net/minecraft/world/damagesource/DamageSource <init> (Ljava/lang/String;)V
+accessible field net/minecraft/world/item/Item category Lnet/minecraft/world/item/CreativeModeTab;
+mutable field net/minecraft/world/item/Item category Lnet/minecraft/world/item/CreativeModeTab;
