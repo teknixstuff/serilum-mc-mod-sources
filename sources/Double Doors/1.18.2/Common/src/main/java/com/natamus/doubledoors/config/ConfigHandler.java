@@ -27,7 +27,7 @@ public class ConfigHandler extends DuskConfig {
 	public static HashMap<String, List<String>> configMetaData = new HashMap<String, List<String>>();
 
 	@Entry public static boolean enableRecursiveOpening = true;
-	@Entry public static int recursiveOpeningMaxBlocksDistance = 10;
+	@Entry(min = 1, max = 64) public static int recursiveOpeningMaxBlocksDistance = 10;
 	@Entry public static boolean enableDoors = true;
 	@Entry public static boolean enableFenceGates = true;
 	@Entry public static boolean enableTrapdoors = true;
@@ -37,8 +37,7 @@ public class ConfigHandler extends DuskConfig {
 			"Whether the recursive opening feature should be enabled. This allows you to for example build a giant door with trapdoors which will all open at the same time, as long as they are connected. The 'recursiveOpeningMaxBlocksDistance' config option determines how far the function should search."
 		));
 		configMetaData.put("recursiveOpeningMaxBlocksDistance", Arrays.asList(
-			"How many blocks the recursive function should search when 'enableRecursiveOpening' is enabled.",
-			"min: 1, max: 64"
+			"How many blocks the recursive function should search when 'enableRecursiveOpening' is enabled."
 		));
 		configMetaData.put("enableDoors", Arrays.asList(
 			"When enables, the mod works with double doors."

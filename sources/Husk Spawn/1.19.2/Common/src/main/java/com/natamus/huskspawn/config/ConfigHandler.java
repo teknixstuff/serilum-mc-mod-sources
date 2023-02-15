@@ -26,12 +26,11 @@ import java.util.List;
 public class ConfigHandler extends DuskConfig {
 	public static HashMap<String, List<String>> configMetaData = new HashMap<String, List<String>>();
 
-	@Entry public static double chanceZombieIsHusk = 0.15;
+	@Entry(min = 0, max = 1.0) public static double chanceZombieIsHusk = 0.15;
 
 	public static void initConfig() {
 		configMetaData.put("chanceZombieIsHusk", Arrays.asList(
-			"The chance a zombie that has spawned is of the husk variant.",
-			"min: 0, max: 1.0"
+			"The chance a zombie that has spawned is of the husk variant."
 		));
 
 		DuskConfig.init(Reference.NAME, Reference.MOD_ID, ConfigHandler.class);

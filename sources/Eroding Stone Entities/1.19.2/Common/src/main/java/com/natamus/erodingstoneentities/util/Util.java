@@ -44,7 +44,7 @@ public class Util {
 		String toclaystring = ConfigHandler.itemsWhichErodeIntoClay;
 		
 		for (String itemstring : tosandstring.split(",")) {
-			ResourceLocation rl = new ResourceLocation(itemstring.trim());
+			ResourceLocation rl = new ResourceLocation(itemstring.trim().replaceAll("[^a-z0-9_.-:]", ""));
 			if (!Registry.ITEM.keySet().contains(rl)) {
 				System.out.println("[Eroding Stone Entities] Unable to find item for input '" + itemstring.trim() + "' to erode into sand in the Forge item registry. Ignoring it.");
 				continue;
@@ -55,7 +55,7 @@ public class Util {
 		}
 		
 		for (String itemstring : toredsandstring.split(",")) {
-			ResourceLocation rl = new ResourceLocation(itemstring.trim());
+			ResourceLocation rl = new ResourceLocation(itemstring.trim().replaceAll("[^a-z0-9_.-:]", ""));
 			if (!Registry.ITEM.keySet().contains(rl)) {
 				System.out.println("[Eroding Stone Entities] Unable to find item for input '" + itemstring.trim() + "' to erode into red sand in the Forge item registry. Ignoring it.");
 				continue;
@@ -66,7 +66,7 @@ public class Util {
 		}
 		
 		for (String itemstring : toclaystring.split(",")) {
-			ResourceLocation rl = new ResourceLocation(itemstring.trim());
+			ResourceLocation rl = new ResourceLocation(itemstring.trim().replaceAll("[^a-z0-9_.-:]", ""));
 			if (!Registry.ITEM.keySet().contains(rl)) {
 				System.out.println("[Eroding Stone Entities] Unable to find item for input '" + itemstring.trim() + "' to erode into clay in the Forge item registry. Ignoring it.");
 				continue;

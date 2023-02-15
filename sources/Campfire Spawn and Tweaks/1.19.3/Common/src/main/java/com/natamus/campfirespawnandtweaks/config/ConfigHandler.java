@@ -34,7 +34,7 @@ public class ConfigHandler extends DuskConfig {
 	@Entry public static boolean sendMessageOnCampfireSpawnUnset = true;
 	@Entry public static boolean sendMessageOnCampfireSpawnMissing = true;
 	@Entry public static boolean sendMessageOnCampfireSpawnOverride = true;
-	@Entry public static int fireResitanceDurationOnRespawnInMs = 10000;
+	@Entry(min = 0, max = 3600000) public static int fireResitanceDurationOnRespawnInMs = 10000;
 
 	public static void initConfig() {
 		configMetaData.put("campfiresStartUnlit", Arrays.asList(
@@ -62,8 +62,7 @@ public class ConfigHandler extends DuskConfig {
 			"When enabled, a message will be sent to the player whenever a campfire spawn point is overridden by the PlayerSetSpawnEvent."
 		));
 		configMetaData.put("fireResitanceDurationOnRespawnInMs", Arrays.asList(
-			"The duration of fire resistance when a player respawns at a campfire. A value of 0 disables this feature, and places the player next to the campfire instead.",
-			"min: 0, max: 3600000"
+			"The duration of fire resistance when a player respawns at a campfire. A value of 0 disables this feature, and places the player next to the campfire instead."
 		));
 
 		DuskConfig.init(Reference.NAME, Reference.MOD_ID, ConfigHandler.class);

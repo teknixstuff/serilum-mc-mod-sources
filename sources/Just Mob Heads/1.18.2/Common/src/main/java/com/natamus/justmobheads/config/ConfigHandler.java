@@ -30,8 +30,8 @@ public class ConfigHandler extends DuskConfig {
 	@Entry public static boolean enableStandardHeads = false;
 	@Entry public static boolean enableLootingEnchant = true;
 	@Entry public static boolean onlyAdultMobsDropTheirHead = true;
-	@Entry public static double overallDropChance = 0.1;
-	@Entry public static double creeperSkeletonZombieDropChance = 0.1;
+	@Entry(min = 0.0001, max = 1.0) public static double overallDropChance = 0.1;
+	@Entry(min = 0.0001, max = 1.0) public static double creeperSkeletonZombieDropChance = 0.1;
 	@Entry public static boolean onlyDropHeadsByChargedCreeper = false;
 	@Entry public static boolean onlyDropHeadsByPlayerKill = false;
 
@@ -49,12 +49,10 @@ public class ConfigHandler extends DuskConfig {
 			"If enabled, only adult tameable mobs will have a chance to drop their head on death."
 		));
 		configMetaData.put("overallDropChance", Arrays.asList(
-			"Sets the chance of a mob dropping its head if 'mobSpecificDropChances' is disabled.",
-			"min: 0.0001, max: 1.0"
+			"Sets the chance of a mob dropping its head if 'mobSpecificDropChances' is disabled."
 		));
 		configMetaData.put("creeperSkeletonZombieDropChance", Arrays.asList(
-			"Sets head drop chance for Zombies, Skeletons and Creepers if 'enableStandardHeads' is enabled.",
-			"min: 0.0001, max: 1.0"
+			"Sets head drop chance for Zombies, Skeletons and Creepers if 'enableStandardHeads' is enabled."
 		));
 		configMetaData.put("onlyDropHeadsByChargedCreeper", Arrays.asList(
 			"When enabled, only drops mob heads if the source on death is a charged creeper. This overwrites the onlyDropHeadsByPlayerKill value."

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "followersteleporttoo",
-  "version": "2.0",
+  "version": "2.1",
 
   "name": "Followers Teleport Too",
   "description": "Whenever a player is teleported via a command, their pets will be teleported alongside them.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.18"
+    "collective": ">=6.45"
   },
 
   "custom": {

@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="followersteleporttoo"
-version="2.0"
+version="2.1"
 displayName="Followers Teleport Too"
 displayURL="https://curseforge.com/minecraft/mc-mods/followers-teleport-too"
 authors="Rick South"
@@ -22,6 +22,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.followersteleporttoo]]
     modId="collective"
     mandatory=true
-    versionRange="[6.18,)"
+    versionRange="[6.45,)"
     ordering="NONE"
     side="BOTH"

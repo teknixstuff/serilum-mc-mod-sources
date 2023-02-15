@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "villagerdeathmessages",
-  "version": "3.0",
+  "version": "3.1",
 
   "name": "Villager Death Messages",
   "description": "Broadcasts an informational death message whenever a villager passes away.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.5"
+    "collective": ">=6.43"
   },
 
   "custom": {
@@ -58,7 +58,6 @@
 	  " Robert Gilbert",
 	  " Shana Gitnick",
 	  " Sija",
-	  " TheNickm2",
 	  " Tyler Behl",
 	  " Wendi S"
   ]

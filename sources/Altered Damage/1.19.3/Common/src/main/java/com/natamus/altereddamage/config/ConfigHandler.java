@@ -29,8 +29,8 @@ public class ConfigHandler extends DuskConfig {
 	@Entry public static boolean preventFatalModifiedDamage = true;
 	@Entry public static boolean alterEntityDamageTaken = true;
 	@Entry public static boolean alterPlayerDamageTaken = true;
-	@Entry public static double entityDamageModifier = 2.0;
-	@Entry public static double playerDamageModifier = 2.0;
+	@Entry(min = 0.01, max = 20.0) public static double entityDamageModifier = 2.0;
+	@Entry(min = 0.01, max = 20.0) public static double playerDamageModifier = 2.0;
 
 	public static void initConfig() {
 		configMetaData.put("preventFatalModifiedDamage", Arrays.asList(
@@ -43,12 +43,10 @@ public class ConfigHandler extends DuskConfig {
 			"If enabled, modifies the damage a player receives by the global modifier."
 		));
 		configMetaData.put("entityDamageModifier", Arrays.asList(
-			"The global damage modifier for other entities.",
-			"min: 0.01, max: 20.0"
+			"The global damage modifier for other entities."
 		));
 		configMetaData.put("playerDamageModifier", Arrays.asList(
-			"The global damage modifier for players.",
-			"min: 0.01, max: 20.0"
+			"The global damage modifier for players."
 		));
 
 		DuskConfig.init(Reference.NAME, Reference.MOD_ID, ConfigHandler.class);

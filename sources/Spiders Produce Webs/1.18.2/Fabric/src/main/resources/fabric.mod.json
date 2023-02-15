@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "spidersproducewebs",
-  "version": "3.0",
+  "version": "3.1",
 
   "name": "Spiders Produce Webs",
   "description": "Spiders and cave spiders can periodically produce a web when a player is close.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.7"
+    "collective": ">=6.45"
   },
 
   "custom": {

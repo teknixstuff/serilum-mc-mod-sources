@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "shulkerdropstwo",
-  "version": "3.0",
+  "version": "3.1",
 
   "name": "Shulker Drops Two",
   "description": "A minimalistic configurable mod that allows shulkers to drop two or more shells and ignore their default drop chance.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.19",
     "java": ">=17",
-    "collective": ">=6.12"
+    "collective": ">=6.45"
   },
 
   "custom": {

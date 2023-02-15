@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="starterstructure"
-version="2.0"
+version="2.1"
 displayName="Starter Structure"
 displayURL="https://curseforge.com/minecraft/mc-mods/starter-structure"
 authors="Rick South"
@@ -23,6 +23,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.starterstructure]]
     modId="collective"
     mandatory=true
-    versionRange="[6.27,)"
+    versionRange="[6.45,)"
     ordering="NONE"
     side="BOTH"

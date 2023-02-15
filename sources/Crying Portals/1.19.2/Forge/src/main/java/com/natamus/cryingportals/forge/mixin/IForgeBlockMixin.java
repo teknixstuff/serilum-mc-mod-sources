@@ -1,6 +1,6 @@
 /*
  * This is the latest source code of Crying Portals.
- * Minecraft version: 1.18.2.
+ * Minecraft version: 1.19.2.
  *
  * Please don't distribute without permission.
  * For all Minecraft modding projects, feel free to visit my profile page on CurseForge or Modrinth.
@@ -19,19 +19,15 @@ package com.natamus.cryingportals.forge.mixin;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CryingObsidianBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.portal.PortalShape;
+import net.minecraftforge.common.extensions.IForgeBlock;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value = PortalShape.class, priority = 1001, remap = false)
-public class PortalShapeMixin {
-	@Inject(method = "lambda$static$0(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)Z", at = @At(value = "TAIL"), cancellable = true)
-	private static void PortalShape_FRAME(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
-		if (blockState.is(Blocks.CRYING_OBSIDIAN)) {
-			cir.setReturnValue(true);
-		}
-	}
+@Mixin(value = IForgeBlock.class, priority = 1001)
+public interface IForgeBlockMixin extends IForgeBlock {
+    @Override
+    default boolean isPortalFrame(BlockState blockState, BlockGetter level, BlockPos pos) {
+        return blockState.is(Blocks.OBSIDIAN) || blockState.getBlock() instanceof CryingObsidianBlock;
+    }
 }

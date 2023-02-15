@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "manure",
-  "version": "2.0",
+  "version": "2.1",
 
   "name": "Manure",
   "description": "Animals periodically drop manure, by default twice a day. Can be used as a bone meal substitute.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.17"
+    "collective": ">=6.45"
   },
 
   "custom": {

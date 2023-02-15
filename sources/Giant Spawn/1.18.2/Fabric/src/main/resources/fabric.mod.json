@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "giantspawn",
-  "version": "4.1",
+  "version": "4.2",
 
   "name": "Giant Spawn",
   "description": "Allows the giant to spawn naturally and other tweaks.",
@@ -26,7 +26,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.4"
+    "collective": ">=6.45"
   },
 
   "custom": {
@@ -61,7 +61,6 @@
 	  " Robert Gilbert",
 	  " Shana Gitnick",
 	  " Sija",
-	  " TheNickm2",
 	  " Tyler Behl",
 	  " Wendi S"
   ]

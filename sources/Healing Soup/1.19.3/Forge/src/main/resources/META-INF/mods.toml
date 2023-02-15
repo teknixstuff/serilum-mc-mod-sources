@@ -6,20 +6,23 @@ logoFile="icon.png"
 
 [[mods]]
 modId="healingsoup"
-version="4.0"
+version="4.1"
 displayName="Healing Soup"
 displayURL="https://curseforge.com/minecraft/mc-mods/healing-soup"
 authors="Rick South"
 description='''Soup heals hearts. Adds cactus soup, mushroom soup and chocolate milk items and recipes.
+If you would like to contribute too, check out https://ricksouth.com/donate. Appreciate it! <3   
 '''
 credits='''Thank you very much to my Membership sponsors for supporting the development of this mod:  
+
 Adam E, Alister, aternosorg, Cherriesaurus, Kreezxil, Michael W. S., Mir3JonCZ, Rebecca Hb., Robert Gilbert, Shana Gitnick, Sija, Tyler Behl, Wendi S   
+
 If you would like to contribute too, check out https://ricksouth.com/donate. Appreciate it! <3   
 '''
 
 [[dependencies.healingsoup]]
     modId="collective"
     mandatory=true
-    versionRange="[6.18,)"
+    versionRange="[6.45,)"
     ordering="NONE"
     side="BOTH"

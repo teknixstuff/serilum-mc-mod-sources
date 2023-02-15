@@ -1,5 +1,5 @@
 /*
- * This is the latest source code of Respawning Shulkers.
+ * This is the latest source code of Random Sheep Colours.
  * Minecraft version: 1.19.2.
  *
  * Please don't distribute without permission.
@@ -14,10 +14,10 @@
  * Thanks for looking at the source code! Hope it's of some use to your project. Happy modding!
  */
 
-package com.natamus.respawningshulkers.config;
+package com.natamus.randomsheepcolours.config;
 
 import com.natamus.collective.config.DuskConfig;
-import com.natamus.respawningshulkers.util.Reference;
+import com.natamus.randomsheepcolours.util.Reference;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -26,16 +26,11 @@ import java.util.List;
 public class ConfigHandler extends DuskConfig {
 	public static HashMap<String, List<String>> configMetaData = new HashMap<String, List<String>>();
 
-	@Entry public static int timeInTicksToRespawn = 1200;
-	@Entry public static boolean shulkersFromSpawnersDoNotRespawn = true;
+	@Entry public static String possibleSheepColours = "black,blue,brown,cyan,gray,green,jeb,light_blue,light_gray,lime,magenta,orange,pink,purple,red,white,yellow";
 
 	public static void initConfig() {
-		configMetaData.put("timeInTicksToRespawn", Arrays.asList(
-			"The amount of time in ticks it takes for a shulker to respawn after it died. 20 ticks = 1 second. By default 60 seconds.",
-			"min: 1, max: 72000"
-		));
-		configMetaData.put("shulkersFromSpawnersDoNotRespawn", Arrays.asList(
-			"If enabled, shulkers which spawn from (modded) spawners will not be respawned after a death."
+		configMetaData.put("possibleSheepColours", Arrays.asList(
+			"The possible sheep colours which the mod chooses from, divided by a comma."
 		));
 
 		DuskConfig.init(Reference.NAME, Reference.MOD_ID, ConfigHandler.class);

@@ -26,14 +26,13 @@ import java.util.List;
 public class ConfigHandler extends DuskConfig {
 	public static HashMap<String, List<String>> configMetaData = new HashMap<String, List<String>>();
 
-	@Entry public static int potionEffectLevel = 1;
+	@Entry(min = 1, max = 50) public static int potionEffectLevel = 1;
 	@Entry public static boolean hideEffectParticles = false;
 	@Entry public static boolean disableCreepers = true;
 
 	public static void initConfig() {
 		configMetaData.put("potionEffectLevel", Arrays.asList(
-			"The default level of the effects the mod applies, by default 1.",
-			"min: 1, max: 50"
+			"The default level of the effects the mod applies, by default 1."
 		));
 		configMetaData.put("hideEffectParticles", Arrays.asList(
 			"When enabled, hides the particles from the mobs with an effect."

@@ -26,7 +26,7 @@ import java.util.List;
 public class ConfigHandler extends DuskConfig {
 	public static HashMap<String, List<String>> configMetaData = new HashMap<String, List<String>>();
 
-	@Entry public static int durationInSecondsStoneErodes = 150;
+	@Entry(min = 1, max = 3600) public static int durationInSecondsStoneErodes = 150;
 	@Entry public static boolean preventErosionIfAboveIceBlock = true;
 	@Entry public static boolean erodeIntoClayBlockInsteadOfClayBall = false;
 	@Entry public static String itemsWhichErodeIntoSand = "minecraft:cobblestone,minecraft:mossy_cobblestone,minecraft:stone,minecraft:stone_bricks,minecraft:chiseled_stone_bricks,minecraft:cracked_stone_bricks,minecraft:smooth_stone,minecraft:gravel,minecraft:andesite,minecraft:polished_andesite,minecraft:diorite,minecraft:polished_diorite,minecraft:granite,minecraft:polished_granite,minecraft:sandstone,minecraft:chiseled_sandstone,minecraft:cut_sandstone,minecraft:smooth_sandstone";
@@ -35,8 +35,7 @@ public class ConfigHandler extends DuskConfig {
 
 	public static void initConfig() {
 		configMetaData.put("durationInSecondsStoneErodes", Arrays.asList(
-			"The duration in seconds after a stone-type item entity in the world erodes to sand if it's in a water stream.",
-			"min: 1, max: 3600"
+			"The duration in seconds after a stone-type item entity in the world erodes to sand if it's in a water stream."
 		));
 		configMetaData.put("preventErosionIfAboveIceBlock", Arrays.asList(
 			"If enabled, prevents the erosion of stone blocks if the item entity is above an ice block. Useful for when you use water streams to transport items you don't want to have eroded, just place ice underneath the streams."

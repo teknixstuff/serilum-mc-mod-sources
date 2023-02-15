@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "beautifiedchatserver",
-  "version": "2.1",
+  "version": "2.2",
 
   "name": "Beautified Chat Server",
   "description": "A highly configurable mod to change the style and colour of incoming chat messages server-wide.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.26"
+    "collective": ">=6.45"
   },
 
   "custom": {

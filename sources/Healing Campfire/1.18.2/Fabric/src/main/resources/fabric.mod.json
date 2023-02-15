@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "healingcampfire",
-  "version": "5.0",
+  "version": "5.1",
 
   "name": "Healing Campfire",
   "description": "Creates an area around the campfire where players and passive mobs receive the regeneration effect in a configurable radius.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.18"
+    "collective": ">=6.45"
   },
 
   "custom": {

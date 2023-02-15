@@ -26,14 +26,13 @@ import java.util.List;
 public class ConfigHandler extends DuskConfig {
 	public static HashMap<String, List<String>> configMetaData = new HashMap<String, List<String>>();
 
-	@Entry public static double chanceSurfaceSkeletonHasHorse = 0.05;
+	@Entry(min = 0, max = 1.0) public static double chanceSurfaceSkeletonHasHorse = 0.05;
 	@Entry public static boolean shouldBurnSkeletonHorsesInDaylight = true;
 	@Entry public static boolean onlySpawnSkeletonHorsesOnSurface = true;
 
 	public static void initConfig() {
 		configMetaData.put("chanceSurfaceSkeletonHasHorse", Arrays.asList(
-			"The chance a skeleton that has spawned on the surface is riding a horse.",
-			"min: 0, max: 1.0"
+			"The chance a skeleton that has spawned on the surface is riding a horse."
 		));
 		configMetaData.put("shouldBurnSkeletonHorsesInDaylight", Arrays.asList(
 			"If enabled, burns skeleton horses when daylight shines upon them."

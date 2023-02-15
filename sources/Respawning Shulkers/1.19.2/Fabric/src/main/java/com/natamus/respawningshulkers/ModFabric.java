@@ -53,6 +53,7 @@ public class ModFabric implements ModInitializer {
 
 		CollectiveEntityEvents.LIVING_ENTITY_DEATH.register((Level world, Entity entity, DamageSource source) -> {
 			ShulkerEvent.onShulkerDeath(world, entity, source);
+			return true;
 		});
 
 		ServerLifecycleEvents.SERVER_STOPPING.register((MinecraftServer server) -> {

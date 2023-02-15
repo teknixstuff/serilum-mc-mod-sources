@@ -85,6 +85,9 @@ public abstract class DuskConfig {
 		Field field;
 		Object widget;
 		int width;
+		double minValue;
+		double maxValue;
+		boolean minMaxSet = false;
 		int max;
 		boolean centered;
 		Map.Entry<EditBox,Component> error;
@@ -107,6 +110,9 @@ public abstract class DuskConfig {
 	private static final Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.TRANSIENT).excludeFieldsWithModifiers(Modifier.PRIVATE).addSerializationExclusionStrategy(new HiddenAnnotationExclusionStrategy()).setPrettyPrinting().create();
 
 	public static void init(String name, String modid, Class<?> config) {
+		init(name, modid, config, true);
+	}
+	public static void init(String name, String modid, Class<?> config, Boolean initial) {
 		pathMap.put(modid, DataFunctions.getConfigDirectoryPath().resolve(modid + ".json5"));
 		configClass.put(modid, config);
 		modidToName.put(modid, name);
@@ -120,17 +126,25 @@ public abstract class DuskConfig {
 					break;
 				}
 			}
-		} catch (Exception ignored) { }
+		}
+		catch (Exception ignored) { }
 
 		for (Field field : config.getFields()) {
 			EntryInfo info = new EntryInfo();
-			if ((field.isAnnotationPresent(Entry.class) || field.isAnnotationPresent(Comment.class)) && !field.isAnnotationPresent(Server.class) && !field.isAnnotationPresent(Hidden.class))
-				if (Services.MODLOADER.isClientSide()) initClient(modid, field, info, configMetaData);
-			if (field.isAnnotationPresent(Comment.class)) info.centered = field.getAnnotation(Comment.class).centered();
-			if (field.isAnnotationPresent(Entry.class))
+			if ((field.isAnnotationPresent(Entry.class) || field.isAnnotationPresent(Comment.class)) && !field.isAnnotationPresent(Server.class) && !field.isAnnotationPresent(Hidden.class)) {
+				if (Services.MODLOADER.isClientSide()) {
+					initClient(modid, field, info, configMetaData);
+				}
+			}
+			if (field.isAnnotationPresent(Comment.class)) {
+				info.centered = field.getAnnotation(Comment.class).centered();
+			}
+			if (field.isAnnotationPresent(Entry.class)) {
 				try {
 					info.defaultValue = field.get(null);
-				} catch (IllegalAccessException ignored) {}
+				} catch (IllegalAccessException ignored) {
+				}
+			}
 		}
 
 		try {
@@ -140,13 +154,20 @@ public abstract class DuskConfig {
 			write(modid);
 		}
 
-		for (EntryInfo info : entryHashMap.get(modid)) {
-			if (info.field.isAnnotationPresent(Entry.class)) {
-				try {
-					info.value = info.field.get(null);
-					info.tempValue = info.value.toString();
+		try {
+			for (EntryInfo info : entryHashMap.get(modid)) {
+				if (info.field.isAnnotationPresent(Entry.class)) {
+					try {
+						info.value = info.field.get(null);
+						info.tempValue = info.value.toString();
+					}
+					catch (IllegalAccessException ignored) { }
 				}
-				catch (IllegalAccessException ignored) { }
+			}
+		}
+		catch (NullPointerException ex) {
+			if (initial) {
+				init(name, modid, config, false);
 			}
 		}
 	}
@@ -159,10 +180,21 @@ public abstract class DuskConfig {
 		info.id = modid;
 
 		if (e != null) {
-			if (!e.name().equals("")) info.name = Component.translatable(e.name());
-			if (type == int.class) textField(modid, info, Integer::parseInt, INTEGER_ONLY, (int) e.min(), (int) e.max(), true);
-			else if (type == float.class) textField(modid, info, Float::parseFloat, DECIMAL_ONLY, (float) e.min(), (float) e.max(), false);
-			else if (type == double.class) textField(modid, info, Double::parseDouble, DECIMAL_ONLY, e.min(), e.max(), false);
+			if (!e.name().equals("")) {
+				info.name = Component.translatable(e.name());
+			}
+			if (type == int.class) {
+				if (e.min() != Double.MIN_NORMAL) { info.minValue = (int) e.min(); info.maxValue = (int) e.max(); info.minMaxSet = true; }
+				textField(modid, info, Integer::parseInt, INTEGER_ONLY, (int) e.min(), (int) e.max(), true);
+			}
+			else if (type == float.class) {
+				if (e.min() != Double.MIN_NORMAL) { info.minValue = (int) e.min(); info.maxValue = (int) e.max(); info.minMaxSet = true; }
+				textField(modid, info, Float::parseFloat, DECIMAL_ONLY, (float) e.min(), (float) e.max(), false);
+			}
+			else if (type == double.class) {
+				if (e.min() != Double.MIN_NORMAL) { info.minValue = (int) e.min(); info.maxValue = (int) e.max(); info.minMaxSet = true; }
+				textField(modid, info, Double::parseDouble, DECIMAL_ONLY, e.min(), e.max(), false);
+			}
 			else if (type == String.class || type == List.class) {
 				info.max = e.max() == Double.MAX_VALUE ? Integer.MAX_VALUE : (int) e.max();
 				textField(modid, info, String::length, null, Math.min(e.min(), 0), Math.max(e.max(), 1), true);
@@ -280,6 +312,17 @@ public abstract class DuskConfig {
 						List<String> metaData = configMetaData.get(fieldname);
 						for (String metaDataValue : metaData) {
 							json5.append("\n\t// ").append(metaDataValue);
+						}
+
+						if (field.isAnnotationPresent(Entry.class)) {
+							Entry e = field.getAnnotation(Entry.class);
+							if (e.min() != Double.MIN_NORMAL) {
+								String rangeValue = "min: " + e.min() + ", max: " + e.max();
+								if (field.getType() == int.class) {
+									rangeValue = rangeValue.replace(".0", "");
+								}
+								json5.append("\n\t// ").append(rangeValue);
+							}
 						}
 					}
 				}
@@ -484,9 +527,21 @@ public abstract class DuskConfig {
 					} else {
 						this.list.addButton(List.of(), name, info);
 					}
-					if (!info.range.equals("")) {
+
+					String rangeValue = "";
+					if (info.minMaxSet) {
+						rangeValue = "min: " + info.minValue + ", max: " + info.maxValue;
+						if (info.field.getType() == int.class) {
+							rangeValue = rangeValue.replace(".0", "");
+						}
+					}
+					else if (!info.range.equals("")) {
+						rangeValue = info.range;
+					}
+
+					if (!rangeValue.equals("")) {
 						EditBox label = new EditBox(font, width - 155, 0, 145, 20, null);
-						label.setValue(info.range);
+						label.setValue(rangeValue);
 						label.setBordered(false);
 						label.setEditable(false);
 						this.list.addButton(List.of(label), Component.literal(""), info);

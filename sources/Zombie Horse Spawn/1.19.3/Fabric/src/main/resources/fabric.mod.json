@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "zombiehorsespawn",
-  "version": "4.3",
+  "version": "4.4",
 
   "name": "Zombie Horse Spawn",
   "description": "Allows the zombie horse to spawn with a zombie riding it and other tweaks.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.19",
     "java": ">=17",
-    "collective": ">=6.4"
+    "collective": ">=6.45"
   },
 
   "custom": {
@@ -53,7 +53,6 @@
 	  " Robert Gilbert",
 	  " Shana Gitnick",
 	  " Sija",
-	  " TheNickm2",
 	  " Tyler Behl",
 	  " Wendi S"
   ]

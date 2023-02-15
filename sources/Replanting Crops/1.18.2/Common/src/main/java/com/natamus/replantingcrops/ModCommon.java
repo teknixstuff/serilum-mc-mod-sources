@@ -1,6 +1,6 @@
 /*
- * This is the latest source code of Villager Death Messages.
- * Minecraft version: 1.19.2.
+ * This is the latest source code of Replanting Crops.
+ * Minecraft version: 1.18.2.
  *
  * Please don't distribute without permission.
  * For all Minecraft modding projects, feel free to visit my profile page on CurseForge or Modrinth.
@@ -14,9 +14,9 @@
  * Thanks for looking at the source code! Hope it's of some use to your project. Happy modding!
  */
 
-package com.natamus.villagerdeathmessages;
+package com.natamus.replantingcrops;
 
-import com.natamus.villagerdeathmessages.config.ConfigHandler;
+import com.natamus.replantingcrops.config.ConfigHandler;
 
 public class ModCommon {
 

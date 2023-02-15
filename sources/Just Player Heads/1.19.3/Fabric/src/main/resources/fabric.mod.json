@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "justplayerheads",
-  "version": "3.0",
+  "version": "3.1",
 
   "name": "Just Player Heads",
   "description": "A minimalistic mod that adds a configurable chance for players to drop their respective heads on death and via a command. All heads are generated with texture-data.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.19",
     "java": ">=17",
-    "collective": ">=6.17"
+    "collective": ">=6.45"
   },
 
   "custom": {

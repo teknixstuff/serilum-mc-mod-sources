@@ -38,6 +38,8 @@ public class ForgeCropEvent {
 	
 	@SubscribeEvent
 	public void onCropEntity(EntityJoinLevelEvent e) {
-		CropEvent.onCropEntity(e.getLevel(), e.getEntity());
+		if (!CropEvent.onCropEntity(e.getLevel(), e.getEntity())) {
+			e.setCanceled(true);
+		}
 	}
 }

@@ -27,15 +27,14 @@ public class ConfigHandler extends DuskConfig {
 	public static HashMap<String, List<String>> configMetaData = new HashMap<String, List<String>>();
 
 	@Entry public static boolean disableFollowerDamageAfterTeleport = true;
-	@Entry public static int durationInSecondsDamageShouldBeDisabled = 20;
+	@Entry(min = 0, max = 86400) public static int durationInSecondsDamageShouldBeDisabled = 20;
 
 	public static void initConfig() {
 		configMetaData.put("disableFollowerDamageAfterTeleport", Arrays.asList(
 			"When enabled, disables damage for followers shortly after a teleport. This can prevent fall damage or suffocation from an estimate target position."
 		));
 		configMetaData.put("durationInSecondsDamageShouldBeDisabled", Arrays.asList(
-			"How long in seconds damage should be disabled for after a teleport when disableFollowerDamageAfterTeleport is enabled.",
-			"min: 0, max: 86400"
+			"How long in seconds damage should be disabled for after a teleport when disableFollowerDamageAfterTeleport is enabled."
 		));
 
 		DuskConfig.init(Reference.NAME, Reference.MOD_ID, ConfigHandler.class);

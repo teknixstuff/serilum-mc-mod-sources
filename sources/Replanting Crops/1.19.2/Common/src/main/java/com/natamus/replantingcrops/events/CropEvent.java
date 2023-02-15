@@ -90,18 +90,18 @@ public class CropEvent {
 		return true;
 	}
 	
-	public static void onCropEntity(Level world, Entity entity) {
+	public static boolean onCropEntity(Level world, Entity entity) {
 		if (world.isClientSide) {
-			return;
+			return true;
 		}
 		
 		if (!(entity instanceof ItemEntity)) {
-			return;
+			return true;
 		}
 		
 		BlockPos ipos = entity.blockPosition();
 		if (!checkreplant.containsKey(ipos)) {
-			return;
+			return true;
 		}
 
 		Block preblock = checkreplant.get(ipos);
@@ -124,13 +124,13 @@ public class CropEvent {
 		else if (item.equals(Items.COCOA_BEANS)) {
 			if (!cocoaStates.containsKey(ipos)) {
 				checkreplant.remove(ipos);
-				return;
+				return true;
 			}
 			world.setBlockAndUpdate(ipos, cocoaStates.get(ipos).setValue(CocoaBlock.AGE, 0));
 			cocoaStates.remove(ipos);
 		}
 		else {
-			return;
+			return true;
 		}
 
 		checkreplant.remove(ipos);
@@ -140,6 +140,8 @@ public class CropEvent {
 		}
 		else {
 			entity.remove(RemovalReason.DISCARDED);
+			return false;
 		}
+		return true;
 	}
 }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "alllootdrops",
-  "version": "3.0",
+  "version": "3.1",
 
   "name": "All Loot Drops",
   "description": "Entities always drop all their possible loot in a configurable amount.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.19",
     "java": ">=17",
-    "collective": ">=6.31"
+    "collective": ">=6.45"
   },
 
   "custom": {

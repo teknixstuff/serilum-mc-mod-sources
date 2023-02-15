@@ -6,7 +6,7 @@
   "refmap": "cryingportals_forge.refmap.json",
   "mixins": [
     "BaseFireBlockMixin",
-    "PortalShapeMixin"
+    "IForgeBlockMixin"
   ],
   "client": [
   ],

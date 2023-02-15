@@ -38,11 +38,11 @@ public class ConfigHandler extends DuskConfig {
 	@Entry public static boolean clockPositionIsLeft = false;
 	@Entry public static boolean clockPositionIsCenter = false;
 	@Entry public static boolean clockPositionIsRight = true;
-	@Entry public static int clockHeightOffset = 5;
-	@Entry public static int clockWidthOffset = 0;
-	@Entry public static int RGB_R = 255;
-	@Entry public static int RGB_G = 255;
-	@Entry public static int RGB_B = 255;
+	@Entry(min = 0, max = 3000) public static int clockHeightOffset = 5;
+	@Entry(min = -3000, max = 3000) public static int clockWidthOffset = 0;
+	@Entry(min = 0, max = 255) public static int RGB_R = 255;
+	@Entry(min = 0, max = 255) public static int RGB_G = 255;
+	@Entry(min = 0, max = 255) public static int RGB_B = 255;
 
 	public static void initConfig() {
 		configMetaData.put("mustHaveClockInInventoryForGameTime", Arrays.asList(
@@ -82,24 +82,19 @@ public class ConfigHandler extends DuskConfig {
 			"Places the GUI clock on the right."
 		));
 		configMetaData.put("clockHeightOffset", Arrays.asList(
-			"The vertical offset (y coord) for the Clock. This determines how far down the time should be on the screen. Can be changed to prevent GUIs from overlapping.",
-			"min: 0, max: 3000"
+			"The vertical offset (y coord) for the Clock. This determines how far down the time should be on the screen. Can be changed to prevent GUIs from overlapping."
 		));
 		configMetaData.put("clockWidthOffset", Arrays.asList(
-			"The horizontal offset (x coord) for the Clock.",
-			"min: -3000, max: 3000"
+			"The horizontal offset (x coord) for the Clock."
 		));
 		configMetaData.put("RGB_R", Arrays.asList(
-			"The red RGB value for the clock text.",
-			"min: 0, max: 255"
+			"The red RGB value for the clock text."
 		));
 		configMetaData.put("RGB_G", Arrays.asList(
-			"The green RGB value for the clock text.",
-			"min: 0, max: 255"
+			"The green RGB value for the clock text."
 		));
 		configMetaData.put("RGB_B", Arrays.asList(
-			"The blue RGB value for the clock text.",
-			"min: 0, max: 255"
+			"The blue RGB value for the clock text."
 		));
 
 		DuskConfig.init(Reference.NAME, Reference.MOD_ID, ConfigHandler.class);

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "strayspawn",
-  "version": "3.2",
+  "version": "3.3",
 
   "name": "Stray Spawn",
   "description": "Allows a chance for strays to spawn naturally everywhere instead of a skeleton.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.4"
+    "collective": ">=6.45"
   },
 
   "custom": {
@@ -58,7 +58,6 @@
 	  " Robert Gilbert",
 	  " Shana Gitnick",
 	  " Sija",
-	  " TheNickm2",
 	  " Tyler Behl",
 	  " Wendi S"
   ]

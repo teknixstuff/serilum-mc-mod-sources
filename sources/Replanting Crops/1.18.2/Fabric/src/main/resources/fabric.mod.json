@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "replantingcrops",
-  "version": "5.0",
+  "version": "5.1",
 
   "name": "Replanting Crops",
   "description": "Automatically replants/replaces/reseeds crops harvested with seeds from drops, negated by holding the sneak button.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.13"
+    "collective": ">=6.43"
   },
 
   "custom": {

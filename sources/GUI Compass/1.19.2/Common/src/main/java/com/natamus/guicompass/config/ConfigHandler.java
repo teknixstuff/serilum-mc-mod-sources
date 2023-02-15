@@ -31,10 +31,10 @@ public class ConfigHandler extends DuskConfig {
 	@Entry public static boolean compassPositionIsLeft = true;
 	@Entry public static boolean compassPositionIsCenter = false;
 	@Entry public static boolean compassPositionIsRight = false;
-	@Entry public static int compassHeightOffset = 5;
-	@Entry public static int RGB_R = 255;
-	@Entry public static int RGB_G = 255;
-	@Entry public static int RGB_B = 255;
+	@Entry(min = 0, max = 3000) public static int compassHeightOffset = 5;
+	@Entry(min = 0, max = 255) public static int RGB_R = 255;
+	@Entry(min = 0, max = 255) public static int RGB_G = 255;
+	@Entry(min = 0, max = 255) public static int RGB_B = 255;
 
 	public static void initConfig() {
 		configMetaData.put("guiCompassFormat", Arrays.asList(
@@ -53,20 +53,16 @@ public class ConfigHandler extends DuskConfig {
 			"Places the GUI compass on the right."
 		));
 		configMetaData.put("compassHeightOffset", Arrays.asList(
-			"The vertical offset (y coord) for the Compass. This determines how far down the time should be on the screen. Can be changed to prevent GUIs from overlapping.",
-			"min: 0, max: 3000"
+			"The vertical offset (y coord) for the Compass. This determines how far down the time should be on the screen. Can be changed to prevent GUIs from overlapping."
 		));
 		configMetaData.put("RGB_R", Arrays.asList(
-			"The red RGB value for the compass text.",
-			"min: 0, max: 255"
+			"The red RGB value for the compass text."
 		));
 		configMetaData.put("RGB_G", Arrays.asList(
-			"The green RGB value for the compass text.",
-			"min: 0, max: 255"
+			"The green RGB value for the compass text."
 		));
 		configMetaData.put("RGB_B", Arrays.asList(
-			"The blue RGB value for the compass text.",
-			"min: 0, max: 255"
+			"The blue RGB value for the compass text."
 		));
 
 		DuskConfig.init(Reference.NAME, Reference.MOD_ID, ConfigHandler.class);

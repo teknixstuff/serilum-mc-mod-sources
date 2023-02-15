@@ -26,8 +26,8 @@ public class CollectiveConfigHandler extends DuskConfig {
     public static HashMap<String, List<String>> configMetaData = new HashMap<String, List<String>>();
 
     @Entry public static boolean transferItemsBetweenReplacedEntities = true;
-    @Entry public static int loopsAmountUsedToGetAllEntityDrops = 100;
-    @Entry public static int findABlockCheckAroundEntitiesDelayMs = 30000;
+    @Entry(min = 1, max = 500) public static int loopsAmountUsedToGetAllEntityDrops = 100;
+    @Entry(min = 0, max = 3600000) public static int findABlockCheckAroundEntitiesDelayMs = 30000;
     @Entry public static boolean enableAntiRepostingCheck = true;
     @Entry public static boolean enablePatronPets = true;
 
@@ -36,12 +36,10 @@ public class CollectiveConfigHandler extends DuskConfig {
                 "When enabled, transfer the held items and armour from replaced entities by any of the Entity Spawn mods which depend on Collective."
         ));
         configMetaData.put("loopsAmountUsedToGetAllEntityDrops", Arrays.asList(
-                "The amount of times Collective loops through possible mob drops to get them all procedurally. Drops are only generated when a dependent mod uses them. Lowering this can increase world load time but decrease accuracy.",
-                "min: 1, max: 500"
+                "The amount of times Collective loops through possible mob drops to get them all procedurally. Drops are only generated when a dependent mod uses them. Lowering this can increase world load time but decrease accuracy."
         ));
         configMetaData.put("findABlockCheckAroundEntitiesDelayMs", Arrays.asList(
-                "The delay of the is-there-a-block-around-check around entities in ms. Used in mods which depends on a specific blockstate in the world. Increasing this number can increase TPS if needed.",
-                "min: 0, max: 3600000"
+                "The delay of the is-there-a-block-around-check around entities in ms. Used in mods which depends on a specific blockstate in the world. Increasing this number can increase TPS if needed."
         ));
         configMetaData.put("enableAntiRepostingCheck", Arrays.asList(
                 "Please check out https://stopmodreposts.org/ for more information on why this feature exists."

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "randommobeffects",
-  "version": "3.0",
+  "version": "3.1",
 
   "name": "Random Mob Effects",
   "description": "Randomly assigns a potion effect to all hostile mobs in the world. With blacklist and modded effects supported.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.19",
     "java": ">=17",
-    "collective": ">=6.14"
+    "collective": ">=6.45"
   },
 
   "custom": {

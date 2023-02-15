@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "sleepsooner",
-  "version": "4.0",
+  "version": "4.1",
 
   "name": "Sleep Sooner",
   "description": "A minimalistic mod that adds a configurable functionality to be able to sleep a little sooner.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.19",
     "java": ">=17",
-    "collective": ">=6.9"
+    "collective": ">=6.45"
   },
 
   "custom": {

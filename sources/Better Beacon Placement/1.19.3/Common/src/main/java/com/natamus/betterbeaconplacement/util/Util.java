@@ -16,23 +16,18 @@
 
 package com.natamus.betterbeaconplacement.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-
 import com.natamus.collective.functions.BlockFunctions;
-
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+
+import java.util.Iterator;
 
 public class Util {
-	public final static List<Block> mineralblocks = new ArrayList<Block>(Arrays.asList(Blocks.IRON_BLOCK, Blocks.GOLD_BLOCK, Blocks.EMERALD_BLOCK, Blocks.DIAMOND_BLOCK));
-	
 	public static BlockPos getNextLocation(Level world, BlockPos beaconpos) {
 		int x = beaconpos.getX();
 		int y = beaconpos.getY();
@@ -65,11 +60,11 @@ public class Util {
 	public static void breakBase(Level world, BlockPos beaconpos, Iterator<BlockPos> it, boolean iscreative) {
 		while (it.hasNext()) {
 			BlockPos np = it.next();
-			Block block = world.getBlockState(np).getBlock();
-			if (BlockFunctions.isOneOfBlocks(mineralblocks, block)) {
+			BlockState blockState = world.getBlockState(np);
+			if (blockState.is(BlockTags.BEACON_BASE_BLOCKS)) {
 				world.setBlockAndUpdate(np, Blocks.AIR.defaultBlockState());
 				if (!iscreative) {
-					ItemEntity ei = new ItemEntity(world, beaconpos.getX(), beaconpos.getY()+2, beaconpos.getZ(), new ItemStack(block, 1));
+					ItemEntity ei = new ItemEntity(world, beaconpos.getX(), beaconpos.getY()+2, beaconpos.getZ(), new ItemStack(blockState.getBlock(), 1));
 					world.addFreshEntity(ei);
 				}
 			}
@@ -79,8 +74,8 @@ public class Util {
 	private static BlockPos checkIterator(Level world, Iterator<BlockPos> it) {
 		while (it.hasNext()) {
 			BlockPos np = it.next();
-			Block block = world.getBlockState(np).getBlock();
-			if (!BlockFunctions.isOneOfBlocks(mineralblocks, block)) {
+			BlockState blockState = world.getBlockState(np);
+			if (!blockState.is(BlockTags.BEACON_BASE_BLOCKS)) {
 				return np.immutable();
 			}
 		}

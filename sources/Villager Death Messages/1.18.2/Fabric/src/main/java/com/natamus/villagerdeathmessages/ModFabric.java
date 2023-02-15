@@ -40,6 +40,7 @@ public class ModFabric implements ModInitializer {
 	private void loadEvents() {
 		CollectiveEntityEvents.LIVING_ENTITY_DEATH.register((Level world, Entity entity, DamageSource source) -> {
 			VillagerEvent.villagerDeath(world, entity, source);
+			return true;
 		});
 	}
 

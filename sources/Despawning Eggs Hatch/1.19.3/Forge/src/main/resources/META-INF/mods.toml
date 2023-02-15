@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="despawningeggshatch"
-version="4.0"
+version="4.1"
 displayName="Despawning Eggs Hatch"
 displayURL="https://curseforge.com/minecraft/mc-mods/despawning-eggs-hatch"
 authors="Rick South"
@@ -22,6 +22,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.despawningeggshatch]]
     modId="collective"
     mandatory=true
-    versionRange="[6.21,)"
+    versionRange="[6.45,)"
     ordering="NONE"
     side="BOTH"

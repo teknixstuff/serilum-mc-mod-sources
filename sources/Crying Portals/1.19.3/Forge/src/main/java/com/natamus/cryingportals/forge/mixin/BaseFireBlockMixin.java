@@ -16,29 +16,20 @@
 
 package com.natamus.cryingportals.forge.mixin;
 
+import com.natamus.collective.data.Constants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseFireBlock;
-import net.minecraft.world.level.block.Blocks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = BaseFireBlock.class, priority = 1001)
 public class BaseFireBlockMixin {
-	@ModifyVariable(method = "isPortal", at = @At(value = "INVOKE", target="Lnet/minecraft/core/Direction;values()[Lnet/minecraft/core/Direction;"))
-	private static boolean BaseFireBlock_isPortal(boolean bl, Level level, BlockPos blockPos, Direction direction) {
-		BlockPos.MutableBlockPos mutableBlockPos = blockPos.mutable();
-		Direction[] var5 = Direction.values();
-		int var6 = var5.length;
-
-		for (Direction direction2 : var5) {
-			if (level.getBlockState(mutableBlockPos.set(blockPos).move(direction2)).is(Blocks.CRYING_OBSIDIAN)) {
-				return true;
-			}
-		}
-		
-		return false;
+	@Inject(method = "isPortal", at = @At(value = "HEAD"))
+	private static void BaseFireBlock_isPortal(Level p_49270_, BlockPos p_49271_, Direction p_49272_, CallbackInfoReturnable<Boolean> cir) {
+		Constants.LOG.info("BASEFIRE");
 	}
 }

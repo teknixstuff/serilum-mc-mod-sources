@@ -26,8 +26,8 @@ import java.util.List;
 public class ConfigHandler extends DuskConfig {
 	public static HashMap<String, List<String>> configMetaData = new HashMap<String, List<String>>();
 
-	@Entry public static int usesAfterGrinding = 32;
-	@Entry public static double sharpenedDamageModifier = 1.5;
+	@Entry(min = 1, max = 5000) public static int usesAfterGrinding = 32;
+	@Entry(min = 0, max = 100.0) public static double sharpenedDamageModifier = 1.5;
 	@Entry public static boolean infiniteCreativeUses = false;
 	@Entry public static boolean sendUsesLeftInChat = true;
 	@Entry public static boolean showUsesLeftInItemName = true;
@@ -36,12 +36,10 @@ public class ConfigHandler extends DuskConfig {
 
 	public static void initConfig() {
 		configMetaData.put("usesAfterGrinding", Arrays.asList(
-			"The amount of sharper uses a tool has after using it on the grindstone.",
-			"min: 1, max: 5000"
+			"The amount of sharper uses a tool has after using it on the grindstone."
 		));
 		configMetaData.put("sharpenedDamageModifier", Arrays.asList(
-			"The damage modifier of sharpened tools.",
-			"min: 0, max: 100.0"
+			"The damage modifier of sharpened tools."
 		));
 		configMetaData.put("infiniteCreativeUses", Arrays.asList(
 			"Whether to decrease sharpened uses in creative."

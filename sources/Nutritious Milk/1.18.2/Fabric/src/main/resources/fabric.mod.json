@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "nutritiousmilk",
-  "version": "3.0",
+  "version": "3.1",
 
   "name": "Nutritious Milk",
   "description": "Adds a nutritious value to milk, filling up the food bar and saturation when consumed.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.15"
+    "collective": ">=6.45"
   },
 
   "custom": {

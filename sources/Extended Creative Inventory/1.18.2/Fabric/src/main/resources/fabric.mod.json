@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "extendedcreativeinventory",
-  "version": "2.0",
+  "version": "2.1",
 
   "name": "Extended Creative Inventory",
   "description": "Adds all items which by default aren't in the creative inventory to a custom Extended tab.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.40"
+    "collective": ">=6.45"
   },
 
   "custom": {

@@ -28,10 +28,10 @@ public class ConfigHandler extends DuskConfig {
 
 	@Entry public static String chatMessageFormat = "%timestamp% | %username%: %chatmessage%";
 	@Entry public static String timestampFormat = "HH:mm";
-	@Entry public static int chatTimestampColour = 8;
-	@Entry public static int chatUsernameColour = 2;
-	@Entry public static int chatMessageColour = 15;
-	@Entry public static int chatOtherSymbolsColour = 7;
+	@Entry(min = 0, max = 15) public static int chatTimestampColour = 8;
+	@Entry(min = 0, max = 15) public static int chatUsernameColour = 2;
+	@Entry(min = 0, max = 15) public static int chatMessageColour = 15;
+	@Entry(min = 0, max = 15) public static int chatOtherSymbolsColour = 7;
 
 	public static void initConfig() {
 		configMetaData.put("chatMessageFormat", Arrays.asList(
@@ -41,20 +41,16 @@ public class ConfigHandler extends DuskConfig {
 			"Example time in formats: 5 seconds past 9 o' clock in the evening. *=Default. *(HH:mm) = 21:00, (HH:mm:ss) = 21:00:05, (hh:mm a) = 9:00 PM"
 		));
 		configMetaData.put("chatTimestampColour", Arrays.asList(
-			"The colour of the timestamp in the chat message. The possible values are; 0: black, 1: dark_blue, 2: dark_green, 3: dark_aqua, 4: dark_red, 5: dark_purple, 6: gold, 7: gray, 8: dark_gray, 9: blue, 10: green, 11: aqua, 12: red, 13: light_purple, 14: yellow, 15: white.",
-			"min: 0, max: 15"
+			"The colour of the timestamp in the chat message. The possible values are; 0: black, 1: dark_blue, 2: dark_green, 3: dark_aqua, 4: dark_red, 5: dark_purple, 6: gold, 7: gray, 8: dark_gray, 9: blue, 10: green, 11: aqua, 12: red, 13: light_purple, 14: yellow, 15: white."
 		));
 		configMetaData.put("chatUsernameColour", Arrays.asList(
-			"The colour of the username in the chat messsage. The possible values are; 0: black, 1: dark_blue, 2: dark_green, 3: dark_aqua, 4: dark_red, 5: dark_purple, 6: gold, 7: gray, 8: dark_gray, 9: blue, 10: green, 11: aqua, 12: red, 13: light_purple, 14: yellow, 15: white.",
-			"min: 0, max: 15"
+			"The colour of the username in the chat messsage. The possible values are; 0: black, 1: dark_blue, 2: dark_green, 3: dark_aqua, 4: dark_red, 5: dark_purple, 6: gold, 7: gray, 8: dark_gray, 9: blue, 10: green, 11: aqua, 12: red, 13: light_purple, 14: yellow, 15: white."
 		));
 		configMetaData.put("chatMessageColour", Arrays.asList(
-			"The colour of the chat message. The possible values are; 0: black, 1: dark_blue, 2: dark_green, 3: dark_aqua, 4: dark_red, 5: dark_purple, 6: gold, 7: gray, 8: dark_gray, 9: blue, 10: green, 11: aqua, 12: red, 13: light_purple, 14: yellow, 15: white.",
-			"min: 0, max: 15"
+			"The colour of the chat message. The possible values are; 0: black, 1: dark_blue, 2: dark_green, 3: dark_aqua, 4: dark_red, 5: dark_purple, 6: gold, 7: gray, 8: dark_gray, 9: blue, 10: green, 11: aqua, 12: red, 13: light_purple, 14: yellow, 15: white."
 		));
 		configMetaData.put("chatOtherSymbolsColour", Arrays.asList(
-			"The colour of the other symbols from chatMessageFormat. So everything except the variables. The possible values are; 0: black, 1: dark_blue, 2: dark_green, 3: dark_aqua, 4: dark_red, 5: dark_purple, 6: gold, 7: gray, 8: dark_gray, 9: blue, 10: green, 11: aqua, 12: red, 13: light_purple, 14: yellow, 15: white.",
-			"min: 0, max: 15"
+			"The colour of the other symbols from chatMessageFormat. So everything except the variables. The possible values are; 0: black, 1: dark_blue, 2: dark_green, 3: dark_aqua, 4: dark_red, 5: dark_purple, 6: gold, 7: gray, 8: dark_gray, 9: blue, 10: green, 11: aqua, 12: red, 13: light_purple, 14: yellow, 15: white."
 		));
 
 		DuskConfig.init(Reference.NAME, Reference.MOD_ID, ConfigHandler.class);

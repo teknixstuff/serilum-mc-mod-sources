@@ -28,8 +28,8 @@ public class ConfigHandler extends DuskConfig {
 
 	@Entry public static boolean disableWaterConsumptionUnderwater = true;
 	@Entry public static boolean holdFireTypeItemInOffhandToPreventWaterBottleCreation = true;
-	@Entry public static double chanceGlassBottleBreaksWithFireTypeInOffhand = 0.5;
-	@Entry public static int amountOfAirInBottles = 150;
+	@Entry(min = 0, max = 1.0) public static double chanceGlassBottleBreaksWithFireTypeInOffhand = 0.5;
+	@Entry(min = 0, max = 1000) public static int amountOfAirInBottles = 150;
 
 	public static void initConfig() {
 		configMetaData.put("disableWaterConsumptionUnderwater", Arrays.asList(
@@ -39,12 +39,10 @@ public class ConfigHandler extends DuskConfig {
 			"Whether the creation of water bottles should be prevented (evaporated) when holding a fire type block in the offhand."
 		));
 		configMetaData.put("chanceGlassBottleBreaksWithFireTypeInOffhand", Arrays.asList(
-			"The chance a glass bottle breaks when the item in the offhand evaporates the water, giving back an empty (air) bottle.",
-			"min: 0, max: 1.0"
+			"The chance a glass bottle breaks when the item in the offhand evaporates the water, giving back an empty (air) bottle."
 		));
 		configMetaData.put("amountOfAirInBottles", Arrays.asList(
-			"The amount of air an empty bottle contains. In vanilla Minecraft, 300 is the maximum air supply.",
-			"min: 0, max: 1000"
+			"The amount of air an empty bottle contains. In vanilla Minecraft, 300 is the maximum air supply."
 		));
 
 		DuskConfig.init(Reference.NAME, Reference.MOD_ID, ConfigHandler.class);

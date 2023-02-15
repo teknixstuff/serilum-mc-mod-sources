@@ -26,12 +26,11 @@ import java.util.List;
 public class ConfigHandler extends DuskConfig {
 	public static HashMap<String, List<String>> configMetaData = new HashMap<String, List<String>>();
 
-	@Entry public static int breakSpiderwebDelay = 500;
+	@Entry(min = 0, max = 10000) public static int breakSpiderwebDelay = 500;
 
 	public static void initConfig() {
 		configMetaData.put("breakSpiderwebDelay", Arrays.asList(
-			"The delay in ms after walking in a spiderweb until it breaks.",
-			"min: 0, max: 10000"
+			"The delay in ms after walking in a spiderweb until it breaks."
 		));
 
 		DuskConfig.init(Reference.NAME, Reference.MOD_ID, ConfigHandler.class);

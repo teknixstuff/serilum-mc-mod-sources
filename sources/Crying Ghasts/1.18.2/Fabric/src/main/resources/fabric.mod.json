@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "cryingghasts",
-  "version": "3.0",
+  "version": "3.1",
 
   "name": "Crying Ghasts",
   "description": "Ghasts drop their tears periodically when a player is close, giving the ability to farm them sustainably.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.21"
+    "collective": ">=6.45"
   },
 
   "custom": {

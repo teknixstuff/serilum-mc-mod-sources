@@ -26,12 +26,11 @@ import java.util.List;
 public class ConfigHandler extends DuskConfig {
 	public static HashMap<String, List<String>> configMetaData = new HashMap<String, List<String>>();
 
-	@Entry public static double chanceSkeletonIsStray = 0.25;
+	@Entry(min = 0, max = 1.0) public static double chanceSkeletonIsStray = 0.25;
 
 	public static void initConfig() {
 		configMetaData.put("chanceSkeletonIsStray", Arrays.asList(
-			"The chance a skeleton that has spawned is of the stray variant.",
-			"min: 0, max: 1.0"
+			"The chance a skeleton that has spawned is of the stray variant."
 		));
 
 		DuskConfig.init(Reference.NAME, Reference.MOD_ID, ConfigHandler.class);

@@ -28,7 +28,7 @@ public class ConfigHandler extends DuskConfig {
 
 	@Entry public static boolean enablePlayerHeadCaching = true;
 	@Entry public static boolean playerDropsHeadOnDeath = true;
-	@Entry public static double playerHeadDropChance = 1.0;
+	@Entry(min = 0.0001, max = 1.0) public static double playerHeadDropChance = 1.0;
 
 	public static void initConfig() {
 		configMetaData.put("enablePlayerHeadCaching", Arrays.asList(
@@ -38,8 +38,7 @@ public class ConfigHandler extends DuskConfig {
 			"If enabled, allows players to drop their head on death."
 		));
 		configMetaData.put("playerHeadDropChance", Arrays.asList(
-			"Sets the chance of a player dropping their head if 'playerDropsHeadOnDeath' is enabled.",
-			"min: 0.0001, max: 1.0"
+			"Sets the chance of a player dropping their head if 'playerDropsHeadOnDeath' is enabled."
 		));
 
 		DuskConfig.init(Reference.NAME, Reference.MOD_ID, ConfigHandler.class);

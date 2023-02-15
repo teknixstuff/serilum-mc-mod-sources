@@ -36,12 +36,12 @@ public class ConfigHandler extends DuskConfig {
 	@Entry public static boolean replaceSaplingOnTreeHarvest = true;
 	@Entry public static boolean replaceMushroomOnMushroomHarvest = true;
 	@Entry public static boolean loseDurabilityPerHarvestedLog = true;
-	@Entry public static double loseDurabilityModifier = 1.0;
+	@Entry(min = 0.001, max = 1.0) public static double loseDurabilityModifier = 1.0;
 	@Entry public static boolean increaseExhaustionPerHarvestedLog = true;
-	@Entry public static double increaseExhaustionModifier = 1.0;
+	@Entry(min = 0.001, max = 1.0) public static double increaseExhaustionModifier = 1.0;
 	@Entry public static boolean increaseHarvestingTimePerLog = true;
-	@Entry public static double increasedHarvestingTimePerLogModifier = 0.1;
-	@Entry public static int amountOfLeavesBrokenPerTick = 3;
+	@Entry(min = 0.01, max = 10.0) public static double increasedHarvestingTimePerLogModifier = 0.1;
+	@Entry(min = 1, max = 16) public static int amountOfLeavesBrokenPerTick = 3;
 
 	public static void initConfig() {
 		configMetaData.put("mustHoldAxeForTreeHarvest", Arrays.asList(
@@ -75,26 +75,22 @@ public class ConfigHandler extends DuskConfig {
 			"If enabled, for every log harvested, the axe held loses durability."
 		));
 		configMetaData.put("loseDurabilityModifier", Arrays.asList(
-			"Here you can set how much durability chopping down a tree should take from the axe. For example if set to 0.1, this means that every 10 logs take 1 durability.",
-			"min: 0.001, max: 1.0"
+			"Here you can set how much durability chopping down a tree should take from the axe. For example if set to 0.1, this means that every 10 logs take 1 durability."
 		));
 		configMetaData.put("increaseExhaustionPerHarvestedLog", Arrays.asList(
 			"If enabled, players' exhaustion level increases 0.005 per harvested log (Minecraft's default per broken block) * increaseExhaustionModifier."
 		));
 		configMetaData.put("increaseExhaustionModifier", Arrays.asList(
-			"This determines how much exhaustion should be added to the player per harvested log. By default 0.005 * 1.0.",
-			"min: 0.001, max: 1.0"
+			"This determines how much exhaustion should be added to the player per harvested log. By default 0.005 * 1.0."
 		));
 		configMetaData.put("increaseHarvestingTimePerLog", Arrays.asList(
 			"If enabled, harvesting time will increase per existing log in the tree. The amount is determined by 'increasedHarvestingTimePerLogModifier'."
 		));
 		configMetaData.put("increasedHarvestingTimePerLogModifier", Arrays.asList(
-			"How much longer it takes to harvest a tree with 'increaseHarvestingTimePerLog' enabled. The actual speed is: newSpeed = originalSpeed / (1 + (logCount * increasedHarvestingTimePerLogModifier)).",
-			"min: 0.01, max: 10.0"
+			"How much longer it takes to harvest a tree with 'increaseHarvestingTimePerLog' enabled. The actual speed is: newSpeed = originalSpeed / (1 + (logCount * increasedHarvestingTimePerLogModifier))."
 		));
 		configMetaData.put("amountOfLeavesBrokenPerTick", Arrays.asList(
-			"How many leaves should be broken per tick after a tree has been harvested. Increasing this will speed up the fast leaf decay, but costs more processing power per tick.",
-			"min: 1, max: 16"
+			"How many leaves should be broken per tick after a tree has been harvested. Increasing this will speed up the fast leaf decay, but costs more processing power per tick."
 		));
 
 		DuskConfig.init(Reference.NAME, Reference.MOD_ID, ConfigHandler.class);

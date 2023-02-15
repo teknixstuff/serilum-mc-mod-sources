@@ -33,11 +33,11 @@ public class ConfigHandler extends DuskConfig {
 	@Entry public static boolean sendMessageOnPortalBroken = true;
 	@Entry public static String messageOnPortalBroken = "With the nether portal broken, the corrupted energy is no longer able to enter the overworld.";
 	@Entry public static boolean prefixPortalCoordsInMessage = true;
-	@Entry public static int portalSpreadRadius = 30;
-	@Entry public static int spreadDelayTicks = 40;
-	@Entry public static int instantConvertAmount = 50;
+	@Entry(min = 1, max = 100) public static int portalSpreadRadius = 30;
+	@Entry(min = 1, max = 72000) public static int spreadDelayTicks = 40;
+	@Entry(min = 0, max = 1000) public static int instantConvertAmount = 50;
 	@Entry public static boolean preventSpreadWithBlock = true;
-	@Entry public static int preventSpreadBlockAmountNeeded = 4;
+	@Entry(min = 1, max = 100) public static int preventSpreadBlockAmountNeeded = 4;
 	@Entry public static String preventSpreadBlockString = "minecraft:coal_block";
 
 	public static void initConfig() {
@@ -63,23 +63,19 @@ public class ConfigHandler extends DuskConfig {
 			"When enabled, shows the portal coordinates in portal messages."
 		));
 		configMetaData.put("portalSpreadRadius", Arrays.asList(
-			"The radius around the portal to which the nether blocks can spread.",
-			"min: 1, max: 100"
+			"The radius around the portal to which the nether blocks can spread."
 		));
 		configMetaData.put("spreadDelayTicks", Arrays.asList(
-			"The delay in ticks in between the spread around the nether portal. 20 ticks = 1 second.",
-			"min: 1, max: 72000"
+			"The delay in ticks in between the spread around the nether portal. 20 ticks = 1 second."
 		));
 		configMetaData.put("instantConvertAmount", Arrays.asList(
-			"The amount of blocks that are instantly converted to a nether block around a portal when it is detected. If there are existing nether blocks within the radius, their count is substracted from this number.",
-			"min: 0, max: 1000"
+			"The amount of blocks that are instantly converted to a nether block around a portal when it is detected. If there are existing nether blocks within the radius, their count is substracted from this number."
 		));
 		configMetaData.put("preventSpreadWithBlock", Arrays.asList(
 			"When enabled, blocks the spread effect when there are n (defined) prevent-spread-blocks (defined) within the radius."
 		));
 		configMetaData.put("preventSpreadBlockAmountNeeded", Arrays.asList(
-			"The amount of prevent-spread-blocks (defined) needed within the radius of the nether portal to prevent spread.",
-			"min: 1, max: 100"
+			"The amount of prevent-spread-blocks (defined) needed within the radius of the nether portal to prevent spread."
 		));
 		configMetaData.put("preventSpreadBlockString", Arrays.asList(
 			"The block which prevents the nether portal from spreading. By default a coal block (minecraft:coal_block is the namespace ID)."

@@ -28,7 +28,7 @@ public class ConfigHandler extends DuskConfig {
 
 	@Entry public static boolean enableSleepSooner = true;
 	@Entry public static boolean enablePreSleepMessage = true;
-	@Entry public static int whenSleepIsPossibleInTicks = 12000;
+	@Entry(min = 0, max = 24000) public static int whenSleepIsPossibleInTicks = 12000;
 
 	public static void initConfig() {
 		configMetaData.put("enableSleepSooner", Arrays.asList(
@@ -38,8 +38,7 @@ public class ConfigHandler extends DuskConfig {
 			"Allows you to disable/enable the message you receive before sleeping. You still need to click the bed twice if the current time is below 12540."
 		));
 		configMetaData.put("whenSleepIsPossibleInTicks", Arrays.asList(
-			"The default time in ticks when you can sleep is ~12540. The default Sleep Sooner mod value is 12000.",
-			"min: 0, max: 24000"
+			"The default time in ticks when you can sleep is ~12540. The default Sleep Sooner mod value is 12000."
 		));
 
 		DuskConfig.init(Reference.NAME, Reference.MOD_ID, ConfigHandler.class);

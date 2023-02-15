@@ -33,11 +33,11 @@ public class ConfigHandler extends DuskConfig {
 	@Entry public static boolean respawnAtWorldSpawn = true;
 	@Entry public static boolean respawnWhenPlayerLogsOut = true;
 	@Entry public static boolean respawnWhenPlayerLogsIn = true;
-	@Entry public static int respawnDelayInSeconds = 10;
+	@Entry(min = -1, max = 3600) public static int respawnDelayInSeconds = 10;
 	@Entry public static String onDeathMessage = "You died! Your gamemode has been set to spectator.";
 	@Entry public static String onRespawnMessage = "You respawned.";
 	@Entry public static String waitingForRespawnMessage = "You will respawn in <seconds_left> seconds.";
-	@Entry public static int lowestPossibleYCoordinate = -10;
+	@Entry(min = -50, max = 256) public static int lowestPossibleYCoordinate = -10;
 
 	public static void initConfig() {
 		configMetaData.put("ignoreAdministratorPlayers", Arrays.asList(
@@ -62,8 +62,7 @@ public class ConfigHandler extends DuskConfig {
 			"If enabled, players will respawn when they log in and are still in spectator mode. Prevents players from getting stuck in spectator mode."
 		));
 		configMetaData.put("respawnDelayInSeconds", Arrays.asList(
-			"The delay in seconds after which a spectating player will respawn. A value of -1 makes players never respawn automatically. The '/respawnall' command can still be used.",
-			"min: -1, max: 3600"
+			"The delay in seconds after which a spectating player will respawn. A value of -1 makes players never respawn automatically. The '/respawnall' command can still be used."
 		));
 		configMetaData.put("onDeathMessage", Arrays.asList(
 			"The message which is sent to the player on death. Leave empty to disable."
@@ -75,8 +74,7 @@ public class ConfigHandler extends DuskConfig {
 			"The message which is sent to players when they are waiting to be respawned. The text '<seconds_left>' will be replaced with the actual seconds left. Leave empty to disable."
 		));
 		configMetaData.put("lowestPossibleYCoordinate", Arrays.asList(
-			"When a player falls into the void, this determines the y position that's set after when a player enters spectator mode.",
-			"min: -50, max: 256"
+			"When a player falls into the void, this determines the y position that's set after when a player enters spectator mode."
 		));
 
 		DuskConfig.init(Reference.NAME, Reference.MOD_ID, ConfigHandler.class);

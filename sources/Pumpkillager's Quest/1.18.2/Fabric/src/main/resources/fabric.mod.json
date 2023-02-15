@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "pumpkillagersquest",
-  "version": "3.0",
+  "version": "3.1",
 
   "name": "Pumpkillager's Quest",
   "description": "Help out the Pumpkillager! With custom encounters, cosmetics and a boss fight. A SpookyJam 2022 submission.",
@@ -26,7 +26,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.38"
+    "collective": ">=6.45"
   },
 
   "custom": {

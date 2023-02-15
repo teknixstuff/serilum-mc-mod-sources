@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "despawningeggshatch",
-  "version": "4.0",
+  "version": "4.1",
 
   "name": "Despawning Eggs Hatch",
   "description": "Allows chicken eggs on a hay block to hatch into a chick baby just before they despawn.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.21"
+    "collective": ">=6.45"
   },
 
   "custom": {

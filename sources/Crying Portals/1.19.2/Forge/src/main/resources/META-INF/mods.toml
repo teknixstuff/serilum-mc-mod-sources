@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="cryingportals"
-version="2.0"
+version="2.2"
 displayName="Crying Portals"
 displayURL="https://curseforge.com/minecraft/mc-mods/crying-portals"
 authors="Rick South"
@@ -22,6 +22,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.cryingportals]]
     modId="collective"
     mandatory=true
-    versionRange="[6.21,)"
+    versionRange="[6.43,)"
     ordering="NONE"
     side="BOTH"

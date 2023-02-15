@@ -18,8 +18,8 @@ package com.natamus.betterbeaconplacement.events;
 
 import com.natamus.betterbeaconplacement.config.ConfigHandler;
 import com.natamus.betterbeaconplacement.util.Util;
-import com.natamus.collective.functions.BlockFunctions;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -36,16 +36,16 @@ public class BeaconEvent {
 		if (world.isClientSide) {
 			return true;
 		}
-		
-		ItemStack handstack = player.getItemInHand(hand);
-		if (!BlockFunctions.isOneOfBlocks(Util.mineralblocks, handstack)) {
-			return true;
-		}
 
 		if (!world.getBlockState(cpos).getBlock().equals(Blocks.BEACON)) {
 			return true;
 		}
 		
+		ItemStack handstack = player.getItemInHand(hand);
+		if (!Block.byItem(handstack.getItem()).defaultBlockState().is(BlockTags.BEACON_BASE_BLOCKS)) {
+			return true;
+		}
+
 		boolean set = false;
 		while (handstack.getCount() > 0) {
 			BlockPos nextpos = Util.getNextLocation(world, cpos);

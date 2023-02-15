@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "zombievillagersfromspawner",
-  "version": "3.3",
+  "version": "3.4",
 
   "name": "Zombie Villagers From Spawner",
   "description": "Puts back the ability for zombie spawners to spawn the villager variant, removed in 1.11.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.4"
+    "collective": ">=6.45"
   },
 
   "custom": {
@@ -58,7 +58,6 @@
 	  " Robert Gilbert",
 	  " Shana Gitnick",
 	  " Sija",
-	  " TheNickm2",
 	  " Tyler Behl",
 	  " Wendi S"
   ]

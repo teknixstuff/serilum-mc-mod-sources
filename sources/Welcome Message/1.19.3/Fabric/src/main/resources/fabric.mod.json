@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "welcomemessage",
-  "version": "2.0",
+  "version": "2.1",
 
   "name": "Welcome Message",
   "description": "An easy to configure welcome message mod for players after login with URL support.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.19",
     "java": ">=17",
-    "collective": ">=6.4"
+    "collective": ">=6.45"
   },
 
   "custom": {
@@ -53,7 +53,6 @@
 	  " Robert Gilbert",
 	  " Shana Gitnick",
 	  " Sija",
-	  " TheNickm2",
 	  " Tyler Behl",
 	  " Wendi S"
   ]

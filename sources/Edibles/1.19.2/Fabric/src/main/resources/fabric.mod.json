@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "edibles",
-  "version": "4.0",
+  "version": "4.1",
 
   "name": "Edibles",
   "description": "Makes lots of ingredients edible, after which the player receives a short status effect.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.19",
     "java": ">=17",
-    "collective": ">=6.20"
+    "collective": ">=6.45"
   },
 
   "custom": {

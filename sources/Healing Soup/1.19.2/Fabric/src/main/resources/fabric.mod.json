@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "healingsoup",
-  "version": "4.0",
+  "version": "4.1",
 
   "name": "Healing Soup",
   "description": "Soup heals hearts. Adds cactus soup, mushroom soup and chocolate milk items and recipes.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.19",
     "java": ">=17",
-    "collective": ">=6.18"
+    "collective": ">=6.45"
   },
 
   "custom": {

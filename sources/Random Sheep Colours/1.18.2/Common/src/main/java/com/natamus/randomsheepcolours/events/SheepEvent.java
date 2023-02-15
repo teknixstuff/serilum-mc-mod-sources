@@ -19,6 +19,7 @@ package com.natamus.randomsheepcolours.events;
 import com.natamus.collective.data.GlobalVariables;
 import com.natamus.randomsheepcolours.util.Reference;
 import com.natamus.randomsheepcolours.util.Util;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
@@ -52,6 +53,11 @@ public class SheepEvent {
 		}
 		
 		Sheep sheep = (Sheep)entity;
+		sheep.addTag(sheeptag);
+
+		if (!sheep.getColor().equals(DyeColor.WHITE)) {
+			return;
+		}
 		
 		if (!((AgeableMob)entity).isBaby()) {
 			int randomindex = GlobalVariables.random.nextInt(Util.possibleColours.size());
@@ -69,7 +75,5 @@ public class SheepEvent {
 				sheep.setColor(randomcolour);
 			}
 		}
-		
-		sheep.addTag(sheeptag);
 	}
 }

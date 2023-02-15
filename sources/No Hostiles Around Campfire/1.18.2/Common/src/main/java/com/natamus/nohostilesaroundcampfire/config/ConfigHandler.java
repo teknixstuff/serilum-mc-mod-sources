@@ -26,9 +26,9 @@ import java.util.List;
 public class ConfigHandler extends DuskConfig {
 	public static HashMap<String, List<String>> configMetaData = new HashMap<String, List<String>>();
 
-	@Entry public static int preventHostilesRadius = 48;
+	@Entry(min = 1, max = 128) public static int preventHostilesRadius = 48;
 	@Entry public static boolean burnHostilesAroundWhenPlaced = true;
-	@Entry public static double burnHostilesRadiusModifier = 0.5;
+	@Entry(min = 0, max = 1.0) public static double burnHostilesRadiusModifier = 0.5;
 	@Entry public static boolean preventMobSpawnerSpawns = false;
 	@Entry public static boolean campfireMustBeLit = true;
 	@Entry public static boolean campfireMustBeSignalling = false;
@@ -37,15 +37,13 @@ public class ConfigHandler extends DuskConfig {
 
 	public static void initConfig() {
 		configMetaData.put("preventHostilesRadius", Arrays.asList(
-			"The radius around the campfire in blocks where hostile mob spawns will be blocked.",
-			"min: 1, max: 128"
+			"The radius around the campfire in blocks where hostile mob spawns will be blocked."
 		));
 		configMetaData.put("burnHostilesAroundWhenPlaced", Arrays.asList(
 			"If enabled, burns all hostile mobs around the campfire within the radius whenever a player places a campfire."
 		));
 		configMetaData.put("burnHostilesRadiusModifier", Arrays.asList(
-			"By default set to 0.5. This means that if the radius is 16, the campfire burns prior mobs in a radius of 8.",
-			"min: 0, max: 1.0"
+			"By default set to 0.5. This means that if the radius is 16, the campfire burns prior mobs in a radius of 8."
 		));
 		configMetaData.put("preventMobSpawnerSpawns", Arrays.asList(
 			"When enabled, the mob spawners spawns are also disabled when a campfire is within the radius."

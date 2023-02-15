@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "configurablefurnaceburntime",
-  "version": "2.0",
+  "version": "2.1",
 
   "name": "Configurable Furnace Burn Time",
   "description": "Allows users to change the fuel burn time in a furnace globally via a config.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.21"
+    "collective": ">=6.45"
   },
 
   "custom": {

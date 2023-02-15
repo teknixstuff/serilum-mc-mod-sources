@@ -31,15 +31,15 @@ public class ConfigHandler extends DuskConfig {
 	@Entry public static String followerHealthFormat = ": <health>%";
 	@Entry public static boolean showFollowerDistance = true;
 	@Entry public static String followerDistanceFormat = " (<distance> blocks)";
-	@Entry public static int distanceToCheckForFollowersAround = 50;
-	@Entry public static int timeBetweenChecksInSeconds = 2;
+	@Entry(min = -1, max = 300) public static int distanceToCheckForFollowersAround = 50;
+	@Entry(min = 0, max = 3600) public static int timeBetweenChecksInSeconds = 2;
 	@Entry public static boolean followerListPositionIsLeft = true;
 	@Entry public static boolean followerListPositionIsCenter = false;
 	@Entry public static boolean followerListPositionIsRight = false;
-	@Entry public static int followerListHeightOffset = 20;
-	@Entry public static int RGB_R = 255;
-	@Entry public static int RGB_G = 255;
-	@Entry public static int RGB_B = 255;
+	@Entry(min = 0, max = 3000) public static int followerListHeightOffset = 20;
+	@Entry(min = 0, max = 255) public static int RGB_R = 255;
+	@Entry(min = 0, max = 255) public static int RGB_G = 255;
+	@Entry(min = 0, max = 255) public static int RGB_B = 255;
 
 	public static void initConfig() {
 		configMetaData.put("followerListHeaderFormat", Arrays.asList(
@@ -58,12 +58,10 @@ public class ConfigHandler extends DuskConfig {
 			"The format of the distance string in the GUI. <distance> will be replaced by distance in blocks."
 		));
 		configMetaData.put("distanceToCheckForFollowersAround", Arrays.asList(
-			"The distance in blocks around the player where the mod checks for tamed, non-sitting followers to add to the list. A value of -1 disables this feature.",
-			"min: -1, max: 300"
+			"The distance in blocks around the player where the mod checks for tamed, non-sitting followers to add to the list. A value of -1 disables this feature."
 		));
 		configMetaData.put("timeBetweenChecksInSeconds", Arrays.asList(
-			"The time in seconds in between checking for tamed, non-sitting followers around the player.",
-			"min: 0, max: 3600"
+			"The time in seconds in between checking for tamed, non-sitting followers around the player."
 		));
 		configMetaData.put("followerListPositionIsLeft", Arrays.asList(
 			"Places the follower list on the left."
@@ -75,20 +73,16 @@ public class ConfigHandler extends DuskConfig {
 			"Places the follower list on the right."
 		));
 		configMetaData.put("followerListHeightOffset", Arrays.asList(
-			"The vertical offset (y coord) for the follower list. This determines how far down the list should be on the screen. Can be changed to prevent GUIs from overlapping.",
-			"min: 0, max: 3000"
+			"The vertical offset (y coord) for the follower list. This determines how far down the list should be on the screen. Can be changed to prevent GUIs from overlapping."
 		));
 		configMetaData.put("RGB_R", Arrays.asList(
-			"The red RGB value for the clock text.",
-			"min: 0, max: 255"
+			"The red RGB value for the clock text."
 		));
 		configMetaData.put("RGB_G", Arrays.asList(
-			"The green RGB value for the clock text.",
-			"min: 0, max: 255"
+			"The green RGB value for the clock text."
 		));
 		configMetaData.put("RGB_B", Arrays.asList(
-			"The blue RGB value for the clock text.",
-			"min: 0, max: 255"
+			"The blue RGB value for the clock text."
 		));
 
 		DuskConfig.init(Reference.NAME, Reference.MOD_ID, ConfigHandler.class);

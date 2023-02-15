@@ -26,8 +26,8 @@ import java.util.List;
 public class ConfigHandler extends DuskConfig {
 	public static HashMap<String, List<String>> configMetaData = new HashMap<String, List<String>>();
 
-	@Entry public static double extraMineralChanceOnOverworldStoneBreak = 0.02;
-	@Entry public static double extraMineralChanceOnNetherStoneBreak = 0.01;
+	@Entry(min = 0, max = 1.0) public static double extraMineralChanceOnOverworldStoneBreak = 0.02;
+	@Entry(min = 0, max = 1.0) public static double extraMineralChanceOnNetherStoneBreak = 0.01;
 	@Entry public static boolean enableOverworldMinerals = true;
 	@Entry public static boolean enableNetherMinerals = true;
 	@Entry public static boolean sendMessageOnMineralFind = true;
@@ -36,12 +36,10 @@ public class ConfigHandler extends DuskConfig {
 
 	public static void initConfig() {
 		configMetaData.put("extraMineralChanceOnOverworldStoneBreak", Arrays.asList(
-			"The chance a mineral is dropped when an overworld stone block is broken. By default 1/50.",
-			"min: 0, max: 1.0"
+			"The chance a mineral is dropped when an overworld stone block is broken. By default 1/50."
 		));
 		configMetaData.put("extraMineralChanceOnNetherStoneBreak", Arrays.asList(
-			"The chance a mineral is dropped when a nether stone block is broken. By default 1/100.",
-			"min: 0, max: 1.0"
+			"The chance a mineral is dropped when a nether stone block is broken. By default 1/100."
 		));
 		configMetaData.put("enableOverworldMinerals", Arrays.asList(
 			"If enabled, mining overworld stone blocks in the overworld has a chance to drop an overworld mineral. These consist of diamonds, gold nuggets, iron nuggets, lapis lazuli, redstone and emeralds."

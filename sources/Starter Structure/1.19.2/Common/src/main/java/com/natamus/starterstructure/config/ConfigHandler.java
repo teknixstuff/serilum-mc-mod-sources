@@ -28,7 +28,7 @@ public class ConfigHandler extends DuskConfig {
 
 	@Entry public static boolean shouldGenerateStructure = true;
 	@Entry public static boolean forceExactSpawnMiddleStructure = true;
-	@Entry public static int generatedStructureYOffset = 0;
+	@Entry(min = -100, max = 100) public static int generatedStructureYOffset = 0;
 	@Entry public static boolean ignoreTreesDuringStructurePlacement = true;
 	@Entry public static boolean generationIgnoreJigsawAndStructureBlocks = true;
 	@Entry public static boolean protectStructureBlocks = true;
@@ -37,9 +37,9 @@ public class ConfigHandler extends DuskConfig {
 	@Entry public static boolean playersInCreativeModeIgnoreEntityProtection = false;
 	@Entry public static boolean preventSpawnedEntityMovement = false;
 	@Entry public static boolean shouldSetSpawnPoint = false;
-	@Entry public static int spawnXCoordinate = 0;
-	@Entry public static int spawnYCoordinate = -1;
-	@Entry public static int spawnZCoordinate = 0;
+	@Entry(min = -10000000, max = 10000000) public static int spawnXCoordinate = 0;
+	@Entry(min = -1, max = 10000) public static int spawnYCoordinate = -1;
+	@Entry(min = -10000000, max = 10000000) public static int spawnZCoordinate = 0;
 	@Entry public static boolean spawnNonSignEntitiesFromSupportedSchematics = true;
 
 	public static void initConfig() {
@@ -50,8 +50,7 @@ public class ConfigHandler extends DuskConfig {
 			"Usually player spawn points are in a randomized area. With this enabled, players will always spawn in the middle of the structure (at the nearest air pocket)."
 		));
 		configMetaData.put("generatedStructureYOffset", Arrays.asList(
-			"The y offset for the generated structure. Can for example be set to -1 if you notice a building always spawns one block too high.",
-			"min: -100, max: 100"
+			"The y offset for the generated structure. Can for example be set to -1 if you notice a building always spawns one block too high."
 		));
 		configMetaData.put("ignoreTreesDuringStructurePlacement", Arrays.asList(
 			"Prevents structures from being placed on top of trees. Any leaf and log blocks will be ignored during placement."
@@ -78,16 +77,13 @@ public class ConfigHandler extends DuskConfig {
 			"Whether the initial world spawn point should be set to specific coordinates."
 		));
 		configMetaData.put("spawnXCoordinate", Arrays.asList(
-			"The new X coordinate of the spawn when shouldSetSpawnPoint is enabled.",
-			"min: -10000000, max: 10000000"
+			"The new X coordinate of the spawn when shouldSetSpawnPoint is enabled."
 		));
 		configMetaData.put("spawnYCoordinate", Arrays.asList(
-			"The new Y coordinate of the spawn when shouldSetSpawnPoint is enabled. A value of -1 means on the surface.",
-			"min: -1, max: 10000"
+			"The new Y coordinate of the spawn when shouldSetSpawnPoint is enabled. A value of -1 means on the surface."
 		));
 		configMetaData.put("spawnZCoordinate", Arrays.asList(
-			"The new Z coordinate of the spawn when shouldSetSpawnPoint is enabled.",
-			"min: -10000000, max: 10000000"
+			"The new Z coordinate of the spawn when shouldSetSpawnPoint is enabled."
 		));
 		configMetaData.put("spawnNonSignEntitiesFromSupportedSchematics", Arrays.asList(
 			"If entities from (structure block) schematic files should be spawned when found. These are entities not created with signs."

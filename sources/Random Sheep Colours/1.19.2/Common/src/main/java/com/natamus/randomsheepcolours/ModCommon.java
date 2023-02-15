@@ -1,5 +1,5 @@
 /*
- * This is the latest source code of Respawning Shulkers.
+ * This is the latest source code of Random Sheep Colours.
  * Minecraft version: 1.19.2.
  *
  * Please don't distribute without permission.
@@ -14,9 +14,10 @@
  * Thanks for looking at the source code! Hope it's of some use to your project. Happy modding!
  */
 
-package com.natamus.respawningshulkers;
+package com.natamus.randomsheepcolours;
 
-import com.natamus.respawningshulkers.config.ConfigHandler;
+import com.natamus.randomsheepcolours.config.ConfigHandler;
+import com.natamus.randomsheepcolours.util.Util;
 
 public class ModCommon {
 
@@ -26,6 +27,6 @@ public class ModCommon {
 	}
 
 	private static void load() {
-		
+		Util.initColours();
 	}
 }

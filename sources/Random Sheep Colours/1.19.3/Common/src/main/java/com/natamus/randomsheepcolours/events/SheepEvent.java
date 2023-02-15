@@ -52,6 +52,11 @@ public class SheepEvent {
 		}
 		
 		Sheep sheep = (Sheep)entity;
+		sheep.addTag(sheeptag);
+
+		if (!sheep.getColor().equals(DyeColor.WHITE)) {
+			return;
+		}
 		
 		if (!((AgeableMob)entity).isBaby()) {
 			int randomindex = GlobalVariables.random.nextInt(Util.possibleColours.size());
@@ -69,7 +74,5 @@ public class SheepEvent {
 				sheep.setColor(randomcolour);
 			}
 		}
-		
-		sheep.addTag(sheeptag);
 	}
 }

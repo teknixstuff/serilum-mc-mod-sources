@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "firespreadtweaks",
-  "version": "2.0",
+  "version": "2.1",
 
   "name": "Fire Spread Tweaks",
   "description": "Disables the default firespread, but does make fire go out on its own after a configurable delay.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.20"
+    "collective": ">=6.45"
   },
 
   "custom": {

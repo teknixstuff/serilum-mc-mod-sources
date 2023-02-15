@@ -26,12 +26,11 @@ import java.util.List;
 public class ConfigHandler extends DuskConfig {
 	public static HashMap<String, List<String>> configMetaData = new HashMap<String, List<String>>();
 
-	@Entry public static int freezeTimeMs = 5000;
+	@Entry(min = 0, max = 3600000) public static int freezeTimeMs = 5000;
 
 	public static void initConfig() {
 		configMetaData.put("freezeTimeMs", Arrays.asList(
-			"The amount of time in ms the mob hit will be frozen for.",
-			"min: 0, max: 3600000"
+			"The amount of time in ms the mob hit will be frozen for."
 		));
 
 		DuskConfig.init(Reference.NAME, Reference.MOD_ID, ConfigHandler.class);
