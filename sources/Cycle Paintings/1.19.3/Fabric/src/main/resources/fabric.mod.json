@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "cyclepaintings",
-  "version": "3.0",
+  "version": "3.1",
 
   "name": "Cycle Paintings",
   "description": "Easily cycle through placed paintings by right-clicking them with another painting.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.19",
     "java": ">=17",
-    "collective": ">=6.21"
+    "collective": ">=6.45"
   },
 
   "custom": {

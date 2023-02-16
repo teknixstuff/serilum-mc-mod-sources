@@ -17,12 +17,10 @@
 package com.natamus.cyclepaintings.events;
 
 import com.natamus.cyclepaintings.util.Util;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.decoration.Painting;
 import net.minecraft.world.entity.decoration.PaintingVariant;
 import net.minecraft.world.entity.player.Player;
@@ -35,11 +33,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class PaintingEvent {
-	public static InteractionResult onClick(Player player, Level world, InteractionHand hand, Entity target, EntityHitResult hitResult) {
-		if (world.isClientSide) {
-			return InteractionResult.PASS;
-		}
-		
+	public static InteractionResult onClick(Player player, Level level, InteractionHand hand, Entity target, EntityHitResult hitResult) {
 		ItemStack handstack = player.getItemInHand(hand);
 		if (!handstack.getItem().equals(Items.PAINTING)) {
 			return InteractionResult.PASS;
@@ -50,43 +44,36 @@ public class PaintingEvent {
 		}
 		
 		Painting painting = (Painting)target;
-		PaintingVariant art = painting.getVariant().value();
+		Holder<PaintingVariant> currentVariant = painting.getVariant();
 		
-		PaintingVariant newart = null;
+		Holder<PaintingVariant> newVariant = null;
 		
-		List<PaintingVariant> similarart = Util.getSimilarArt(art);
+		List<Holder<PaintingVariant>> similarPaintingVariants = Util.getSimilarArt(currentVariant.value());
 		if (player.isCrouching()) {
-			Collections.reverse(similarart);
+			Collections.reverse(similarPaintingVariants);
 		}
 		
-		if (similarart.get(similarart.size()-1).equals(art)) {
-			newart = similarart.get(0);
+		if (similarPaintingVariants.get(similarPaintingVariants.size()-1).equals(currentVariant)) {
+			newVariant = similarPaintingVariants.get(0);
 		}
 		else {
 			boolean choosenext = false;
-			for (PaintingVariant sa : similarart) {
+			for (Holder<PaintingVariant> similarVariant : similarPaintingVariants) {
 				if (choosenext) {
-					newart = sa;
+					newVariant = similarVariant;
 					break;
 				}
-				if (sa.equals(art)) {
+				if (similarVariant.equals(currentVariant)) {
 					choosenext = true;
 				}
 			}
 		}
 		
-		if (newart == null) {
+		if (newVariant == null) {
 			return InteractionResult.PASS;
 		}
-		
-		BlockPos ppos = painting.getPos();
-		Painting newpainting = new Painting(world, ppos, painting.getMotionDirection(), Holder.direct(newart));
-		
-		newpainting.setPos(ppos.getX(), ppos.getY(), ppos.getZ());
-		
-		painting.remove(RemovalReason.DISCARDED);
-		world.addFreshEntity(newpainting);
-		
+
+		painting.setVariant(newVariant);
 		return InteractionResult.SUCCESS;
 	}
 }

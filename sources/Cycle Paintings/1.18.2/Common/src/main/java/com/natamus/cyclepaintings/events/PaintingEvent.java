@@ -18,10 +18,10 @@ package com.natamus.cyclepaintings.events;
 
 import com.natamus.cyclepaintings.util.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.decoration.Motive;
 import net.minecraft.world.entity.decoration.Painting;
 import net.minecraft.world.entity.player.Player;
@@ -35,57 +35,52 @@ import java.util.List;
 
 public class PaintingEvent {
 	public static InteractionResult onClick(Player player, Level world, InteractionHand hand, Entity target, EntityHitResult hitResult) {
-		if (world.isClientSide) {
-			return InteractionResult.PASS;
-		}
-		
 		ItemStack handstack = player.getItemInHand(hand);
 		if (!handstack.getItem().equals(Items.PAINTING)) {
 			return InteractionResult.PASS;
 		}
-		
+
 		if (!(target instanceof Painting)) {
 			return InteractionResult.PASS;
 		}
-		
+
 		Painting painting = (Painting)target;
-		Motive art = painting.motive;
-		
-		Motive newart = null;
-		
-		List<Motive> similarart = Util.getSimilarArt(art);
+		Motive currentVariant = painting.motive;
+
+		Holder<Motive> newVariant = null;
+
+		List<Holder<Motive>> similarPaintingVariants = Util.getSimilarArt(currentVariant);
 		if (player.isCrouching()) {
-			Collections.reverse(similarart);
+			Collections.reverse(similarPaintingVariants);
 		}
-		
-		if (similarart.get(similarart.size()-1).equals(art)) {
-			newart = similarart.get(0);
+
+		if (similarPaintingVariants.get(similarPaintingVariants.size()-1).value().equals(currentVariant)) {
+			newVariant = similarPaintingVariants.get(0);
 		}
 		else {
 			boolean choosenext = false;
-			for (Motive sa : similarart) {
+			for (Holder<Motive> similarVariant : similarPaintingVariants) {
 				if (choosenext) {
-					newart = sa;
+					newVariant = similarVariant;
 					break;
 				}
-				if (sa.equals(art)) {
+				if (similarVariant.value().equals(currentVariant)) {
 					choosenext = true;
 				}
 			}
 		}
-		
-		if (newart == null) {
+
+		if (newVariant == null) {
 			return InteractionResult.PASS;
 		}
-		
+
 		BlockPos ppos = painting.getPos();
-		Painting newpainting = new Painting(world, ppos, painting.getMotionDirection(), newart);
-		
+		Painting newpainting = new Painting(world, ppos, painting.getMotionDirection(), newVariant.value());
+
 		newpainting.setPos(ppos.getX(), ppos.getY(), ppos.getZ());
-		
-		painting.remove(RemovalReason.DISCARDED);
+
+		painting.remove(Entity.RemovalReason.DISCARDED);
 		world.addFreshEntity(newpainting);
-		
 		return InteractionResult.SUCCESS;
 	}
 }

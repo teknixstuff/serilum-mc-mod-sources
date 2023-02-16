@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "breedablekillerrabbit",
-  "version": "3.1",
+  "version": "3.2",
 
   "name": "Breedable Killer Rabbit",
   "description": "A minimalistic configurable mod which makes the killer rabbit tamable and available by breeding.",

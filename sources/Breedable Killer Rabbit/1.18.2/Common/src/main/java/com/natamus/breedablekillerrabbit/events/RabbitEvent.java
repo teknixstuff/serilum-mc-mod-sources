@@ -20,6 +20,7 @@ import com.natamus.breedablekillerrabbit.config.ConfigHandler;
 import com.natamus.collective.data.GlobalVariables;
 import com.natamus.collective.functions.StringFunctions;
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -124,7 +125,7 @@ public class RabbitEvent {
 			return;
 		}
 		
-		if (entity.getCustomName().getString().equals("The Killer Bunny")) {
+		if (entity.getCustomName().equals(new TranslatableComponent("entity.minecraft.killer_bunny"))) {
 			entity.setCustomName(null);
 		}
 	}
@@ -147,7 +148,7 @@ public class RabbitEvent {
 			return damageAmount;
 		}
 		
-		if (((Rabbit)entity).getRabbitType() != 99) {
+		if (((Rabbit)source).getRabbitType() != 99) {
 			StringFunctions.sendMessage((Player)entity, "The killer rabbit wants a golden carrot!", ChatFormatting.RED);
 		}
 		

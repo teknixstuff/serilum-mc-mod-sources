@@ -21,6 +21,8 @@ import com.natamus.cyclepaintings.events.PaintingEvent;
 import com.natamus.cyclepaintings.util.Reference;
 import com.natamus.cyclepaintings.util.Util;
 import net.minecraft.core.Registry;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -40,6 +42,9 @@ public class ForgePaintingEvent {
 
 	@SubscribeEvent
 	public void onClick(PlayerInteractEvent.EntityInteract e) {
-		PaintingEvent.onClick(e.getEntity(), e.getLevel(), e.getHand(), e.getTarget(), null);
+		Player player = e.getEntity();
+		if (PaintingEvent.onClick(player, e.getLevel(), e.getHand(), e.getTarget(), null).equals(InteractionResult.SUCCESS)) {
+			player.swing(e.getHand());
+		}
 	}
 }

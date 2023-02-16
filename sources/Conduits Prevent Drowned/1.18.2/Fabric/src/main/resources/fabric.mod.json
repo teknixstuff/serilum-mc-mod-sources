@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "conduitspreventdrowned",
-  "version": "3.1",
+  "version": "3.2",
 
   "name": "Conduits Prevent Drowned",
   "description": "Disables drowned zombie spawns around the player when the conduit effect is active.",
