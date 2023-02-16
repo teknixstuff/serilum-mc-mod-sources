@@ -26,10 +26,10 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 public class ForgeServerEvent {
 	@SubscribeEvent
 	public void onEntityDamageTaken(LivingHurtEvent e) {
-		Entity target = e.getEntity();
+		Entity entity = e.getEntity();
 
 		float damageAmount = e.getAmount();
-		float newAmount = ServerEvent.onEntityDamageTaken(target.getCommandSenderWorld(), target, e.getSource(), damageAmount);
+		float newAmount = ServerEvent.onEntityDamageTaken(entity.getCommandSenderWorld(), entity, e.getSource(), damageAmount);
 
 		if (newAmount != damageAmount) {
 			e.setAmount(newAmount);

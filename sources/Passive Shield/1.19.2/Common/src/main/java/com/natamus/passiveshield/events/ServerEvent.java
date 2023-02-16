@@ -29,9 +29,8 @@ public class ServerEvent {
 			return damageAmount;
 		}
 
-		Entity target = damageSource.getDirectEntity();
-		if (target instanceof Player) {
-			Player player = (Player)target;
+		if (entity instanceof Player) {
+			Player player = (Player)entity;
 			if (!(Services.TOOLFUNCTIONS.isShield(player.getMainHandItem()))) {
 				if (!(Services.TOOLFUNCTIONS.isShield(player.getOffhandItem()))) {
 					return damageAmount;

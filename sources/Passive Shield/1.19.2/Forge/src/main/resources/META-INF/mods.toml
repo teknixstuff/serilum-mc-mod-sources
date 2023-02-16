@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="passiveshield"
-version="3.1"
+version="3.2"
 displayName="Passive Shield"
 displayURL="https://curseforge.com/minecraft/mc-mods/passive-shield"
 authors="Rick South"

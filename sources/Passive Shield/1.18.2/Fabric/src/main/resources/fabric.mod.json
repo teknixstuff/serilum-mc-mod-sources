@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "passiveshield",
-  "version": "3.1",
+  "version": "3.2",
 
   "name": "Passive Shield",
   "description": "The shield is hidden in the offhand until used, and they can passively block damage when held.",
