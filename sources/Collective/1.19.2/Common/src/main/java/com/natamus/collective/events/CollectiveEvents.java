@@ -16,6 +16,7 @@
 
 package com.natamus.collective.events;
 
+import com.mojang.datafixers.util.Pair;
 import com.natamus.collective.check.RegisterMod;
 import com.natamus.collective.config.CollectiveConfigHandler;
 import com.natamus.collective.data.GlobalVariables;
@@ -24,6 +25,8 @@ import com.natamus.collective.functions.EntityFunctions;
 import com.natamus.collective.functions.SpawnEntityFunctions;
 import com.natamus.collective.objects.SAMObject;
 import com.natamus.collective.util.CollectiveReference;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.AgeableMob;
@@ -41,10 +44,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.WeakHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class CollectiveEvents {
 	public static WeakHashMap<ServerLevel, List<Entity>> entitiesToSpawn = new WeakHashMap<ServerLevel, List<Entity>>();
 	public static WeakHashMap<ServerLevel, WeakHashMap<Entity, Entity>> entitiesToRide = new WeakHashMap<ServerLevel, WeakHashMap<Entity, Entity>>();
+	public static CopyOnWriteArrayList<Pair<Integer, Runnable>> scheduledRunnables = new CopyOnWriteArrayList<Pair<Integer, Runnable>>();
 
 	public static void onWorldLoad(ServerLevel serverlevel) {
 		entitiesToSpawn.put(serverlevel, new ArrayList<Entity>());
@@ -72,6 +77,16 @@ public class CollectiveEvents {
 			}
 
 			entitiesToSpawn.get(serverlevel).remove(0);
+		}
+	}
+
+	public static void onServerTick(MinecraftServer minecraftServer) {
+		int serverTickCount = minecraftServer.getTickCount();
+		for (Pair<Integer, Runnable> pair : scheduledRunnables) {
+			if (pair.getFirst() <= serverTickCount) {
+				minecraftServer.tell(new TickTask(minecraftServer.getTickCount(), pair.getSecond()));
+				scheduledRunnables.remove(pair);
+			}
 		}
 	}
 	

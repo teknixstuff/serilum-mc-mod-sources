@@ -50,7 +50,7 @@ public class Util {
 		File file = new File(dirpath + File.separator + "starterkit.txt");
 		
 		if (dir.isDirectory() && file.isFile()) {
-			String configstring = new String(Files.readAllBytes(Paths.get(dirpath + File.separator + "starterkit.txt")));
+			String configstring = new String(Files.readAllBytes(Paths.get(dirpath + File.separator + "starterkit.txt")), StandardCharsets.UTF_8);
 			if (configstring.startsWith("'")) { // nbt
 				startergearstring = configstring;
 			}

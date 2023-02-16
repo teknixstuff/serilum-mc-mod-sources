@@ -21,6 +21,7 @@ import com.natamus.collective.functions.WorldFunctions;
 import com.natamus.collective.util.CollectiveReference;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.WorldTickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -28,6 +29,7 @@ import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 @EventBusSubscriber
 public class RegisterCollectiveEvents {
@@ -49,6 +51,15 @@ public class RegisterCollectiveEvents {
         }
 
         CollectiveEvents.onWorldTick((ServerLevel)level);
+    }
+
+    @SubscribeEvent
+    public void onServerTick(TickEvent.ServerTickEvent e) {
+        if (!e.phase.equals(Phase.END)) {
+            return;
+        }
+
+        CollectiveEvents.onServerTick(ServerLifecycleHooks.getCurrentServer());
     }
 
     @SubscribeEvent

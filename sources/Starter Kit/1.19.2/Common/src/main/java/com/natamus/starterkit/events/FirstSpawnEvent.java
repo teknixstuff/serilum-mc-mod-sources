@@ -20,11 +20,11 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.context.CommandContextBuilder;
 import com.natamus.collective.functions.PlayerFunctions;
+import com.natamus.collective.functions.TaskFunctions;
 import com.natamus.starterkit.config.ConfigHandler;
 import com.natamus.starterkit.util.Reference;
 import com.natamus.starterkit.util.Util;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.server.TickTask;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -40,11 +40,11 @@ public class FirstSpawnEvent {
 		}
 
 		final Player player = (Player)entity;
-		world.getServer().tell(new TickTask(world.getServer().getTickCount(), () -> {
+		TaskFunctions.enqueueCollectiveTask(world.getServer(), () -> {
 			if (PlayerFunctions.isJoiningWorldForTheFirstTime(player, Reference.MOD_ID, false)) {
 				Util.setStarterKit(player);
 			}
-		}));
+		}, 5);
 	}
 	
 	public static void onCommand(String string, ParseResults<CommandSourceStack> parse) {

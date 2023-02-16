@@ -687,7 +687,7 @@ public abstract class DuskConfig {
 		JsonWriter jsonWriter = new JsonWriter(new FileWriter(newJsonPath.toString()));
 		jsonWriter.beginObject();
 
-		String tomlContent = Files.readString(oldTomlPath);
+		String tomlContent = Files.readString(oldTomlPath, StandardCharsets.UTF_8);
 		for (String line : tomlContent.split("\n")) {
 			line = line.trim();
 			if (line.startsWith("[") || line.startsWith("#")) {

@@ -40,6 +40,10 @@ public class CollectiveFabric implements ModInitializer {
 		ServerTickEvents.START_WORLD_TICK.register((ServerLevel world) -> {
 			CollectiveEvents.onWorldTick(world);
 		});
+
+		ServerTickEvents.START_SERVER_TICK.register((MinecraftServer minecraftServer) -> {
+			CollectiveEvents.onServerTick(minecraftServer);
+		});
 		
 		ServerEntityEvents.ENTITY_LOAD.register((Entity entity, ServerLevel world) -> {
 			CollectiveEvents.onEntityJoinLevel(world, entity);

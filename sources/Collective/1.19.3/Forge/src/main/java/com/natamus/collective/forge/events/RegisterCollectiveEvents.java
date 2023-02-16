@@ -52,6 +52,15 @@ public class RegisterCollectiveEvents {
     }
 
     @SubscribeEvent
+    public void onServerTick(TickEvent.ServerTickEvent e) {
+        if (!e.phase.equals(Phase.END)) {
+            return;
+        }
+
+        CollectiveEvents.onServerTick(e.getServer());
+    }
+
+    @SubscribeEvent
     public void onMobSpawnerSpawn(LivingSpawnEvent.SpecialSpawn e) {
         Level Level = WorldFunctions.getWorldIfInstanceOfAndNotRemote(e.getLevel());
         if (Level == null) {
