@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "mooshroomtweaks",
-  "version": "3.0",
+  "version": "3.2",
 
   "name": "Mooshroom Tweaks",
   "description": "A minimalistic mod that tweaks the spawning behaviour of mooshrooms, allowing both red and brown to spawn naturally.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.19",
     "java": ">=17",
-    "collective": ">=6.16"
+    "collective": ">=6.48"
   },
 
   "custom": {

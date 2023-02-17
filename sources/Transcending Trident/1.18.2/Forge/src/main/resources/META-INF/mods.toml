@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="transcendingtrident"
-version="4.1"
+version="4.2"
 displayName="Transcending Trident"
 displayURL="https://curseforge.com/minecraft/mc-mods/transcending-trident"
 authors="Rick South"
@@ -23,6 +23,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.transcendingtrident]]
     modId="collective"
     mandatory=true
-    versionRange="[6.45,)"
+    versionRange="[6.48,)"
     ordering="NONE"
     side="BOTH"

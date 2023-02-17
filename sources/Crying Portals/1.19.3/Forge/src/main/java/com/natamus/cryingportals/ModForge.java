@@ -17,9 +17,7 @@
 package com.natamus.cryingportals;
 
 import com.natamus.collective.check.RegisterMod;
-import com.natamus.cryingportals.forge.events.ForgePortalEvent;
 import com.natamus.cryingportals.util.Reference;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
@@ -39,7 +37,7 @@ public class ModForge {
 	}
 
 	private void loadComplete(final FMLLoadCompleteEvent event) {
-    	MinecraftForge.EVENT_BUS.register(new ForgePortalEvent());
+
 	}
 
 	private static void setGlobalConstants() {

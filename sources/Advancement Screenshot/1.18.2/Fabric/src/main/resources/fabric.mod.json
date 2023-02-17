@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "advancementscreenshot",
-  "version": "4.0",
+  "version": "4.1",
 
   "name": "Advancement Screenshot",
   "description": "A client-side mod which takes a screenshot every time a player achieves an advancement.",
@@ -26,7 +26,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.22"
+    "collective": ">=6.48"
   },
 
   "custom": {

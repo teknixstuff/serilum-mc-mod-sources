@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="realisticbees"
-version="3.2"
+version="3.3"
 displayName="Realistic Bees"
 displayURL="https://curseforge.com/minecraft/mc-mods/realistic-bees"
 authors="Rick South"
@@ -22,6 +22,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.realisticbees]]
     modId="collective"
     mandatory=true
-    versionRange="[6.45,)"
+    versionRange="[6.48,)"
     ordering="NONE"
     side="BOTH"

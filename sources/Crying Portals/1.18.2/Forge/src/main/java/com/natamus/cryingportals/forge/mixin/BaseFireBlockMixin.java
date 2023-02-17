@@ -16,14 +16,15 @@
 
 package com.natamus.cryingportals.forge.mixin;
 
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Blocks;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(value = BaseFireBlock.class, priority = 1001)
 public class BaseFireBlockMixin {
@@ -38,7 +39,7 @@ public class BaseFireBlockMixin {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 }

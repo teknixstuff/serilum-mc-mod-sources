@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="respawningshulkers"
-version="3.2"
+version="3.3"
 displayName="Respawning Shulkers"
 displayURL="https://curseforge.com/minecraft/mc-mods/respawning-shulkers"
 authors="Rick South"
@@ -23,6 +23,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.respawningshulkers]]
     modId="collective"
     mandatory=true
-    versionRange="[6.45,)"
+    versionRange="[6.48,)"
     ordering="NONE"
     side="BOTH"

@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="naturallychargedcreepers"
-version="3.1"
+version="3.2"
 displayName="Naturally Charged Creepers"
 displayURL="https://curseforge.com/minecraft/mc-mods/naturally-charged-creepers"
 authors="Rick South"
@@ -23,6 +23,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.naturallychargedcreepers]]
     modId="collective"
     mandatory=true
-    versionRange="[6.45,)"
+    versionRange="[6.48,)"
     ordering="NONE"
     side="BOTH"
