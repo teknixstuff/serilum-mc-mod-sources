@@ -80,60 +80,60 @@ public class Util {
 		bottomleft = bottomleft.immutable();
 		
 		int height;
-		if (!world.getBlockState(bottomleft.below()).getBlock().equals(Blocks.OBSIDIAN)) {
+		if (!isObsidian(world.getBlockState(bottomleft.below()))) {
 			return;
 		}
-		
-		if (world.getBlockState(bottomleft.above(2)).getBlock().equals(Blocks.OBSIDIAN)) {
+
+		if (isObsidian(world.getBlockState(bottomleft.above(2)))) {
 			height = 2;
 		}
-		else if (world.getBlockState(bottomleft.above(3)).getBlock().equals(Blocks.OBSIDIAN)) {
+		else if (isObsidian(world.getBlockState(bottomleft.above(3)))) {
 			height = 3;
 		}
 		else {
 			return;
 		}
-		
+
 		List<BlockPos> toportals = new ArrayList<BlockPos>();
-		
+
 		int heighti;
 		for (heighti = height; heighti > 0; heighti--) {
 			toportals.add(bottomleft.above(heighti-1).immutable());
 			if (!airdirection.equals("none")) {
 				if (airdirection.equals("south")) {
-					if (!world.getBlockState(bottomleft.north()).getBlock().equals(Blocks.OBSIDIAN)) {
+					if (!isObsidian(world.getBlockState(bottomleft.north()))) {
 						break;
 					}
-					
+
 					Block wblock = world.getBlockState(bottomleft.south()).getBlock();
 					if (isAir(wblock)) {
-						if (!world.getBlockState(bottomleft.south(2)).getBlock().equals(Blocks.OBSIDIAN)) {
+						if (!isObsidian(world.getBlockState(bottomleft.south(2)))) {
 							break;
 						}
 						toportals.add(bottomleft.above(heighti-1).south().immutable());
 					}
-					else if (!wblock.equals(Blocks.OBSIDIAN)) {
+					else if (!isObsidian(wblock)) {
 						break;
 					}
 				}
 				else if (airdirection.equals("east")) {
-					if (!world.getBlockState(bottomleft.west()).getBlock().equals(Blocks.OBSIDIAN)) {
+					if (!isObsidian(world.getBlockState(bottomleft.west()).getBlock())) {
 						break;
 					}
-					
+
 					Block wblock = world.getBlockState(bottomleft.east()).getBlock();
 					if (isAir(wblock)) {
-						if (!world.getBlockState(bottomleft.east(2)).getBlock().equals(Blocks.OBSIDIAN)) {
+						if (!isObsidian(world.getBlockState(bottomleft.east(2)))) {
 							break;
 						}
 						toportals.add(bottomleft.above(heighti-1).east().immutable());
 					}
-					else if (!wblock.equals(Blocks.OBSIDIAN)) {
+					else if (!isObsidian(wblock)) {
 						break;
 					}
 				}
 			}
-			
+
 		}
 
 		if (heighti == 0) {
@@ -145,9 +145,9 @@ public class Util {
 					rotation = Rotation.CLOCKWISE_90;
 				}
 			}
-			
+
 			int obsidiancount = 0;
-			
+
 			for (BlockPos tp0 : toportals) {
 				for (BlockPos tp0around : getBlocksAround(tp0.immutable(), rotation)) {
 					Block tp0block = world.getBlockState(tp0around).getBlock();
@@ -156,7 +156,7 @@ public class Util {
 					}
 				}
 			}
-			
+
 			if (toportals.size() == 2) {
 				if (obsidiancount < 6) {
 					return;
@@ -167,17 +167,17 @@ public class Util {
 					return;
 				}
 			}
-			
+
 			BlockPos portalpos = null;
 			for (BlockPos tp : toportals) {
 				world.setBlock(tp, Blocks.NETHER_PORTAL.defaultBlockState().rotate(rotation), 2);
 				portalpos = tp;
 			}
-			
+
 			if (portalpos == null) {
 				return;
 			}
-			
+
 			Axis axis;
 			if (airdirection.equals("east")) {
 				axis = Axis.X;
@@ -185,20 +185,20 @@ public class Util {
 			else {
 				axis = Axis.Z;
 			}
-			
+
 			PortalShape size = new PortalShape(world, portalpos, axis);
 
 			Services.EVENTTRIGGER.triggerNetherPortalSpawnEvent(world, portalpos, size);
 		}
 	}
-	
+
 	public static List<BlockPos> getBlocksAround(BlockPos pos, Rotation rot) {
 		List<BlockPos> around = new ArrayList<BlockPos>();
 		BlockPos impos = pos.immutable();
-		
+
 		around.add(impos.above().immutable());
 		around.add(impos.below().immutable());
-		
+
 		if (rot.equals(Rotation.CLOCKWISE_90)) {
 			around.add(impos.north().immutable());
 			around.add(impos.south().immutable());
@@ -207,13 +207,13 @@ public class Util {
 			around.add(impos.east().immutable());
 			around.add(impos.west().immutable());
 		}
-		
+
 		return around;
 	}
-	
+
 	public static List<BlockPos> getFrontBlocks(Level world, BlockPos portalblock) {
 		List<BlockPos> returnblocks = new ArrayList<BlockPos>();
-		
+
 		boolean smallest = false;
 		if (isObsidian(world.getBlockState(portalblock.east())) && isObsidian(world.getBlockState(portalblock.west()))) {
 			smallest = true;
@@ -229,7 +229,7 @@ public class Util {
 				portalblock = portalblock.west().immutable();
 			}
 		}
-		
+
 		if (!isPortalOrObsidian(world.getBlockState(portalblock.west()))) {
 			returnblocks.add(portalblock.west().below().immutable());
 			if (!smallest) {
@@ -242,13 +242,13 @@ public class Util {
 				returnblocks.add(portalblock.south().east().below().immutable());
 			}
 		}
-		
+
 		return returnblocks;
 	}
-	
+
 	public static BlockPos findPortalAround(Level world, BlockPos pos) {
 		BlockPos portalpos = null;
-		
+
 		for (int i = 0; i < 10; i++) {
 			BlockPos cpos = pos.above(i).immutable();
 			Iterator<BlockPos> around = BlockPos.betweenClosedStream(cpos.getX()-1, cpos.getY(), cpos.getZ()-1, cpos.getX()+1, cpos.getY(), cpos.getZ()+1).iterator();
@@ -265,7 +265,7 @@ public class Util {
 		}
 		return portalpos;
 	}
-	
+
 	public static void setObsidian(Level world, List<BlockPos> toblocks) {
 		for (BlockPos tbs : toblocks) {
 			if (shouldMakeFront(world.getBlockState(tbs))) {
@@ -279,20 +279,19 @@ public class Util {
 			}
 		}
 	}
-	
+
 	public static Boolean shouldMakeFront(BlockState bs) {
 		Block block = bs.getBlock();
 		return isAir(block) || block.equals(Blocks.NETHERRACK) || block.equals(Blocks.SOUL_SAND);
 	}
-	
+
 	public static Boolean isObsidian(BlockState bs) {
-		Block block = bs.getBlock();
-		return block.equals(Blocks.OBSIDIAN);
+		return isObsidian(bs.getBlock());
 	}
 	public static Boolean isObsidian(Block block) {
-		return block.equals(Blocks.OBSIDIAN);
+		return block.equals(Blocks.OBSIDIAN) || (Services.MODLOADER.isModLoaded("cryingportals") && block.equals(Blocks.CRYING_OBSIDIAN));
 	}
-	
+
 	public static Boolean isAir(BlockState bs) {
 		Block block = bs.getBlock();
 		return block.equals(Blocks.AIR) || block.equals(Blocks.FIRE);
@@ -300,10 +299,10 @@ public class Util {
 	public static Boolean isAir(Block block) {
 		return block.equals(Blocks.AIR) || block.equals(Blocks.FIRE);
 	}
-	
+
 	public static Boolean isPortalOrObsidian(BlockState bs) {
 		Block block = bs.getBlock();
-		return block.equals(Blocks.NETHER_PORTAL) || block.equals(Blocks.OBSIDIAN);
+		return block.equals(Blocks.NETHER_PORTAL) || isObsidian(block);
 	}
 	
 	public static Boolean isPortal(BlockState bs) {

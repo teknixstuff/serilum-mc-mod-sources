@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "smallernetherportals",
-  "version": "3.0",
+  "version": "3.2",
 
   "name": "Smaller Nether Portals",
   "description": "Allows the creation of smaller nether portals, specifically 1x2, 1x3 and 2x2.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.19",
     "java": ">=17",
-    "collective": ">=6.9"
+    "collective": ">=6.48"
   },
 
   "custom": {

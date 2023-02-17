@@ -80,14 +80,14 @@ public class Util {
 		bottomleft = bottomleft.immutable();
 		
 		int height;
-		if (!world.getBlockState(bottomleft.below()).getBlock().equals(Blocks.OBSIDIAN)) {
+		if (!isObsidian(world.getBlockState(bottomleft.below()))) {
 			return;
 		}
 		
-		if (world.getBlockState(bottomleft.above(2)).getBlock().equals(Blocks.OBSIDIAN)) {
+		if (isObsidian(world.getBlockState(bottomleft.above(2)))) {
 			height = 2;
 		}
-		else if (world.getBlockState(bottomleft.above(3)).getBlock().equals(Blocks.OBSIDIAN)) {
+		else if (isObsidian(world.getBlockState(bottomleft.above(3)))) {
 			height = 3;
 		}
 		else {
@@ -101,34 +101,34 @@ public class Util {
 			toportals.add(bottomleft.above(heighti-1).immutable());
 			if (!airdirection.equals("none")) {
 				if (airdirection.equals("south")) {
-					if (!world.getBlockState(bottomleft.north()).getBlock().equals(Blocks.OBSIDIAN)) {
+					if (!isObsidian(world.getBlockState(bottomleft.north()))) {
 						break;
 					}
 					
 					Block wblock = world.getBlockState(bottomleft.south()).getBlock();
 					if (isAir(wblock)) {
-						if (!world.getBlockState(bottomleft.south(2)).getBlock().equals(Blocks.OBSIDIAN)) {
+						if (!isObsidian(world.getBlockState(bottomleft.south(2)))) {
 							break;
 						}
 						toportals.add(bottomleft.above(heighti-1).south().immutable());
 					}
-					else if (!wblock.equals(Blocks.OBSIDIAN)) {
+					else if (!isObsidian(wblock)) {
 						break;
 					}
 				}
 				else if (airdirection.equals("east")) {
-					if (!world.getBlockState(bottomleft.west()).getBlock().equals(Blocks.OBSIDIAN)) {
+					if (!isObsidian(world.getBlockState(bottomleft.west()).getBlock())) {
 						break;
 					}
 					
 					Block wblock = world.getBlockState(bottomleft.east()).getBlock();
 					if (isAir(wblock)) {
-						if (!world.getBlockState(bottomleft.east(2)).getBlock().equals(Blocks.OBSIDIAN)) {
+						if (!isObsidian(world.getBlockState(bottomleft.east(2)))) {
 							break;
 						}
 						toportals.add(bottomleft.above(heighti-1).east().immutable());
 					}
-					else if (!wblock.equals(Blocks.OBSIDIAN)) {
+					else if (!isObsidian(wblock)) {
 						break;
 					}
 				}
@@ -286,11 +286,10 @@ public class Util {
 	}
 	
 	public static Boolean isObsidian(BlockState bs) {
-		Block block = bs.getBlock();
-		return block.equals(Blocks.OBSIDIAN);
+		return isObsidian(bs.getBlock());
 	}
 	public static Boolean isObsidian(Block block) {
-		return block.equals(Blocks.OBSIDIAN);
+		return block.equals(Blocks.OBSIDIAN) || (Services.MODLOADER.isModLoaded("cryingportals") && block.equals(Blocks.CRYING_OBSIDIAN));
 	}
 	
 	public static Boolean isAir(BlockState bs) {
@@ -303,7 +302,7 @@ public class Util {
 	
 	public static Boolean isPortalOrObsidian(BlockState bs) {
 		Block block = bs.getBlock();
-		return block.equals(Blocks.NETHER_PORTAL) || block.equals(Blocks.OBSIDIAN);
+		return block.equals(Blocks.NETHER_PORTAL) || isObsidian(block);
 	}
 	
 	public static Boolean isPortal(BlockState bs) {

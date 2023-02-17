@@ -49,7 +49,7 @@ public class PortalEvent {
 			Iterator<BlockPos> it = BlockPos.betweenClosedStream(clickpos.getX()-3, clickpos.getY()-3, clickpos.getZ()-3, clickpos.getX()+3, clickpos.getY()+3, clickpos.getZ()+3).iterator();
 			while (it.hasNext()) {
 				BlockPos np = it.next();
-				if (world.getBlockState(np).getBlock().equals(Blocks.OBSIDIAN)) {
+				if (Util.isObsidian(world.getBlockState(np))) {
 					obsidiancount+=1;
 				}
 			}
