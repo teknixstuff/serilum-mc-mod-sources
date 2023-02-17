@@ -35,6 +35,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(value = Player.class, priority = 999)
 public class PlayerMixin {
@@ -50,18 +51,15 @@ public class PlayerMixin {
 		
 		return f;
 	}
-	
-	@ModifyVariable(method = "getDestroySpeed", at = @At(value= "RETURN"))
-	private float Player_getDestroySpeed(float f, BlockState state) {
-		Player player = (Player)(Object)this;
-		Level world = player.getCommandSenderWorld();
 
-		float newSpeed = CollectivePlayerEvents.ON_PLAYER_DIG_SPEED_CALC.invoker().onDigSpeedCalc(world, player, f, state);
+	@Inject(method = "getDestroySpeed", at = @At(value= "RETURN"), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
+	private void Player_getDestroySpeed(BlockState blockState, CallbackInfoReturnable<Float> cir, float f) {
+		Player player = (Player)(Object)this;
+
+		float newSpeed = CollectivePlayerEvents.ON_PLAYER_DIG_SPEED_CALC.invoker().onDigSpeedCalc(player.getCommandSenderWorld(), player, f, blockState);
 		if (newSpeed != -1 && newSpeed != f) {
-			return newSpeed;
+			cir.setReturnValue(newSpeed);
 		}
-		
-		return f;
 	}
 	
 	@Inject(method = "drop(Lnet/minecraft/world/item/ItemStack;Z)Lnet/minecraft/world/entity/item/ItemEntity;", at = @At(value = "HEAD"))

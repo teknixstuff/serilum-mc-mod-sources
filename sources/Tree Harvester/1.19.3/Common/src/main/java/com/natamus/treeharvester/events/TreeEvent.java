@@ -117,17 +117,17 @@ public class TreeEvent {
 		}
 
 		Block block = level.getBlockState(bpos).getBlock();
-		if (!CompareBlockFunctions.isTreeLog(block) && !Util.isGiantMushroomStemBlock(block)) {
+		if (!Util.isTreeLog(block)) {
 			return true;
 		}
 
 		if (ConfigHandler.treeHarvestWithoutSneak) {
-			if (player.isShiftKeyDown()) {
+			if (player.isCrouching()) {
 				return true;
 			}
 		}
 		else {
-			if (!player.isShiftKeyDown()) {
+			if (!player.isCrouching()) {
 				return true;
 			}
 		}
@@ -211,14 +211,14 @@ public class TreeEvent {
 			return true;
 		}
 		
-		if (ConfigHandler.enableFastLeafDecay && !ConfigHandler.instantBreakLeavesAround) {
+		if (ConfigHandler.enableFastLeafDecay || ConfigHandler.instantBreakLeavesAround) {
 			List<BlockPos> logs = new ArrayList<BlockPos>();
 			List<BlockPos> leaves = new ArrayList<BlockPos>();
 
 			for (BlockPos next : BlockPos.betweenClosed(bpos.getX() - 8, bpos.getY(), bpos.getZ() - 8, bpos.getX() + 8, Util.highestleaf.get(bpos), bpos.getZ() + 8)) {
 				Block nextblock = level.getBlockState(next).getBlock();
-				if (CompareBlockFunctions.isTreeLog(nextblock) || Util.isGiantMushroomStemBlock(nextblock)) {
-					if (nextblock.equals(block)) {
+				if (Util.isTreeLog(nextblock)) {
+					if (nextblock.equals(block) || Util.areEqualLogTypes(block, nextblock)) {
 						logs.add(next.immutable());
 					}
 				}
@@ -232,7 +232,8 @@ public class TreeEvent {
 			Block leafblock = level.getBlockState(highestlog.above()).getBlock();
 			for (BlockPos next : BlockPos.betweenClosed(bpos.getX() - h, bpos.getY(), bpos.getZ() - h, bpos.getX() + h, Util.highestleaf.get(bpos), bpos.getZ() + h)) {
 				Block nextblock = level.getBlockState(next).getBlock();
-				if (!leafblock.equals(nextblock) && !(ConfigHandler.enableNetherTrees && nextblock.equals(Blocks.SHROOMLIGHT))) {
+
+				if (!leafblock.equals(nextblock) && !(ConfigHandler.enableNetherTrees && nextblock.equals(Blocks.SHROOMLIGHT)) && !(Util.isAzaleaLeaf(leafblock) && Util.isAzaleaLeaf(nextblock))) {
 					continue;
 				}
 
@@ -276,9 +277,17 @@ public class TreeEvent {
 					}
 				}
 			}
-			
-			Collections.shuffle(leaves);
-			processleaves.get(level).add(leaves);
+
+			if (ConfigHandler.instantBreakLeavesAround) {
+				for (BlockPos leafPos : leaves) {
+					level.destroyBlock(leafPos, true);
+				}
+			}
+			else {
+				Collections.shuffle(leaves);
+				processleaves.get(level).add(leaves);
+			}
+
 			Util.highestleaf.remove(bpos);
 
 			if (ConfigHandler.increaseHarvestingTimePerLog) {
@@ -296,17 +305,17 @@ public class TreeEvent {
 		}
 
 		Block block = state.getBlock();
-		if (!CompareBlockFunctions.isTreeLog(block) && !Util.isGiantMushroomStemBlock(block)) {
+		if (!Util.isTreeLog(block)) {
 			return digSpeed;
 		}
 
 		if (ConfigHandler.treeHarvestWithoutSneak) {
-			if (player.isShiftKeyDown()) {
+			if (player.isCrouching()) {
 				return digSpeed;
 			}
 		}
 		else {
-			if (!player.isShiftKeyDown()) {
+			if (!player.isCrouching()) {
 				return digSpeed;
 			}
 		}
@@ -355,8 +364,8 @@ public class TreeEvent {
 				return digSpeed;
 			}
 
-			logcount = BlockPosFunctions.getBlocksNextToEachOtherMaterial(level, bpos, Arrays.asList(Material.WOOD), 30).size(); // Util.isTreeAndReturnLogAmount(level, bpos);
-			if (logcount <= 0) {
+			logcount = BlockPosFunctions.getBlocksNextToEachOtherMaterial(level, bpos, Arrays.asList(Material.WOOD), 25).size(); // Util.isTreeAndReturnLogAmount(level, bpos);
+			if (logcount == 0) {
 				return digSpeed;
 			}
 

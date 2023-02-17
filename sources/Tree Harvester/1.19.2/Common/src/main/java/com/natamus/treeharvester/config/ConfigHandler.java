@@ -40,7 +40,7 @@ public class ConfigHandler extends DuskConfig {
 	@Entry public static boolean increaseExhaustionPerHarvestedLog = true;
 	@Entry(min = 0.001, max = 1.0) public static double increaseExhaustionModifier = 1.0;
 	@Entry public static boolean increaseHarvestingTimePerLog = true;
-	@Entry(min = 0.01, max = 10.0) public static double increasedHarvestingTimePerLogModifier = 0.1;
+	@Entry(min = 0.01, max = 10.0) public static double increasedHarvestingTimePerLogModifier = 0.2;
 	@Entry(min = 1, max = 16) public static int amountOfLeavesBrokenPerTick = 3;
 
 	public static void initConfig() {

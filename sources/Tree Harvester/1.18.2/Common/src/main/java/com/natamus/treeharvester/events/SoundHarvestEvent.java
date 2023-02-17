@@ -26,9 +26,9 @@ public class SoundHarvestEvent {
 	public static Date lastplayedleaf = null;
 	
 	public static boolean onSoundEvent(SoundEngine soundEngine, SoundInstance soundInstance) {
-		String name = soundInstance.toString();
-		
-		if (name.equals("block.grass.break") || name.equals("block.wood.break")) {
+		String name = soundInstance.getLocation().toString();
+
+		if (name.endsWith("block.grass.break") || name.endsWith("block.wood.break")) {
 			Date now = new Date();
 			Date then;
 			

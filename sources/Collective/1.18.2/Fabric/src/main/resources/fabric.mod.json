@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "collective",
-  "version": "6.47",
+  "version": "6.48",
 
   "name": "Collective",
   "description": "Collective is a shared library with common code for all of Serilum's mods.",
@@ -18,14 +18,7 @@
   "icon": "icon.png",
 
   "environment": "*",
-  "entrypoints": {
-    "main": [
-      "com.natamus.collective.CollectiveFabric"
-    ],
-    "modmenu": [
-      "com.natamus.collective.fabric.config.CollectiveModMenu"
-    ]
-  },
+  "entrypoints": { "main": [ "com.natamus.collective.CollectiveFabric" ], "client": [ "com.natamus.collective.CollectiveFabricClient" ], "modmenu": [ "com.natamus.collective.fabric.config.CollectiveModMenu" ] },
   "mixins": [
     "collective-fabric.mixins.json",
     "collective-fabric.crop.mixins.json"

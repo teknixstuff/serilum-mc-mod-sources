@@ -107,12 +107,12 @@ public class Util {
 
 	public static int isTreeAndReturnLogAmount(Level level, BlockPos pos) {
 		highestleaf.put(pos, 0);
-		
-		int leafcount = 9;
+
+		int leafcount = 8;
 		int logcount = 0;
 		int prevleafcount = -1;
 		int prevlogcount = -1;
-	
+
 		int highesty = 0;
 		for (int y = 1; y<=30; y+=1) {
 			if (prevleafcount == leafcount && prevlogcount == logcount) {
@@ -120,7 +120,7 @@ public class Util {
 			}
 			prevleafcount = leafcount;
 			prevlogcount = logcount;
-			
+
 			Iterator<BlockPos> it = BlockPos.betweenClosedStream(pos.getX()-2, pos.getY()+(y-1), pos.getZ()-2, pos.getX()+2, pos.getY()+(y-1), pos.getZ()+2).iterator();
 			while (it.hasNext()) {
 				BlockPos npos = it.next();
@@ -131,20 +131,20 @@ public class Util {
 						highesty = npos.getY();
 					}
 				}
-				else if (CompareBlockFunctions.isTreeLog(nblock) || isGiantMushroomStemBlock(nblock)) {
+				else if (isTreeLog(nblock)) {
 					logcount+=1;
 				}
 			}
 		}
-		
+
 		highestleaf.put(pos.immutable(), highesty);
-		
+
 		if (leafcount < 0) {
 			return logcount;
 		}
 		return -1;
 	}
-	
+
 	public static List<BlockPos> getAllLogsToBreak(Level level, BlockPos pos, int logcount, Block logtype) {
 		CopyOnWriteArrayList<BlockPos> bottomlogs = new CopyOnWriteArrayList<BlockPos>();
 		if (ConfigHandler.replaceSaplingOnTreeHarvest) {
@@ -154,25 +154,25 @@ public class Util {
 				while (it.hasNext()) {
 					BlockPos npos = it.next();
 					Block block = level.getBlockState(npos).getBlock();
-					if (block.equals(logtype)) {
+					if (block.equals(logtype) || areEqualLogTypes(logtype, block)) {
 						bottomlogs.add(npos.immutable());
 					}
 				}
 			}
 		}
-		
+
 		if (ConfigHandler.replaceSaplingOnTreeHarvest) {
 			if (ConfigHandler.instantBreakLeavesAround) {
 				replaceSapling(level, pos, bottomlogs, 1, null);
 			}
-			else if (ConfigHandler.enableFastLeafDecay){
+			else if (ConfigHandler.enableFastLeafDecay) {
 				lowerlogs.add(new Pair<BlockPos, CopyOnWriteArrayList<BlockPos>>(pos.immutable(), bottomlogs));
 			}
 		}
-		
+
 		return getLogsToBreak(level, pos, new ArrayList<BlockPos>(), logcount, logtype);
 	}
-	
+
 	public static void replaceSapling(Level level, BlockPos pos, CopyOnWriteArrayList<BlockPos> bottomlogs, int radius, Item saplingitem) {
 		int rc = bottomlogs.size();
 		if (rc == 0) {
@@ -219,7 +219,7 @@ public class Util {
 				}
 			}
 		}
-		
+
 		int setsaplings = bottomlogs.size()-rc;
 		for (BlockPos bottompos : bottomlogs) {
 			if (setsaplings == 0) {
@@ -235,7 +235,7 @@ public class Util {
 			setsaplings-=1;
 			bottomlogs.remove(bottompos);
 		}
-		
+
 		if (bottomlogs.size() > 0) {
 			if (radius >= 5) {
 				return;
@@ -243,11 +243,11 @@ public class Util {
 			replaceSapling(level, pos, bottomlogs, radius+2, saplingitem);
 		}
 	}
-	
+
 	private static List<BlockPos> getLogsToBreak(Level level, BlockPos pos, List<BlockPos> logstobreak, int logcount, Block logtype) {
 		List<BlockPos> checkaround = new ArrayList<BlockPos>();
-		
-		Iterator<BlockPos> aroundlogs = BlockPos.betweenClosedStream(pos.getX()-1, pos.getY(), pos.getZ()-1, pos.getX()+1, pos.getY()+1, pos.getZ()+1).iterator();
+
+		Iterator<BlockPos> aroundlogs = BlockPos.betweenClosedStream(pos.getX()-1, pos.getY()-1, pos.getZ()-1, pos.getX()+1, pos.getY()+1, pos.getZ()+1).iterator();
 		while (aroundlogs.hasNext()) {
 			BlockPos nalogpos = aroundlogs.next().immutable();
 			if (logstobreak.contains(nalogpos)) {
@@ -255,31 +255,16 @@ public class Util {
 			}
 			BlockState logstate = level.getBlockState(nalogpos);
 			Block logblock = logstate.getBlock();
-			if (logblock.equals(logtype)) {
+			if (logblock.equals(logtype) || areEqualLogTypes(logtype, logblock)) {
 				checkaround.add(nalogpos);
 				logstobreak.add(nalogpos);
-
-				if (ConfigHandler.instantBreakLeavesAround) {
-					Pair<Integer, Integer> hv = getHorizontalAndVerticalValue(level, pos, logtype, logcount);
-					int h = hv.getFirst();
-					int v = hv.getSecond();
-
-					Iterator<BlockPos> aroundleaves = BlockPos.betweenClosedStream(pos.getX() - h, pos.getY(), pos.getZ() - h, pos.getX() + h, pos.getY() + v, pos.getZ() + h).iterator();
-					while (aroundleaves.hasNext()) {
-						BlockPos naleafpos = aroundleaves.next();
-						Block leafblock = level.getBlockState(naleafpos).getBlock();
-						if (CompareBlockFunctions.isTreeLeaf(leafblock, ConfigHandler.enableNetherTrees) || isGiantMushroomLeafBlock(leafblock)) {
-							level.destroyBlock(naleafpos, true);
-						}
-					}
-				}
 			}
 		}
-		
+
 		if (checkaround.size() == 0) {
 			return logstobreak;
 		}
-		
+
 		for (BlockPos capos : checkaround) {
 			for (BlockPos logpos : getLogsToBreak(level, capos, logstobreak, logcount, logtype)) {
 				if (!logstobreak.contains(logpos)) {
@@ -287,14 +272,14 @@ public class Util {
 				}
 			}
 		}
-		
+
 		BlockPos up = pos.above(2);
 		return getLogsToBreak(level, up.immutable(), logstobreak, logcount, logtype);
 	}
-	
+
 	public static Pair<Integer, Integer> getHorizontalAndVerticalValue(Level level, BlockPos startpos, Block logtype, int logcount) {
-		int h = 4; // horizontal
-		int v = 4; // vertical
+		int h = 5; // horizontal
+		int v = 5; // vertical
 		if (logtype.equals(Blocks.ACACIA_LOG)) {
 			h = 5;
 			v = 5;
@@ -318,19 +303,42 @@ public class Util {
 			}
 		}
 		else if (logcount >= 20) {
-			h = 5;
-			v = 5;
+			h = 8;
+			v = 8;
 		}
 		else if (logcount >= 15) {
-			h = 6;
+			h = 7;
 			v = 7;
 		}
 		else if (logcount >= 10) {
-			h = 4;
+			h = 6;
 			v = 5;
 		}
-		
+
 		return new Pair<Integer, Integer>(h, v);
+	}
+
+	public static boolean isTreeLog(Block block) {
+		return CompareBlockFunctions.isTreeLog(block) || isGiantMushroomStemBlock(block) || isTreeRoot(block);
+	}
+
+	public static boolean areEqualLogTypes(Block one, Block two) {
+		if (!isTreeLog(one) || !isTreeLog(two)) {
+			return false;
+		}
+
+		if (isMangroveRootOrLog(one) && isMangroveRootOrLog(two)) {
+			return true;
+		}
+
+		String oneIdentifier = one.getName().getString().split(" ")[0];
+		String twoIdentifier = two.getName().getString().split(" ")[0];
+
+		return oneIdentifier.equals(twoIdentifier);
+	}
+
+	public static boolean isTreeRoot(Block block) {
+		return false;
 	}
 
 	public static boolean isGiantMushroomStemBlock(Block block) {
@@ -349,11 +357,19 @@ public class Util {
 		return block instanceof HugeMushroomBlock && (materialcolour.equals(MaterialColor.DIRT) || materialcolour.equals(MaterialColor.COLOR_RED));
 	}
 
+	public static boolean isMangroveRootOrLog(Block block) {
+		return false;
+	}
+
+	public static boolean isAzaleaLeaf(Block block) {
+		return block.equals(Blocks.AZALEA_LEAVES) || block.equals(Blocks.FLOWERING_AZALEA_LEAVES);
+	}
+
 	public static Pair<Boolean, List<BlockPos>> isConnectedToLogs(Level level, BlockPos startpos) {
 		List<BlockPos> recursiveList = BlockPosFunctions.getBlocksNextToEachOtherMaterial(level, startpos, Arrays.asList(Material.WOOD, Material.LEAVES), 6);
 		for (BlockPos connectedpos : recursiveList) {
 			Block connectedblock = level.getBlockState(connectedpos).getBlock();
-			if (CompareBlockFunctions.isTreeLog(connectedblock) || isGiantMushroomStemBlock(connectedblock)) {
+			if (isTreeLog(connectedblock)) {
 				return new Pair<Boolean, List<BlockPos>>(true, recursiveList);
 			}
 		}
