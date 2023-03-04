@@ -39,6 +39,10 @@ public class DoorEvent {
 	public static HashMap<Level, List<BlockPos>> newclosedoors = new HashMap<Level, List<BlockPos>>();
 
 	public static void onWorldTick(ServerLevel level) {
+		if (ConfigHandler.doorOpenTime == 0) {
+			return;
+		}
+
 		if (newclosedoors.computeIfAbsent(level, k -> new ArrayList<BlockPos>()).size() > 0) {
 			toclosedoors.computeIfAbsent(level, k -> new ArrayList<BlockPos>()).addAll(newclosedoors.get(level));
 			newclosedoors.get(level).clear();
@@ -97,6 +101,10 @@ public class DoorEvent {
 	}
 
 	public static void onPlayerTick(ServerLevel level, ServerPlayer player) {
+		if (ConfigHandler.doorOpenTime == 0) {
+			return;
+		}
+
 		if (player.isSpectator()) {
 			return;
 		}

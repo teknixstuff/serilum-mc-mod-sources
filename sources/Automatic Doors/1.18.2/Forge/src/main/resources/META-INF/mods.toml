@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="automaticdoors"
-version="4.2"
+version="4.3"
 displayName="Automatic Doors"
 displayURL="https://curseforge.com/minecraft/mc-mods/automatic-doors"
 authors="Rick South"
@@ -22,6 +22,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.automaticdoors]]
     modId="collective"
     mandatory=true
-    versionRange="[6.48,)"
+    versionRange="[6.49,)"
     ordering="NONE"
     side="BOTH"

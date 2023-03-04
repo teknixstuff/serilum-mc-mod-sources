@@ -16,6 +16,7 @@
 
 package com.natamus.weakerspiderwebs.events;
 
+import com.natamus.collective.functions.TaskFunctions;
 import com.natamus.weakerspiderwebs.config.ConfigHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -58,10 +59,7 @@ public class WebEvent {
 		BlockPos pos = new BlockPos(pvec.x, ypos, pvec.z);
 		
 		if (world.getBlockState(pos.below()).getBlock() instanceof WebBlock || world.getBlockState(pos).getBlock() instanceof WebBlock || world.getBlockState(pos.above()).getBlock() instanceof WebBlock) {
-			new Thread(() -> {
-				try  { Thread.sleep( ConfigHandler.breakSpiderwebDelay ); }
-				catch (InterruptedException ignored)  { }
-
+			TaskFunctions.enqueueCollectiveTask(world.getServer(), () -> {
 				BlockPos nowpos = player.blockPosition().immutable();
 				if (pos.getX() != nowpos.getX() || pos.getZ() != nowpos.getZ()) {
 					return;
@@ -75,7 +73,7 @@ public class WebEvent {
 				if (world.getBlockState(pos.above()).getBlock() instanceof WebBlock) {
 					todestroy.get(playername).add(pos.above().immutable());
 				}
-			}).start();
+			}, (ConfigHandler.breakSpiderwebDelay/1000)*20);
 		}
 	}
 }

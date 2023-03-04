@@ -16,6 +16,7 @@
 
 package com.natamus.smallernetherportals.events;
 
+import com.natamus.collective.functions.TaskFunctions;
 import com.natamus.smallernetherportals.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -37,39 +38,36 @@ import java.util.Map;
 
 public class PortalEvent {
 	private static final Map<String, BlockPos> toposes = new HashMap<String, BlockPos>();
-	
-	public static boolean onClick(Level world, Player player, InteractionHand hand, BlockPos clickpos, BlockHitResult hitVec) {
-		if (world.isClientSide) {
+
+	public static boolean onClick(Level level, Player player, InteractionHand hand, BlockPos clickpos, BlockHitResult hitVec) {
+		if (level.isClientSide) {
 			return true;
 		}
-		
+
 		ItemStack itemstack = player.getItemInHand(hand);
 		if (itemstack.getItem().equals(Items.FLINT_AND_STEEL)) {
 			int obsidiancount = 0;
 			Iterator<BlockPos> it = BlockPos.betweenClosedStream(clickpos.getX()-3, clickpos.getY()-3, clickpos.getZ()-3, clickpos.getX()+3, clickpos.getY()+3, clickpos.getZ()+3).iterator();
 			while (it.hasNext()) {
 				BlockPos np = it.next();
-				if (Util.isObsidian(world.getBlockState(np))) {
+				if (Util.isObsidian(level.getBlockState(np))) {
 					obsidiancount+=1;
 				}
 			}
-			
-			if (obsidiancount >= 6) {
-				new Thread(() -> {
-					try  { Thread.sleep( 10 ); }
-					catch (InterruptedException ignored)  {}
 
+			if (obsidiancount >= 6) {
+				TaskFunctions.enqueueCollectiveTask(level.getServer(), () -> {
 					BlockPos topos = clickpos;
 
 					boolean foundportal = false;
 					for (BlockPos np : BlockPos.betweenClosed(clickpos.getX() - 1, clickpos.getY() - 1, clickpos.getZ() - 1, clickpos.getX() + 1, clickpos.getY() + 1, clickpos.getZ() + 1)) {
-						Block bsblock = world.getBlockState(np).getBlock();
+						Block bsblock = level.getBlockState(np).getBlock();
 						if (bsblock instanceof NetherPortalBlock) {
 							foundportal = true;
 						} else if (bsblock.equals(Blocks.FIRE)) {
-							if (Util.isAir(world.getBlockState(np.below(1)))) {
+							if (Util.isAir(level.getBlockState(np.below(1)))) {
 								topos = np.below(1).immutable();
-							} else if (Util.isAir(world.getBlockState(np.below(2)))) {
+							} else if (Util.isAir(level.getBlockState(np.below(2)))) {
 								topos = np.below(2).immutable();
 							} else {
 								topos = np.immutable();
@@ -78,39 +76,39 @@ public class PortalEvent {
 					}
 
 					if (!foundportal) {
-						if (Util.isAir(world.getBlockState(topos))) {
-							Util.processSmallerPortal(world, topos.immutable());
+						if (Util.isAir(level.getBlockState(topos))) {
+							Util.processSmallerPortal(level, topos.immutable());
 						}
 					}
-				}).start();
+				}, 1);
 			}
 		}
-		
+
 		return true;
 	}
-	
-	public static void onDimensionChange(ServerLevel world, ServerPlayer player) {
+
+	public static void onDimensionChange(ServerLevel level, ServerPlayer player) {
 		BlockPos pos = player.blockPosition();
-		Block block = world.getBlockState(pos).getBlock();
-		
+		Block block = level.getBlockState(pos).getBlock();
+
 		if (block instanceof NetherPortalBlock) {
 			return;
 		}
-		
+
 		String playername = player.getName().getString();
-		
+
 		if (!toposes.containsKey(playername)) {
-			BlockPos foundpos = Util.findPortalAround(world, pos);
+			BlockPos foundpos = Util.findPortalAround(level, pos);
 			if (foundpos != null) {
-				List<BlockPos> frontblocks = Util.getFrontBlocks(world, foundpos);
-				Util.setObsidian(world, frontblocks);
-				
+				List<BlockPos> frontblocks = Util.getFrontBlocks(level, foundpos);
+				Util.setObsidian(level, frontblocks);
+
 				toposes.put(playername, frontblocks.get(frontblocks.size()-1).above().immutable());
 			}
 		}
 	}
-	
-	public static void onPlayerTick(ServerLevel world, ServerPlayer player) {
+
+	public static void onPlayerTick(ServerLevel level, ServerPlayer player) {
 		String playername = player.getName().getString();
 		if (!toposes.containsKey(playername)) {
 			return;
@@ -118,7 +116,7 @@ public class PortalEvent {
 		
 		BlockPos topos = toposes.get(playername); 
 		
-		player.setPortalCooldown(); // reset time until portal
+		player.setPortalCooldown();
 		player.teleportTo(((double)topos.getX())+0.5, topos.getY(), ((double)topos.getZ())+0.5);
 		toposes.remove(playername);
 	}

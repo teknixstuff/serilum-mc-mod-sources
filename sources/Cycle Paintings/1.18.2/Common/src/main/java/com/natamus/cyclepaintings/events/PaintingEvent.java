@@ -50,6 +50,10 @@ public class PaintingEvent {
 		Holder<Motive> newVariant = null;
 
 		List<Holder<Motive>> similarPaintingVariants = Util.getSimilarArt(currentVariant);
+		if (similarPaintingVariants.size() == 0) {
+			return InteractionResult.PASS;
+		}
+		
 		if (player.isCrouching()) {
 			Collections.reverse(similarPaintingVariants);
 		}

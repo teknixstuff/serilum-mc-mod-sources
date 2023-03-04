@@ -19,6 +19,7 @@ package com.natamus.villagernames.events;
 import com.google.gson.JsonSyntaxException;
 import com.natamus.collective.functions.EntityFunctions;
 import com.natamus.collective.functions.JsonFunctions;
+import com.natamus.collective.functions.TaskFunctions;
 import com.natamus.villagernames.config.ConfigHandler;
 import com.natamus.villagernames.util.Names;
 import net.minecraft.network.chat.Component;
@@ -109,14 +110,10 @@ public class VillagerEvent {
 			map.put("text", prevname + " the " + upperprofession);
 			villager.setCustomName(Component.Serializer.fromJson(JsonFunctions.HashMapToJsonString(map)));
 
-			new Thread(() -> {
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException ignored) { }
-
+			TaskFunctions.enqueueCollectiveTask(level.getServer(), () -> {
 				map.put("text", prevname.replace(" the ", "").replace(upperprofession, ""));
 				villager.setCustomName(Component.Serializer.fromJson(JsonFunctions.HashMapToJsonString(map)));
-			}).start();
+			}, 0);
 		}
 		catch (JsonSyntaxException ex) {
 			return InteractionResult.PASS;

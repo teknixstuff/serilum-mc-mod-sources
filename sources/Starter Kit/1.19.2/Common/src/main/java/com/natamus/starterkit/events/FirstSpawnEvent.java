@@ -65,13 +65,13 @@ public class FirstSpawnEvent {
 			Entity sourceentity = source.getEntity();
 			if (sourceentity instanceof Player) {
 				Player player = (Player)sourceentity;
-				
-				new Thread(() -> {
-					try  { Thread.sleep( 2000 ); }
-					catch (InterruptedException ignored)  {}
+				Level level = player.level;
 
-					Util.setStarterKit(player);
-				}).start();
+				if (!level.isClientSide) {
+					TaskFunctions.enqueueCollectiveTask(level.getServer(), () -> {
+						Util.setStarterKit(player);
+					}, 40);
+				}
 			}
 		}
 	}
