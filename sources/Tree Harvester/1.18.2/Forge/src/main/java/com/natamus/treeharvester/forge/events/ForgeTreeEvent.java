@@ -26,7 +26,6 @@ import net.minecraftforge.event.TickEvent.WorldTickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
@@ -35,16 +34,6 @@ public class ForgeTreeEvent {
 	@SubscribeEvent
 	public void onServerStart(ServerStartedEvent e) {
 		TreeEvent.setupBlacklist();
-	}
-
-	@SubscribeEvent
-	public void onWorldLoad(WorldEvent.Load e) {
-		Level level = WorldFunctions.getWorldIfInstanceOfAndNotRemote(e.getWorld());
-		if (level == null) {
-			return;
-		}
-		
-		TreeEvent.onWorldLoad((ServerLevel)level);
 	}
 	
 	@SubscribeEvent

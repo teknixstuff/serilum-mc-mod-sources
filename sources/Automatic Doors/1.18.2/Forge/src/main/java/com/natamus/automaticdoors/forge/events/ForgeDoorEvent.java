@@ -17,30 +17,18 @@
 package com.natamus.automaticdoors.forge.events;
 
 import com.natamus.automaticdoors.events.DoorEvent;
-import com.natamus.collective.functions.WorldFunctions;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.TickEvent.WorldTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.event.TickEvent.WorldTickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 @EventBusSubscriber
 public class ForgeDoorEvent {
-	@SubscribeEvent
-	public void onWorldLoad(WorldEvent.Load e) {
-		Level level = WorldFunctions.getWorldIfInstanceOfAndNotRemote(e.getWorld());
-		if (level == null) {
-			return;
-		}
-
-		DoorEvent.onWorldLoad((ServerLevel)level);
-	}
-
 	@SubscribeEvent
 	public void onWorldTick(WorldTickEvent e) {
 		Level level = e.world;

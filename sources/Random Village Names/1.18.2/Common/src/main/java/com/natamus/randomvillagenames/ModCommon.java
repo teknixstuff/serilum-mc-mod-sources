@@ -1,5 +1,5 @@
 /*
- * This is the latest source code of Zombie Horse Spawn.
+ * This is the latest source code of Random Village Names.
  * Minecraft version: 1.18.2.
  *
  * Please don't distribute without permission.
@@ -14,20 +14,16 @@
  * Thanks for looking at the source code! Hope it's of some use to your project. Happy modding!
  */
 
-package com.natamus.zombiehorsespawn;
+package com.natamus.randomvillagenames;
 
-import com.natamus.collective.objects.SAMObject;
-import com.natamus.zombiehorsespawn.config.ConfigHandler;
-import net.minecraft.world.entity.EntityType;
 
 public class ModCommon {
 
 	public static void init() {
-		ConfigHandler.initConfig();
 		load();
 	}
 
 	private static void load() {
-		new SAMObject(EntityType.ZOMBIE, EntityType.ZOMBIE_HORSE, null, ConfigHandler.chanceSurfaceZombieHasHorse, false, true, ConfigHandler.onlySpawnZombieHorsesOnSurface);
+		
 	}
 }

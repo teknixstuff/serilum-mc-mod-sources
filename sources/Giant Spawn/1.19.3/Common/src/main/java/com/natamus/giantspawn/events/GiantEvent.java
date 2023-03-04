@@ -41,7 +41,7 @@ public class GiantEvent {
 			return;
 		}
 		
-		if (!giants_per_world.get(level).contains(entity)) {
+		if (!giants_per_world.computeIfAbsent(level, k -> new CopyOnWriteArrayList<Entity>()).contains(entity)) {
 			giants_per_world.get(level).add(entity);
 		}
 
@@ -54,7 +54,7 @@ public class GiantEvent {
 	}
 	
 	public static void onWorldTick(ServerLevel level) {
-		int ticks = tickdelay_per_world.get(level);
+		int ticks = tickdelay_per_world.computeIfAbsent(level, k -> 1);
 		if (ticks % 20 != 0) {
 			tickdelay_per_world.put(level, ticks + 1);
 			return;
@@ -69,7 +69,7 @@ public class GiantEvent {
 			return;
 		}
 		
-		for (Entity giant : giants_per_world.get(level)) {
+		for (Entity giant : giants_per_world.computeIfAbsent(level, k -> new CopyOnWriteArrayList<Entity>())) {
 			if (giant.isAlive()) {
 				if (!giant.isInWaterRainOrBubble()) {
 					BlockPos epos = giant.blockPosition();
@@ -82,10 +82,5 @@ public class GiantEvent {
 				giants_per_world.get(level).remove(giant);
 			}		
 		}
-	}
-	
-	public static void onWorldLoad(ServerLevel level) {
-		giants_per_world.put(level, new CopyOnWriteArrayList<Entity>());
-		tickdelay_per_world.put(level, 1);
 	}
 }

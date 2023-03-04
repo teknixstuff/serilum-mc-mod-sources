@@ -40,10 +40,6 @@ public class ModFabric implements ModInitializer {
 	}
 
 	private void loadEvents() {
-		ServerWorldEvents.LOAD.register((MinecraftServer server, ServerLevel world) -> {
-			DoorEvent.onWorldLoad(world);
-		});
-
 		ServerTickEvents.START_WORLD_TICK.register((ServerLevel world) -> {
 			DoorEvent.onWorldTick(world);
 		});

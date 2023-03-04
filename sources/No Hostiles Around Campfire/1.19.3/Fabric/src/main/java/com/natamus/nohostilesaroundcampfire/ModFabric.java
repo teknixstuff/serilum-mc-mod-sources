@@ -23,9 +23,7 @@ import com.natamus.nohostilesaroundcampfire.events.CampfireEvent;
 import com.natamus.nohostilesaroundcampfire.util.Reference;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -49,10 +47,6 @@ public class ModFabric implements ModInitializer {
 	}
 
 	private void loadEvents() {
-		ServerWorldEvents.LOAD.register((MinecraftServer server, ServerLevel world) -> {
-			CampfireEvent.onWorldLoad(world);
-		});
-
 		ServerTickEvents.START_WORLD_TICK.register((ServerLevel world) -> {
 			CampfireEvent.onWorldTick(world);
 		});

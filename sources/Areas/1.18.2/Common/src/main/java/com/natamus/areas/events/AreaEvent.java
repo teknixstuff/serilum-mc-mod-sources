@@ -40,98 +40,88 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AreaEvent {
 	static int tickdelay = 20;
-	
-	public static void onWorldLoad(MinecraftServer server, ServerLevel world) {
-		if (!Variables.areasperworld.containsKey(world)) {
-			Variables.areasperworld.put(world, new HashMap<BlockPos, AreaObject>());
-			Variables.ignoresignsperworld.put(world, new CopyOnWriteArrayList<BlockPos>());
-			
-			Variables.checkifshouldignoreperworld.put(world, new CopyOnWriteArrayList<BlockPos>());
-			Variables.ignoremap.put(world, new HashMap<BlockPos, Integer>());
-		}
-	}
-	
+
 	public static void onServerTick(MinecraftServer server) {
 		if (tickdelay > 0) {
 			tickdelay -= 1;
 			return;
 		}
 		tickdelay = 20;
-		
-		for (Level world : Variables.checkifshouldignoreperworld.keySet()) {
-			for (BlockPos pos : Variables.checkifshouldignoreperworld.get(world)) {
-				if (Variables.areasperworld.get(world).containsKey(pos)) {
-					Variables.checkifshouldignoreperworld.get(world).remove(pos);
-					Variables.ignoremap.get(world).remove(pos);
+
+		for (Level level : Variables.checkifshouldignoreperlevel.keySet()) {
+			for (BlockPos pos : Variables.checkifshouldignoreperlevel.get(level)) {
+				if (Variables.areasperlevel.computeIfAbsent(level, k -> new HashMap<BlockPos, AreaObject>()).containsKey(pos)) {
+					Variables.checkifshouldignoreperlevel.get(level).remove(pos);
+					Variables.ignoremap.computeIfAbsent(level, k -> new HashMap<BlockPos, Integer>()).remove(pos);
 					continue;
 				}
-				
-				int checkleft = Variables.ignoremap.get(world).get(pos);
+
+				int checkleft = Variables.ignoremap.computeIfAbsent(level, k -> new HashMap<BlockPos, Integer>()).get(pos);
 				if (checkleft <= 0) {
-					Variables.checkifshouldignoreperworld.get(world).remove(pos);
-					Variables.ignoremap.get(world).remove(pos);
-					
-					Variables.ignoresignsperworld.get(world).add(pos);
+					Variables.checkifshouldignoreperlevel.get(level).remove(pos);
+					Variables.ignoremap.get(level).remove(pos);
+
+					Variables.ignoresignsperlevel.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).add(pos);
 					continue;
 				}
-				
-				Variables.ignoremap.get(world).put(pos, checkleft-1);
+
+				Variables.ignoremap.get(level).put(pos, checkleft-1);
 			}
 		}
 	}
-	
-	public static void onPlayerTick(ServerLevel world, ServerPlayer player) {
-		if (world.isClientSide) {
+
+	public static void onPlayerTick(ServerLevel level, ServerPlayer player) {
+		if (level.isClientSide) {
 			return;
 		}
-		
+
 		if (player.tickCount % 20 != 0) {
 			return;
 		}
-		
+
 		BlockPos ppos = player.blockPosition();
-		
+
 		List<AreaObject> aos = new ArrayList<AreaObject>();
 		List<String> enteredareas = new ArrayList<String>();
-		List<BlockPos> ignoresigns = Variables.ignoresignsperworld.get(world);
-		
-		List<BlockPos> nearbysigns = FABFunctions.getAllTileEntityPositionsNearbyEntity(BlockEntityType.SIGN, ConfigHandler.radiusAroundPlayerToCheckForSigns, world, player);
+		List<BlockPos> ignoresigns = Variables.ignoresignsperlevel.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>());
+
+		List<BlockPos> nearbysigns = FABFunctions.getAllTileEntityPositionsNearbyEntity(BlockEntityType.SIGN, ConfigHandler.radiusAroundPlayerToCheckForSigns, level, player);
 		for (BlockPos nspos : nearbysigns) {
 			if (ignoresigns.contains(nspos)) {
 				continue;
 			}
-			
-			AreaObject ao = Util.getAreaSign(world, nspos);
+
+			AreaObject ao = Util.getAreaSign(level, nspos);
 			if (ao == null) {
-				if (!Variables.checkifshouldignoreperworld.get(world).contains(nspos)) {
-					Variables.checkifshouldignoreperworld.get(world).add(nspos);
-					Variables.ignoremap.get(world).put(nspos, 10);
+				if (!Variables.checkifshouldignoreperlevel.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).contains(nspos)) {
+					Variables.checkifshouldignoreperlevel.get(level).add(nspos);
+					Variables.ignoremap.computeIfAbsent(level, k -> new HashMap<BlockPos, Integer>()).put(nspos, 10);
 				}
 				continue;
 			}
-			
+
 			if (ao.containsplayers.contains(player)){
 				enteredareas.add(ao.areaname);
 			}
 			aos.add(ao);
 		}
-		
+
 		for (AreaObject ao : aos) {
 			if (ao == null) {
 				continue;
 			}
-			
+
 			BlockPos nspos = ao.location;
 			if (ppos.closerThan(nspos, ao.radius)) {
 				if (ao.containsplayers.contains(player)) {
 					continue;
 				}
-				
+
 				if (Collections.frequency(enteredareas, ao.areaname) > 1) {
 					Util.enterArea(ao, player, false);
 					return;
 				}
-				
+
 				Util.enterArea(ao, player, true);
 			}
 			else if (ao.containsplayers.contains(player)){
@@ -139,31 +129,31 @@ public class AreaEvent {
 					Util.exitArea(ao, player, false);
 					return;
 				}
-				
+
 				Util.exitArea(ao, player, true);
 			}
 		}
 	}
 
-	public static void onSignBreak(Level world, Player player, BlockPos signpos, BlockState state, BlockEntity blockEntity) {
-		if (world.isClientSide) {
+	public static void onSignBreak(Level level, Player player, BlockPos signpos, BlockState state, BlockEntity blockEntity) {
+		if (level.isClientSide) {
 			return;
 		}
 
 		if (Util.isSignBlock(state.getBlock())) {
-			if (Variables.areasperworld.get(world).containsKey(signpos)) {
-				AreaObject ao = Variables.areasperworld.get(world).get(signpos);
+			if (Variables.areasperlevel.computeIfAbsent(level, k -> new HashMap<BlockPos, AreaObject>()).containsKey(signpos)) {
+				AreaObject ao = Variables.areasperlevel.get(level).get(signpos);
 				List<Player> playersinside = ao.containsplayers;
 				for (Player insideplayer : playersinside) {
 					Util.areaChangeMessage(insideplayer, StringFunctions.capitalizeFirst(ao.areaname) + " no longer exists.", ao.customrgb);
 				}
-				
-				Variables.areasperworld.get(world).remove(signpos);
+
+				Variables.areasperlevel.get(level).remove(signpos);
 			}
 
-			Variables.ignoresignsperworld.get(world).remove(signpos);
-			Variables.checkifshouldignoreperworld.get(world).remove(signpos);
-			Variables.ignoremap.get(world).remove(signpos);
+			Variables.ignoresignsperlevel.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).remove(signpos);
+			Variables.checkifshouldignoreperlevel.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).remove(signpos);
+			Variables.ignoremap.computeIfAbsent(level, k -> new HashMap<BlockPos, Integer>()).remove(signpos);
 		}
 	}
 }

@@ -28,7 +28,6 @@ import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.event.TickEvent.ServerTickEvent;
 import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
@@ -38,17 +37,7 @@ public class ForgeAreaEvent {
     public void registerCommands(RegisterCommandsEvent e) {
     	CommandAreas.register(e.getDispatcher());
     }
-	
-	@SubscribeEvent
-	public void onWorldLoad(LevelEvent.Load e) {
-		Level level = WorldFunctions.getWorldIfInstanceOfAndNotRemote(e.getLevel());
-		if (level == null) {
-			return;
-		}
 
-		AreaEvent.onWorldLoad(level.getServer(), (ServerLevel)level);
-	}
-	
 	@SubscribeEvent
 	public void onServerTick(ServerTickEvent e) {
 		if (!e.phase.equals(Phase.START)) {

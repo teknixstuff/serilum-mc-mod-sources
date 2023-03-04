@@ -45,24 +45,24 @@ import java.util.List;
 
 public class Util {
 	private static final List<String> zoneprefixes = new ArrayList<String>(Arrays.asList("[na]", "[area]", "[region]", "[zone]"));
-	
-	public static AreaObject getAreaSign(Level world, BlockPos signpos) {
-		if (world.isClientSide) {
+
+	public static AreaObject getAreaSign(Level level, BlockPos signpos) {
+		if (level.isClientSide) {
 			return null;
 		}
 
-		HashMap<BlockPos, AreaObject> hm = Variables.areasperworld.get(world);
+		HashMap<BlockPos, AreaObject> hm = Variables.areasperlevel.computeIfAbsent(level, k -> new HashMap<BlockPos, AreaObject>());
 		if (hm != null) {
 			if (hm.containsKey(signpos)) {
 				return hm.get(signpos);
 			}
 		}
-		
-		BlockEntity te = world.getBlockEntity(signpos);
+
+		BlockEntity te = level.getBlockEntity(signpos);
 		if (te == null) {
 			return null;
 		}
-		
+
 		SignBlockEntity signentity;
 		try {
 			signentity = (SignBlockEntity)te;
@@ -71,7 +71,7 @@ public class Util {
 			return null;
 		}
 
-		
+
 		StringBuilder areaname = new StringBuilder();
 		String rgb = "";
 		String zoneprefix = "Area";
@@ -86,53 +86,53 @@ public class Util {
 			if (i == 0 && !hasZonePrefix(line)) {
 				return null;
 			}
-			
+
 			if (line.length() < 1) {
 				continue;
 			}
-			
+
 			for (String zpx : zoneprefixes) {
 				if (line.toLowerCase().contains(zpx)) {
 					zoneprefix = StringFunctions.capitalizeFirst(zpx.replace("[", "").replace("]", ""));
 					break;
 				}
 			}
-			
+
 			Integer possibleradius = getZonePrefixgetRadius(line.toLowerCase());
 			if (possibleradius >= 0) {
 				radius = possibleradius;
 				continue;
 			}
-			
+
 			String possiblergb = getZoneRGB(line.toLowerCase());
 			if (!possiblergb.equals("")) {
 				rgb = possiblergb;
 				customrgb = true;
 				continue;
 			}
-			
+
 			if (hasZonePrefix(line)) {
 				continue;
 			}
-			
+
 			if (!areaname.toString().equals("")) {
 				areaname.append(" ");
 			}
 			areaname.append(line);
 		}
-		
+
 		boolean setradius = false;
 		int maxradius = ConfigHandler.radiusAroundPlayerToCheckForSigns;
 		if (radius > maxradius) {
 			radius = maxradius;
 			setradius = true;
 		}
-		
-		boolean updatesign = false;		
+
+		boolean updatesign = false;
 		if (areaname.toString().trim().equals("")) {
 			if (ConfigHandler.giveUnnamedAreasRandomName) {
 				List<String> newsigncontentlist = new ArrayList<String>();
-				
+
 				newsigncontentlist.add("[" + zoneprefix + "] " + radius);
 				if (customrgb) {
 					newsigncontentlist.add("[RGB] " + rgb);
@@ -140,7 +140,7 @@ public class Util {
 				else {
 					newsigncontentlist.add("");
 				}
-				
+
 				areaname = new StringBuilder();
 				String randomname = getRandomAreaName();
 				for (String word : randomname.split(" ")) {
@@ -153,20 +153,20 @@ public class Util {
 					}
 					areaname.append(word);
 				}
-				
+
 				i = 0;
 				for (String line : newsigncontentlist) {
 					signentity.setMessage(i, new TextComponent(line));
 					i+=1;
 				}
-				
+
 				updatesign = true;
 			}
 			else {
 				areaname = new StringBuilder("Unnamed area");
 			}
 		}
-		
+
 		if (!updatesign) {
 			if (radius == 0 || setradius) {
 				i = 0;
@@ -174,23 +174,23 @@ public class Util {
 					if (i == 0) {
 						line = "[" + zoneprefix + "] " + radius;
 					}
-					
+
 					signentity.setMessage(i, new TextComponent(line));
 					i+=1;
 				}
-				
+
 				updatesign = true;
 			}
 		}
-		
+
 		if (updatesign) {
-			TileEntityFunctions.updateTileEntity(world, signpos, signentity);
+			TileEntityFunctions.updateTileEntity(level, signpos, signentity);
 		}
 		if (radius < 0) {
 			return null;
 		}
-		
-		return new AreaObject(world, signpos, areaname.toString(), radius, rgb);
+
+		return new AreaObject(level, signpos, areaname.toString(), radius, rgb);
 	}
 	
 	private static boolean hasZonePrefix(String line) {

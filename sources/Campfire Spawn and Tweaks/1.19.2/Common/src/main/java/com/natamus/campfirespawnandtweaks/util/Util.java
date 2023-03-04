@@ -36,11 +36,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Util {
-	public static void loadCampfireSpawnsFromWorld(Level world) {
-		String campfirespawnfolder = WorldFunctions.getWorldPath((ServerLevel)world) + File.separator + "data" + File.separator + "campfirespawn" + File.separator + DimensionFunctions.getSimpleDimensionString(world);
+	public static void loadCampfireSpawnsFromWorld(Level level) {
+		String campfirespawnfolder = WorldFunctions.getWorldPath((ServerLevel)level) + File.separator + "data" + File.separator + "campfirespawn" + File.separator + DimensionFunctions.getSimpleDimensionString(level);
 		File dir = new File(campfirespawnfolder);
 		dir.mkdirs();
-		
+
 		File[] listOfFiles = dir.listFiles();
 		if (listOfFiles == null) {
 			return;
@@ -71,19 +71,19 @@ public class Util {
 						int z = Integer.parseInt(cs[2]);
 
 						BlockPos spawnpos = new BlockPos(x, y, z);
-						CampfireEvent.playercampfires.put(playername, new Pair<Level, BlockPos>(world, spawnpos.immutable()));
+						CampfireEvent.playercampfires.put(playername, new Pair<Level, BlockPos>(level, spawnpos.immutable()));
 					}
 
 				}
 			}
 		}
 	}
-	
-	public static boolean setCampfireSpawn(Level world, String playername, BlockPos campfirepos) {
-		String campfirespawnfolder = WorldFunctions.getWorldPath((ServerLevel)world) + File.separator + "data" + File.separator + "campfirespawn" + File.separator + DimensionFunctions.getSimpleDimensionString(world);
+
+	public static boolean setCampfireSpawn(Level level, String playername, BlockPos campfirepos) {
+		String campfirespawnfolder = WorldFunctions.getWorldPath((ServerLevel)level) + File.separator + "data" + File.separator + "campfirespawn" + File.separator + DimensionFunctions.getSimpleDimensionString(level);
 		File dir = new File(campfirespawnfolder);
 		dir.mkdirs();
-		
+
 		String filename = playername.toLowerCase() + ".spawnpoint";
 		try {
 			PrintWriter writer = new PrintWriter(campfirespawnfolder + File.separator + filename, StandardCharsets.UTF_8);
@@ -93,12 +93,12 @@ public class Util {
 			System.out.println("[Error] Campfire Spawn: Something went wrong while saving a campfire spawn location for player " + playername + ".");
 			return false;
 		}
-		
-		CampfireEvent.playercampfires.put(playername.toLowerCase(), new Pair<Level, BlockPos>(world, campfirepos.immutable()));
+
+		CampfireEvent.playercampfires.put(playername.toLowerCase(), new Pair<Level, BlockPos>(level, campfirepos.immutable()));
 		return true;
 	}
-	
-	public static boolean checkForCampfireSpawnRemoval(Level world, String playername, BlockPos campfirepos) {
+
+	public static boolean checkForCampfireSpawnRemoval(Level level, String playername, BlockPos campfirepos) {
 		List<String> fromplayernames = new ArrayList<String>();
 		for (String pname : CampfireEvent.playercampfires.keySet()) {
 			Pair<Level, BlockPos> pair = CampfireEvent.playercampfires.get(pname);
@@ -106,15 +106,15 @@ public class Util {
 				fromplayernames.add(pname);
 			}
 		}
-		
+
 		boolean removed = false;
 		for (String fromplayername : fromplayernames) {
 			if (CampfireEvent.playercampfires.containsKey(fromplayername)) {
-				for (Level loopworld : CampfireEvent.playerstorespawn.keySet()) {
-					String campfirespawnfolder = WorldFunctions.getWorldPath((ServerLevel)loopworld) + File.separator + "data" + File.separator + "campfirespawn" + File.separator + DimensionFunctions.getSimpleDimensionString(loopworld);
+				for (Level looplevel : CampfireEvent.playerstorespawn.keySet()) {
+					String campfirespawnfolder = WorldFunctions.getWorldPath((ServerLevel)looplevel) + File.separator + "data" + File.separator + "campfirespawn" + File.separator + DimensionFunctions.getSimpleDimensionString(looplevel);
 					File dir = new File(campfirespawnfolder);
 					dir.mkdirs();
-					
+
 					String filename = fromplayername.toLowerCase() + ".spawnpoint";
 					try {
 						PrintWriter writer = new PrintWriter(campfirespawnfolder + File.separator + filename, StandardCharsets.UTF_8);
@@ -124,16 +124,16 @@ public class Util {
 						System.out.println("[Error] Campfire Spawn: Something went wrong while removing a campfire spawn location for player " + playername + ".");
 					}
 				}
-				
+
 				CampfireEvent.playercampfires.remove(fromplayername);
 				removed = true;
-				
+
 				if (ConfigHandler.sendMessageOnCampfireSpawnUnset) {
 					if (fromplayername.equalsIgnoreCase(playername)) {
 						continue;
 					}
-					
-					Player target = PlayerFunctions.matchPlayer(world, fromplayername);
+
+					Player target = PlayerFunctions.matchPlayer(level, fromplayername);
 					if (target == null) {
 						continue;
 					}

@@ -36,8 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Util {
-	public static void loadCampfireSpawnsFromWorld(Level world) {
-		String campfirespawnfolder = WorldFunctions.getWorldPath((ServerLevel)world) + File.separator + "data" + File.separator + "campfirespawn" + File.separator + DimensionFunctions.getSimpleDimensionString(world);
+	public static void loadCampfireSpawnsFromWorld(Level level) {
+		String campfirespawnfolder = WorldFunctions.getWorldPath((ServerLevel)level) + File.separator + "data" + File.separator + "campfirespawn" + File.separator + DimensionFunctions.getSimpleDimensionString(level);
 		File dir = new File(campfirespawnfolder);
 		dir.mkdirs();
 		
@@ -71,7 +71,7 @@ public class Util {
 						int z = Integer.parseInt(cs[2]);
 
 						BlockPos spawnpos = new BlockPos(x, y, z);
-						CampfireEvent.playercampfires.put(playername, new Pair<Level, BlockPos>(world, spawnpos.immutable()));
+						CampfireEvent.playercampfires.put(playername, new Pair<Level, BlockPos>(level, spawnpos.immutable()));
 					}
 
 				}
@@ -79,8 +79,8 @@ public class Util {
 		}
 	}
 	
-	public static boolean setCampfireSpawn(Level world, String playername, BlockPos campfirepos) {
-		String campfirespawnfolder = WorldFunctions.getWorldPath((ServerLevel)world) + File.separator + "data" + File.separator + "campfirespawn" + File.separator + DimensionFunctions.getSimpleDimensionString(world);
+	public static boolean setCampfireSpawn(Level level, String playername, BlockPos campfirepos) {
+		String campfirespawnfolder = WorldFunctions.getWorldPath((ServerLevel)level) + File.separator + "data" + File.separator + "campfirespawn" + File.separator + DimensionFunctions.getSimpleDimensionString(level);
 		File dir = new File(campfirespawnfolder);
 		dir.mkdirs();
 		
@@ -94,11 +94,11 @@ public class Util {
 			return false;
 		}
 		
-		CampfireEvent.playercampfires.put(playername.toLowerCase(), new Pair<Level, BlockPos>(world, campfirepos.immutable()));
+		CampfireEvent.playercampfires.put(playername.toLowerCase(), new Pair<Level, BlockPos>(level, campfirepos.immutable()));
 		return true;
 	}
 	
-	public static boolean checkForCampfireSpawnRemoval(Level world, String playername, BlockPos campfirepos) {
+	public static boolean checkForCampfireSpawnRemoval(Level level, String playername, BlockPos campfirepos) {
 		List<String> fromplayernames = new ArrayList<String>();
 		for (String pname : CampfireEvent.playercampfires.keySet()) {
 			Pair<Level, BlockPos> pair = CampfireEvent.playercampfires.get(pname);
@@ -110,8 +110,8 @@ public class Util {
 		boolean removed = false;
 		for (String fromplayername : fromplayernames) {
 			if (CampfireEvent.playercampfires.containsKey(fromplayername)) {
-				for (Level loopworld : CampfireEvent.playerstorespawn.keySet()) {
-					String campfirespawnfolder = WorldFunctions.getWorldPath((ServerLevel)loopworld) + File.separator + "data" + File.separator + "campfirespawn" + File.separator + DimensionFunctions.getSimpleDimensionString(loopworld);
+				for (Level looplevel : CampfireEvent.playerstorespawn.keySet()) {
+					String campfirespawnfolder = WorldFunctions.getWorldPath((ServerLevel)looplevel) + File.separator + "data" + File.separator + "campfirespawn" + File.separator + DimensionFunctions.getSimpleDimensionString(looplevel);
 					File dir = new File(campfirespawnfolder);
 					dir.mkdirs();
 					
@@ -133,7 +133,7 @@ public class Util {
 						continue;
 					}
 					
-					Player target = PlayerFunctions.matchPlayer(world, fromplayername);
+					Player target = PlayerFunctions.matchPlayer(level, fromplayername);
 					if (target == null) {
 						continue;
 					}

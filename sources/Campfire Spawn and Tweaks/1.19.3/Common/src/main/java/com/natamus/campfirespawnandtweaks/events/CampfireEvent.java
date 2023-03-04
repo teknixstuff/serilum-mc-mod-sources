@@ -55,29 +55,27 @@ public class CampfireEvent {
 	
 	private static final List<Block> extinguishblocks = new ArrayList<Block>(Arrays.asList(Blocks.DIRT, Blocks.GRASS, Blocks.SAND, Blocks.RED_SAND, Blocks.SOUL_SAND));
 	
-	public static void onWorldLoad(ServerLevel world) {
-		firestoextinguish.put(world, new ArrayList<BlockPos>());
-		playerstorespawn.put(world, new ArrayList<Pair<Player, BlockPos>>());
-		Util.loadCampfireSpawnsFromWorld(world);
+	public static void onWorldLoad(ServerLevel level) {
+		Util.loadCampfireSpawnsFromWorld(level);
 	}
 	
-	public static void onWorldTick(ServerLevel world) {
-		if (firestoextinguish.get(world).size() > 0) {
-			BlockPos campfirepos = firestoextinguish.get(world).get(0);
-			BlockState state = world.getBlockState(campfirepos);
+	public static void onWorldTick(ServerLevel level) {
+		if (firestoextinguish.computeIfAbsent(level, k -> new ArrayList<BlockPos>()).size() > 0) {
+			BlockPos campfirepos = firestoextinguish.get(level).get(0);
+			BlockState state = level.getBlockState(campfirepos);
 			if (state.getBlock() instanceof CampfireBlock) {
-				world.setBlockAndUpdate(campfirepos, state.setValue(CampfireBlock.LIT, false).setValue(CampfireBlock.WATERLOGGED, false));
+				level.setBlockAndUpdate(campfirepos, state.setValue(CampfireBlock.LIT, false).setValue(CampfireBlock.WATERLOGGED, false));
 			}
 			
-			firestoextinguish.get(world).remove(0);
+			firestoextinguish.get(level).remove(0);
 		}
-		if (playerstorespawn.get(world).size() > 0) {
-			Pair<Player, BlockPos> pair = playerstorespawn.get(world).get(0);
+		if (playerstorespawn.get(level).size() > 0) {
+			Pair<Player, BlockPos> pair = playerstorespawn.get(level).get(0);
 			Player player = pair.getFirst();
 			BlockPos respawnpos = pair.getSecond();
 			
 			if (player instanceof ServerPlayer) {
-				if (world.getBlockState(respawnpos).getBlock() instanceof CampfireBlock) {
+				if (level.getBlockState(respawnpos).getBlock() instanceof CampfireBlock) {
 					ServerPlayer serverplayer = ((ServerPlayer)player);
 					
 					Vec3 ts;
@@ -97,17 +95,17 @@ public class CampfireEvent {
 						Iterator<BlockPos> posaround = BlockPos.betweenClosedStream(tsbp.getX(), tsbp.getY(), tsbp.getZ(), tsbp.getX(), tsbp.getY()+1, tsbp.getZ()).iterator();
 						while (posaround.hasNext()) {
 							BlockPos around = posaround.next();
-							Block block = world.getBlockState(around).getBlock();
+							Block block = level.getBlockState(around).getBlock();
 							if (block.equals(Blocks.AIR) || block instanceof CampfireBlock) {
 								continue;
 							}
 							
-							BlockFunctions.dropBlock(world, around);
+							BlockFunctions.dropBlock(level, around);
 						}
 						
 					}
 					
-					serverplayer.teleportTo(world, ts.x, ts.y, ts.z, player.getYRot(), player.getXRot());
+					serverplayer.teleportTo(level, ts.x, ts.y, ts.z, player.getYRot(), player.getXRot());
 				}
 				else {
 					String playername = player.getName().toString();
@@ -118,12 +116,12 @@ public class CampfireEvent {
 				}
 			}
 			
-			playerstorespawn.get(world).remove(0);
+			playerstorespawn.computeIfAbsent(level, k -> new ArrayList<Pair<Player, BlockPos>>()).remove(0);
 		}
 	}
 	
-	public static boolean onEntityBlockPlace(Level world, BlockPos pos, BlockState state, LivingEntity entity, ItemStack itemStack) {
-		if (world.isClientSide) {
+	public static boolean onEntityBlockPlace(Level level, BlockPos pos, BlockState state, LivingEntity entity, ItemStack itemStack) {
+		if (level.isClientSide) {
 			return true;
 		}
 		
@@ -139,7 +137,7 @@ public class CampfireEvent {
 			}
 			
 			if (ConfigHandler.campfiresStartUnlit) {
-				world.setBlockAndUpdate(pos, state.setValue(CampfireBlock.LIT, false));
+				level.setBlockAndUpdate(pos, state.setValue(CampfireBlock.LIT, false));
 				return false;
 			}
 		}
@@ -147,12 +145,12 @@ public class CampfireEvent {
 		return true;
 	}
 	
-	public static boolean onRightClickCampfireBlock(Level world, Player player, InteractionHand hand, BlockPos pos, BlockHitResult hitVec) {
-		if (world.isClientSide) {
+	public static boolean onRightClickCampfireBlock(Level level, Player player, InteractionHand hand, BlockPos pos, BlockHitResult hitVec) {
+		if (level.isClientSide) {
 			return true;
 		}
 		
-		BlockState state = world.getBlockState(pos);
+		BlockState state = level.getBlockState(pos);
 		Block block = state.getBlock();
 		
 		boolean allowAction = true;
@@ -160,7 +158,7 @@ public class CampfireEvent {
 			String playername = player.getName().getString();
 			if (player.isShiftKeyDown()) {
 				if (ConfigHandler.sneakRightClickCampfireToUnset) {
-					if (Util.checkForCampfireSpawnRemoval(world, playername, pos)) {
+					if (Util.checkForCampfireSpawnRemoval(level, playername, pos)) {
 						if (ConfigHandler.sendMessageOnNewCampfireSpawnSet) {
 							StringFunctions.sendMessage(player, "Campfire spawn point removed.", ChatFormatting.DARK_GRAY);
 						}
@@ -190,13 +188,13 @@ public class CampfireEvent {
 					}
 					
 					allowAction = false;
-					world.setBlockAndUpdate(pos, state.setValue(CampfireBlock.LIT, false));
+					level.setBlockAndUpdate(pos, state.setValue(CampfireBlock.LIT, false));
 					
 					if (iswaterbucket) {
-						firestoextinguish.get(world).add(pos);
+						firestoextinguish.computeIfAbsent(level, k -> new ArrayList<BlockPos>()).add(pos);
 					}
 					
-					if (Util.checkForCampfireSpawnRemoval(world, playername, pos)) {
+					if (Util.checkForCampfireSpawnRemoval(level, playername, pos)) {
 						if (ConfigHandler.sendMessageOnNewCampfireSpawnSet) {
 							StringFunctions.sendMessage(player, "Campfire spawn point removed.", ChatFormatting.DARK_GRAY);
 						}
@@ -212,10 +210,10 @@ public class CampfireEvent {
 						oldpos = playercampfires.get(playername.toLowerCase()).getSecond().immutable();
 					}
 					
-					if (Util.setCampfireSpawn(world, playername, pos)) {
+					if (Util.setCampfireSpawn(level, playername, pos)) {
 						if (ConfigHandler.sendMessageOnNewCampfireSpawnSet) {
 							if (holdinglighter) {
-								world.setBlockAndUpdate(pos, state.setValue(CampfireBlock.WATERLOGGED, false));
+								level.setBlockAndUpdate(pos, state.setValue(CampfireBlock.WATERLOGGED, false));
 								player.swing(hand);
 							}
 							
@@ -245,16 +243,16 @@ public class CampfireEvent {
 					BlockPos newspawn = pos.immutable();
 
 					Pair<Level, BlockPos> pair = playercampfires.get(playername);
-					Level oldworld = pair.getFirst();
+					Level oldlevel = pair.getFirst();
 					BlockPos oldpos = pair.getSecond();
 					
-					if (WorldFunctions.getWorldDimensionName(world).equals(WorldFunctions.getWorldDimensionName(oldworld))) {
+					if (WorldFunctions.getWorldDimensionName(level).equals(WorldFunctions.getWorldDimensionName(oldlevel))) {
 						if (newspawn.equals(oldpos)) {
 							return true;
 						}
 					}
 					
-					if (Util.checkForCampfireSpawnRemoval(world, playername, oldpos)) {
+					if (Util.checkForCampfireSpawnRemoval(level, playername, oldpos)) {
 						if (ConfigHandler.sendMessageOnCampfireSpawnOverride) {
 							StringFunctions.sendMessage(player, "Campfire spawn point unset.", ChatFormatting.DARK_GRAY);
 						}
@@ -266,15 +264,15 @@ public class CampfireEvent {
 		return allowAction;
 	}
 	
-	public static void onCampfireBreak(Level world, Player player, BlockPos pos, BlockState state, BlockEntity blockEntity) {
-		if (world.isClientSide) {
+	public static void onCampfireBreak(Level level, Player player, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+		if (level.isClientSide) {
 			return;
 		}
 		
-		if (world.getBlockState(pos).getBlock() instanceof CampfireBlock) {
+		if (level.getBlockState(pos).getBlock() instanceof CampfireBlock) {
 			String playername = player.getName().getString().toLowerCase();
 
-			if (Util.checkForCampfireSpawnRemoval(world, playername, pos)) {
+			if (Util.checkForCampfireSpawnRemoval(level, playername, pos)) {
 				if (ConfigHandler.sendMessageOnNewCampfireSpawnSet) {
 					StringFunctions.sendMessage(player, "Campfire spawn point removed.", ChatFormatting.DARK_GRAY);
 				}
@@ -284,8 +282,8 @@ public class CampfireEvent {
 	}
 	
 	public static void onPlayerRespawn(ServerPlayer oldPlayer, ServerPlayer newPlayer, boolean alive) {
-		Level world = newPlayer.getCommandSenderWorld();
-		if (world.isClientSide) {
+		Level level = newPlayer.getCommandSenderWorld();
+		if (level.isClientSide) {
 			return;
 		}
 		
@@ -295,6 +293,6 @@ public class CampfireEvent {
 		}
 		
 		Pair<Level, BlockPos> pair = playercampfires.get(playername);
-		playerstorespawn.get(pair.getFirst()).add(new Pair<Player, BlockPos>(newPlayer, pair.getSecond().immutable()));
+		playerstorespawn.computeIfAbsent(pair.getFirst(), k -> new ArrayList<Pair<Player, BlockPos>>()).add(new Pair<Player, BlockPos>(newPlayer, pair.getSecond().immutable()));
 	}
 }

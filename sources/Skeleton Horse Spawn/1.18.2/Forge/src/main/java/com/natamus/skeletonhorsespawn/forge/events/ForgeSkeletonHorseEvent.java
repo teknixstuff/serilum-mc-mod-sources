@@ -30,16 +30,6 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 @EventBusSubscriber
 public class ForgeSkeletonHorseEvent {
 	@SubscribeEvent
-	public void onWorldLoad(WorldEvent.Load e) {
-		Level level = WorldFunctions.getWorldIfInstanceOfAndNotRemote(e.getWorld());
-		if (level == null) {
-			return;
-		}
-
-		SkeletonHorseEvent.onWorldLoad((ServerLevel)level);
-	}
-	
-	@SubscribeEvent
 	public void onEntityJoin(EntityJoinWorldEvent e) {
 		SkeletonHorseEvent.onEntityJoin(e.getWorld(), e.getEntity());
 	}

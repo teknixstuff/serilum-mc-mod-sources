@@ -23,7 +23,6 @@ import com.natamus.respawningshulkers.util.Reference;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -43,10 +42,6 @@ public class ModFabric implements ModInitializer {
 	}
 
 	private void loadEvents() {
-		ServerWorldEvents.LOAD.register((MinecraftServer server, ServerLevel world) -> {
-			ShulkerEvent.onWorldLoad(world);
-		});
-
 		ServerTickEvents.START_WORLD_TICK.register((ServerLevel world) -> {
 			ShulkerEvent.onWorldTick(world);
 		});

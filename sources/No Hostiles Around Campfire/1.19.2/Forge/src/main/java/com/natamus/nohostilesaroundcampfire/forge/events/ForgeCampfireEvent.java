@@ -28,7 +28,6 @@ import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -36,16 +35,6 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 @EventBusSubscriber
 public class ForgeCampfireEvent {
-	@SubscribeEvent
-	public void onWorldLoad(LevelEvent.Load e) {
-		Level level = WorldFunctions.getWorldIfInstanceOfAndNotRemote(e.getLevel());
-		if (level == null) {
-			return;
-		}
-
-		CampfireEvent.onWorldLoad((ServerLevel)level);
-	}
-	
 	@SubscribeEvent
 	public void onWorldTick(LevelTickEvent e) {
 		Level level = e.level;

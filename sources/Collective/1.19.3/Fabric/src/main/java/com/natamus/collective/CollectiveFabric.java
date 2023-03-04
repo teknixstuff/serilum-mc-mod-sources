@@ -22,7 +22,6 @@ import com.natamus.collective.util.CollectiveReference;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -33,10 +32,6 @@ public class CollectiveFabric implements ModInitializer {
 		setGlobalConstants();
 		CollectiveCommon.init();
 
-		ServerWorldEvents.LOAD.register((MinecraftServer server, ServerLevel world) -> {
-			CollectiveEvents.onWorldLoad(world);
-		});
-		
 		ServerTickEvents.START_WORLD_TICK.register((ServerLevel world) -> {
 			CollectiveEvents.onWorldTick(world);
 		});

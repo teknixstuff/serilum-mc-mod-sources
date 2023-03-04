@@ -33,16 +33,6 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 @EventBusSubscriber
 public class ForgeShulkerEvent {
 	@SubscribeEvent
-	public void onWorldLoad(LevelEvent.Load e) {
-		Level level = WorldFunctions.getWorldIfInstanceOfAndNotRemote(e.getLevel());
-		if (level == null) {
-			return;
-		}
-
-		ShulkerEvent.onWorldLoad((ServerLevel)level);
-	}
-	
-	@SubscribeEvent
 	public void onWorldTick(LevelTickEvent e) {
 		Level level = e.level;
 		if (level.isClientSide || !e.phase.equals(Phase.START)) {

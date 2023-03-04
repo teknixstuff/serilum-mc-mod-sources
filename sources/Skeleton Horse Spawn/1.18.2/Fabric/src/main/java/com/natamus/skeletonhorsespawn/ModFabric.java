@@ -22,8 +22,6 @@ import com.natamus.skeletonhorsespawn.util.Reference;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 
@@ -40,10 +38,6 @@ public class ModFabric implements ModInitializer {
 	}
 
 	private void loadEvents() {
-		ServerWorldEvents.LOAD.register((MinecraftServer server, ServerLevel world) -> {
-			SkeletonHorseEvent.onWorldLoad(world);
-		});
-
 		ServerTickEvents.START_WORLD_TICK.register((ServerLevel world) -> {
 			SkeletonHorseEvent.onWorldTick(world);
 		});

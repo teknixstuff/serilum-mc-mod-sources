@@ -33,28 +33,24 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ShulkerEvent {
 	private static final HashMap<Entity, Integer> shulkersTicksLeft = new HashMap<Entity, Integer>();
 	private static final HashMap<Level, CopyOnWriteArrayList<Entity>> respawnShulkers = new HashMap<Level, CopyOnWriteArrayList<Entity>>();
-	
-	public static void onWorldLoad(ServerLevel serverLevel) {
-		respawnShulkers.put(serverLevel, new CopyOnWriteArrayList<Entity>());
-	}
-	
+
 	public static void onWorldTick(ServerLevel serverLevel) {
-		if (respawnShulkers.getOrDefault(serverLevel, new CopyOnWriteArrayList<Entity>()).size() > 0) {
+		if (respawnShulkers.computeIfAbsent(serverLevel, k -> new CopyOnWriteArrayList<Entity>()).size() > 0) {
 			for (Entity shulker : respawnShulkers.get(serverLevel)) {
 				int ticksleft = shulkersTicksLeft.get(shulker) - 1;
 				if (ticksleft == 0) {
 					respawnShulkers.get(serverLevel).remove(shulker);
 					shulkersTicksLeft.remove(shulker);
-					
+
 					serverLevel.addFreshEntity(shulker);
 					continue;
 				}
-				
+
 				shulkersTicksLeft.put(shulker, ticksleft);
 			}
 		}
 	}
-	
+
 	public static void onShulkerDeath(Level level, Entity entity, DamageSource source) {
 		if (level.isClientSide) {
 			return;
@@ -63,20 +59,20 @@ public class ShulkerEvent {
 		if (!(entity instanceof Shulker)) {
 			return;
 		}
-		
+
 		Set<String> tags = entity.getTags();
 		if (tags.contains(CollectiveReference.MOD_ID + ".fromspawner")) {
 			if (ConfigHandler.shulkersFromSpawnersDoNotRespawn) {
 				return;
 			}
 		}
-		
+
 		Shulker newshulker = EntityType.SHULKER.create(level);
 		newshulker.restoreFrom(entity);
 		newshulker.setHealth(30F);
-		
+
 		shulkersTicksLeft.put(newshulker, ConfigHandler.timeInTicksToRespawn);
-		respawnShulkers.get(level).add(newshulker);
+		respawnShulkers.computeIfAbsent(level, k -> new CopyOnWriteArrayList<Entity>()).add(newshulker);
 	}
 	
 	public static void onServerShutdown(MinecraftServer server) {

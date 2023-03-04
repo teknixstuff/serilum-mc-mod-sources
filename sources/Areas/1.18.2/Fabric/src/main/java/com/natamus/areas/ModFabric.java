@@ -24,7 +24,6 @@ import com.natamus.collective.fabric.callbacks.CollectivePlayerEvents;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -43,18 +42,18 @@ public class ModFabric implements ModInitializer {
 	}
 
 	private void loadEvents() {
-		ServerWorldEvents.LOAD.register((MinecraftServer server, ServerLevel world) -> {
-			AreaEvent.onWorldLoad(server, world);
-		});
 		ServerTickEvents.START_SERVER_TICK.register((MinecraftServer server) -> {
 			AreaEvent.onServerTick(server);
 		});
+
 		CollectivePlayerEvents.PLAYER_TICK.register((ServerLevel world, ServerPlayer player) -> {
 			AreaEvent.onPlayerTick(world, player);
 		});
+
 		PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, entity) -> {
 			AreaEvent.onSignBreak(world, player, pos, state, entity);
 		});
+
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             CommandAreas.register(dispatcher);
         });

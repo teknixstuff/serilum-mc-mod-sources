@@ -31,44 +31,35 @@ public class SkeletonHorseEvent {
 	private static final HashMap<Level, CopyOnWriteArrayList<Entity>> skeletonhorses_per_world = new HashMap<Level, CopyOnWriteArrayList<Entity>>();
 	private static final HashMap<Level, Integer> tickdelay_per_world = new HashMap<Level, Integer>();
 	
-	public static void onWorldLoad(ServerLevel level) {
-		skeletonhorses_per_world.put(level, new CopyOnWriteArrayList<Entity>());
-		tickdelay_per_world.put(level, 1);
-	}
-	
 	public static void onEntityJoin(Level level, Entity entity) {
 		if (level.isClientSide) {
 			return;
 		}
-		
-		if (entity instanceof SkeletonHorse) {
-			if (!skeletonhorses_per_world.containsKey(level)) {
-				skeletonhorses_per_world.put(level, new CopyOnWriteArrayList<Entity>());
-			}
 
-			if (!skeletonhorses_per_world.get(level).contains(entity)) {
+		if (entity instanceof SkeletonHorse) {
+			if (!skeletonhorses_per_world.computeIfAbsent(level, k -> new CopyOnWriteArrayList<Entity>()).contains(entity)) {
 				skeletonhorses_per_world.get(level).add(entity);
 			}
 		}
 	}
-	
+
 	public static void onWorldTick(ServerLevel level) {
-		int ticks = tickdelay_per_world.getOrDefault(level, 1);
+		int ticks = tickdelay_per_world.computeIfAbsent(level, k -> 1);
 		if (ticks % 20 != 0) {
 			tickdelay_per_world.put(level, ticks+1);
 			return;
 		}
 		tickdelay_per_world.put(level, 1);
-		
+
 		if (!ConfigHandler.shouldBurnSkeletonHorsesInDaylight) {
 			return;
 		}
-		
+
 		if (!level.isDay()) {
 			return;
 		}
-		
-		for (Entity skeletonhorse : skeletonhorses_per_world.get(level)) {
+
+		for (Entity skeletonhorse : skeletonhorses_per_world.computeIfAbsent(level, k -> new CopyOnWriteArrayList<Entity>())) {
 			if (skeletonhorse.isAlive()) {
 				if (!skeletonhorse.isInWaterRainOrBubble()) {
 					BlockPos epos = skeletonhorse.blockPosition();

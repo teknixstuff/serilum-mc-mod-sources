@@ -16,26 +16,25 @@
 
 package com.natamus.areas.cmds;
 
-import java.util.List;
-
 import com.mojang.brigadier.CommandDispatcher;
 import com.natamus.areas.objects.AreaObject;
 import com.natamus.areas.objects.Variables;
 import com.natamus.areas.util.Util;
 import com.natamus.collective.functions.FABFunctions;
 import com.natamus.collective.functions.StringFunctions;
-
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.ChatFormatting;
-import net.minecraft.world.level.Level;
+
+import java.util.List;
 
 public class CommandAreas {
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -45,14 +44,14 @@ public class CommandAreas {
 				CommandSourceStack source = command.getSource();
 				
 				Player player = source.getPlayerOrException();
-				Level world = player.getCommandSenderWorld();
+				Level level = player.getCommandSenderWorld();
 				
 				Vec3 pvec = player.position();
 				boolean sentfirst = false;
 				
-				List<BlockPos> signsaround = FABFunctions.getAllTileEntityPositionsNearbyEntity(BlockEntityType.SIGN, 200, world, player);
+				List<BlockPos> signsaround = FABFunctions.getAllTileEntityPositionsNearbyEntity(BlockEntityType.SIGN, 200, level, player);
 				for (BlockPos signpos : signsaround) {
-					BlockEntity te = world.getBlockEntity(signpos);
+					BlockEntity te = level.getBlockEntity(signpos);
 					if (te instanceof SignBlockEntity) {
 						if (Util.hasZonePrefix((SignBlockEntity)te)) {
 							if (!sentfirst) {
@@ -60,8 +59,8 @@ public class CommandAreas {
 								sentfirst = true;
 							}
 							String prefix = "a";
-							if (Variables.areasperworld.get(world).containsKey(signpos)) {
-								AreaObject ao = Variables.areasperworld.get(world).get(signpos);
+							if (Variables.areasperlevel.get(level).containsKey(signpos)) {
+								AreaObject ao = Variables.areasperlevel.get(level).get(signpos);
 								prefix = ao.areaname + " a";
 							}
 							

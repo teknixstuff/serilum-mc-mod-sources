@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "respawningshulkers",
-  "version": "3.3",
+  "version": "3.4",
 
   "name": "Respawning Shulkers",
   "description": "Shulkers will respawn on their death location after a configurable delay to make them more sustainable.",
@@ -54,11 +54,12 @@
 	  " Kreezxil",
 	  " Michael W. S.",
 	  " Mir3JonCZ",
+	  " nbtc971",
 	  " Rebecca Hb.",
 	  " Robert Gilbert",
 	  " Shana Gitnick",
 	  " Sija",
-	  " Tyler Behl",
-	  " Wendi S"
+	  " silver Bowsman",
+	  " Tyler Behl"
   ]
 }

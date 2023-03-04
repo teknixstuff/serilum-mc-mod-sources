@@ -30,70 +30,65 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class SpreadEvent {
 	private static final HashMap<Level, CopyOnWriteArrayList<BlockPos>> portals_to_process = new HashMap<Level, CopyOnWriteArrayList<BlockPos>>();
-	private static final HashMap<Level, Integer> worldticks = new HashMap<Level, Integer>();
-	
-	public static void onWorldTick(ServerLevel world) {
-		if (WorldFunctions.isNether(world)) {
+	private static final HashMap<Level, Integer> levelTicks = new HashMap<Level, Integer>();
+
+	public static void onWorldLoad(ServerLevel level) {
+		if (WorldFunctions.isNether(level)) {
 			return;
 		}
-		
-		if (portals_to_process.get(world).size() > 0) {
-			BlockPos portal = portals_to_process.get(world).get(0);
-			
-			if (!Util.portals.get(world).contains(portal) && !Util.preventedportals.get(world).containsKey(portal)) {
-				Util.validatePortalAndAdd(world, portal);
+
+		Util.loadPortalsFromWorld(level);
+	}
+
+	public static void onWorldTick(ServerLevel level) {
+		if (WorldFunctions.isNether(level)) {
+			return;
+		}
+
+		if (portals_to_process.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).size() > 0) {
+			BlockPos portal = portals_to_process.get(level).get(0);
+
+			if (!Util.portals.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).contains(portal) && !Util.preventedportals.computeIfAbsent(level, k -> new HashMap<BlockPos, Boolean>()).containsKey(portal)) {
+				Util.validatePortalAndAdd(level, portal);
 			}
-			
-			portals_to_process.get(world).remove(0);
+
+			portals_to_process.get(level).remove(0);
 		}
-		
-		int worldtick = worldticks.get(world);
-		if (worldtick % ConfigHandler.spreadDelayTicks != 0) {
-			worldticks.put(world, worldtick+1);
+
+		int leveltick = levelTicks.computeIfAbsent(level, k -> 1);
+		if (leveltick % ConfigHandler.spreadDelayTicks != 0) {
+			levelTicks.put(level, leveltick+1);
 			return;
 		}
-		worldticks.put(world, 1);
-		
-		for (BlockPos portal : Util.portals.get(world)) {
-			Util.spreadNextBlock(world, portal);
+		levelTicks.put(level, 1);
+
+		for (BlockPos portal : Util.portals.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>())) {
+			Util.spreadNextBlock(level, portal);
 		}
-	}
-	
-	public static void onWorldLoad(ServerLevel world) {
-		if (WorldFunctions.isNether(world)) {
-			return;
-		}
-		
-		worldticks.put(world, 0);
-		portals_to_process.put(world, new CopyOnWriteArrayList<BlockPos>());
-		Util.portals.put(world, new CopyOnWriteArrayList<BlockPos>());
-		Util.preventedportals.put(world, new HashMap<BlockPos, Boolean>());
-		
-		Util.loadPortalsFromWorld(world);
 	}
 
-	public static void onPortalSpawn(Level world, BlockPos pos, PortalShape shape) {
-		if (world.isClientSide) {
+	public static void onPortalSpawn(Level level, BlockPos pos, PortalShape shape) {
+		if (level.isClientSide) {
 			return;
 		}
 
-		if (WorldFunctions.isNether(world)) {
+		if (WorldFunctions.isNether(level)) {
 			return;
 		}
-		
-		portals_to_process.get(world).add(pos);
+
+		portals_to_process.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).add(pos);
 	}
-	
-	public static void onDimensionChange(ServerLevel world, ServerPlayer player) {
-		if (world.isClientSide) {
+
+	public static void onDimensionChange(ServerLevel level, ServerPlayer player) {
+		if (level.isClientSide) {
 			return;
 		}
-		
-		if (WorldFunctions.isNether(world)) {
+
+		if (WorldFunctions.isNether(level)) {
 			return;
 		}
-		
+
 		BlockPos ppos = player.blockPosition();
-		portals_to_process.get(world).add(ppos);
+		portals_to_process.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).add(ppos);
 	}
 }

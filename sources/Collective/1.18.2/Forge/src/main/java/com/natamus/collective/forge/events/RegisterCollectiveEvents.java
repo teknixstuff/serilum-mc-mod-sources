@@ -26,23 +26,12 @@ import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.WorldTickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 @EventBusSubscriber
 public class RegisterCollectiveEvents {
-    @SubscribeEvent
-    public void onWorldLoad(WorldEvent.Load e) {
-        Level level = WorldFunctions.getWorldIfInstanceOfAndNotRemote(e.getWorld());
-        if (level == null) {
-            return;
-        }
-
-        CollectiveEvents.onWorldLoad((ServerLevel)level);
-    }
-
     @SubscribeEvent
     public void onWorldTick(WorldTickEvent e) {
         Level level = e.world;

@@ -49,15 +49,11 @@ import java.util.List;
 
 public class CampfireEvent {
 	private static final HashMap<Level, List<BlockPos>> checkCampfireBurn = new HashMap<Level, List<BlockPos>>();
-	
-	public static void onWorldLoad(ServerLevel world) {
-		checkCampfireBurn.put(world, new ArrayList<BlockPos>());
-	}
-	
-	public static void onWorldTick(ServerLevel world) {
-		if (checkCampfireBurn.get(world).size() > 0) {
-			BlockPos campfirepos = checkCampfireBurn.get(world).get(0);
-			BlockState campfirestate = world.getBlockState(campfirepos);
+
+	public static void onWorldTick(ServerLevel level) {
+		if (checkCampfireBurn.computeIfAbsent(level, k -> new ArrayList<BlockPos>()).size() > 0) {
+			BlockPos campfirepos = checkCampfireBurn.get(level).get(0);
+			BlockState campfirestate = level.getBlockState(campfirepos);
 			if (CompareBlockFunctions.blockIsInRegistryHolder(campfirestate.getBlock(), BlockTags.CAMPFIRES)) {
 				boolean islit = true;
 				if (ConfigHandler.campfireMustBeLit) {
@@ -66,7 +62,7 @@ public class CampfireEvent {
 				
 				if (islit) {
 					int r = (int)(ConfigHandler.preventHostilesRadius * ConfigHandler.burnHostilesRadiusModifier);
-					List<Entity> entities = world.getEntities(null, new AABB(campfirepos.getX()-r, campfirepos.getY()-r, campfirepos.getZ()-r, campfirepos.getX()+r, campfirepos.getY()+r, campfirepos.getZ()+r));
+					List<Entity> entities = level.getEntities(null, new AABB(campfirepos.getX()-r, campfirepos.getY()-r, campfirepos.getZ()-r, campfirepos.getX()+r, campfirepos.getY()+r, campfirepos.getZ()+r));
 					for (Entity entity : entities) {
 						if (Util.entityIsHostile(entity)) {
 							entity.setSecondsOnFire(30);
@@ -75,7 +71,7 @@ public class CampfireEvent {
 				}
 			}
 			
-			checkCampfireBurn.get(world).remove(0);
+			checkCampfireBurn.get(level).remove(0);
 		}
 	}
 	
@@ -149,8 +145,8 @@ public class CampfireEvent {
 		return false;
 	}
 	
-	public static void onCampfirePlace(Level world, BlockPos blockPos, BlockState blockState, LivingEntity livingEntity, ItemStack itemStack) {
-		if (world.isClientSide) {
+	public static void onCampfirePlace(Level level, BlockPos blockPos, BlockState blockState, LivingEntity livingEntity, ItemStack itemStack) {
+		if (level.isClientSide) {
 			return;
 		}
 		
@@ -174,15 +170,15 @@ public class CampfireEvent {
 			}
 		}
 		
-		checkCampfireBurn.get(world).add(blockPos.immutable());
+		checkCampfireBurn.computeIfAbsent(level, k -> new ArrayList<BlockPos>()).add(blockPos.immutable());
 	}
 	
-	public static boolean onRightClickCampfireBlock(Level world, Player player, InteractionHand hand, BlockPos pos, BlockHitResult hitVec) {
-		if (world.isClientSide) {
+	public static boolean onRightClickCampfireBlock(Level level, Player player, InteractionHand hand, BlockPos pos, BlockHitResult hitVec) {
+		if (level.isClientSide) {
 			return true;
 		}
 
-		BlockState state = world.getBlockState(pos);
+		BlockState state = level.getBlockState(pos);
 		Block block = state.getBlock();
 		
 		if (CompareBlockFunctions.blockIsInRegistryHolder(block, BlockTags.CAMPFIRES)) {
@@ -191,7 +187,7 @@ public class CampfireEvent {
 			}
 			
 			if (player.getMainHandItem().getItem() instanceof FlintAndSteelItem || player.getOffhandItem().getItem() instanceof FlintAndSteelItem) {
-				checkCampfireBurn.get(world).add(pos.immutable());
+				checkCampfireBurn.computeIfAbsent(level, k -> new ArrayList<BlockPos>()).add(pos.immutable());
 			}
 		}
 		

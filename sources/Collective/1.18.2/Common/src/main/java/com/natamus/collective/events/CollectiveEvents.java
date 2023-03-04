@@ -51,24 +51,13 @@ public class CollectiveEvents {
 	public static WeakHashMap<ServerLevel, WeakHashMap<Entity, Entity>> entitiesToRide = new WeakHashMap<ServerLevel, WeakHashMap<Entity, Entity>>();
 	public static CopyOnWriteArrayList<Pair<Integer, Runnable>> scheduledRunnables = new CopyOnWriteArrayList<Pair<Integer, Runnable>>();
 
-	public static void onWorldLoad(ServerLevel serverlevel) {
-		entitiesToSpawn.put(serverlevel, new ArrayList<Entity>());
-		entitiesToRide.put(serverlevel, new WeakHashMap<Entity, Entity>());
-	}
-
 	public static void onWorldTick(ServerLevel serverlevel) {
-		if (!entitiesToSpawn.containsKey(serverlevel)) {
-			entitiesToSpawn.put(serverlevel, new ArrayList<Entity>());
-		}
-		else if (entitiesToSpawn.get(serverlevel).size() > 0) {
+		if (entitiesToSpawn.computeIfAbsent(serverlevel, k -> new ArrayList<Entity>()).size() > 0) {
 			Entity tospawn = entitiesToSpawn.get(serverlevel).get(0);
 
 			serverlevel.addFreshEntityWithPassengers(tospawn);
 
-			if (!entitiesToRide.containsKey(serverlevel)) {
-				entitiesToRide.put(serverlevel, new WeakHashMap<Entity, Entity>());
-			}
-			else if (entitiesToRide.get(serverlevel).containsKey(tospawn)) {
+			if (entitiesToRide.computeIfAbsent(serverlevel, k -> new WeakHashMap<Entity, Entity>()).containsKey(tospawn)) {
 				Entity rider = entitiesToRide.get(serverlevel).get(tospawn);
 
 				rider.startRiding(tospawn);

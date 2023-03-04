@@ -46,19 +46,19 @@ import java.util.List;
 public class Util {
 	private static final List<String> zoneprefixes = new ArrayList<String>(Arrays.asList("[na]", "[area]", "[region]", "[zone]"));
 	
-	public static AreaObject getAreaSign(Level world, BlockPos signpos) {
-		if (world.isClientSide) {
+	public static AreaObject getAreaSign(Level level, BlockPos signpos) {
+		if (level.isClientSide) {
 			return null;
 		}
 
-		HashMap<BlockPos, AreaObject> hm = Variables.areasperworld.get(world);
+		HashMap<BlockPos, AreaObject> hm = Variables.areasperlevel.computeIfAbsent(level, k -> new HashMap<BlockPos, AreaObject>());
 		if (hm != null) {
 			if (hm.containsKey(signpos)) {
 				return hm.get(signpos);
 			}
 		}
 		
-		BlockEntity te = world.getBlockEntity(signpos);
+		BlockEntity te = level.getBlockEntity(signpos);
 		if (te == null) {
 			return null;
 		}
@@ -184,13 +184,13 @@ public class Util {
 		}
 		
 		if (updatesign) {
-			TileEntityFunctions.updateTileEntity(world, signpos, signentity);
+			TileEntityFunctions.updateTileEntity(level, signpos, signentity);
 		}
 		if (radius < 0) {
 			return null;
 		}
 		
-		return new AreaObject(world, signpos, areaname.toString(), radius, rgb);
+		return new AreaObject(level, signpos, areaname.toString(), radius, rgb);
 	}
 	
 	private static boolean hasZonePrefix(String line) {

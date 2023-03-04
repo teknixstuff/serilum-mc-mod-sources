@@ -16,14 +16,12 @@
 
 package com.natamus.giantspawn.forge.events;
 
-import com.natamus.collective.functions.WorldFunctions;
 import com.natamus.giantspawn.events.GiantEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.TickEvent.WorldTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
+import net.minecraftforge.event.TickEvent.WorldTickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
@@ -42,15 +40,5 @@ public class ForgeGiantEvent {
 		}
 		
 		GiantEvent.onWorldTick((ServerLevel)level);
-	}
-	
-	@SubscribeEvent
-	public void onWorldLoad(WorldEvent.Load e) {
-		Level level = WorldFunctions.getWorldIfInstanceOfAndNotRemote(e.getWorld());
-		if (level == null) {
-			return;
-		}
-		
-		GiantEvent.onWorldLoad((ServerLevel)level);
 	}
 }

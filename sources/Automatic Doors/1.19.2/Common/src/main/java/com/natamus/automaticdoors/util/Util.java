@@ -40,22 +40,22 @@ public class Util {
 		return false;
 	}
 	
-	public static void delayDoorClose(Level world, BlockPos pos) {
+	public static void delayDoorClose(Level level, BlockPos pos) {
 		if (pos == null) {
 			return;
 		}
-		
+
 		if (runnables.contains(pos)) {
 			return;
 		}
-		
+
 		runnables.add(pos);
 		new Thread(() -> {
 			try  { Thread.sleep( ConfigHandler.doorOpenTime ); }
 			catch (InterruptedException ignored)  {}
 
-			if (!DoorEvent.toclosedoors.get(world).contains(pos) && !DoorEvent.newclosedoors.get(world).contains(pos)) {
-				DoorEvent.newclosedoors.get(world).add(pos);
+			if (!DoorEvent.toclosedoors.get(level).contains(pos) && !DoorEvent.newclosedoors.get(level).contains(pos)) {
+				DoorEvent.newclosedoors.get(level).add(pos);
 			}
 			runnables.remove(pos);
 		}).start();

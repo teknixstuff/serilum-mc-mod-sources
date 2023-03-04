@@ -23,9 +23,7 @@ import com.natamus.treeharvester.util.Reference;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -46,10 +44,6 @@ public class ModFabric implements ModInitializer {
 	private void loadEvents() {
 		ServerLifecycleEvents.SERVER_STARTING.register(server -> {
 			TreeEvent.setupBlacklist();
-		});
-
-		ServerWorldEvents.LOAD.register((MinecraftServer server, ServerLevel world) -> {
-			TreeEvent.onWorldLoad(world);
 		});
 
 		ServerTickEvents.START_WORLD_TICK.register((ServerLevel world) -> {

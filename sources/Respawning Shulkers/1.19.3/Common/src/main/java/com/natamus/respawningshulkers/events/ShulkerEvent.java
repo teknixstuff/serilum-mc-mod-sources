@@ -33,13 +33,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ShulkerEvent {
 	private static final HashMap<Entity, Integer> shulkersTicksLeft = new HashMap<Entity, Integer>();
 	private static final HashMap<Level, CopyOnWriteArrayList<Entity>> respawnShulkers = new HashMap<Level, CopyOnWriteArrayList<Entity>>();
-	
-	public static void onWorldLoad(ServerLevel serverLevel) {
-		respawnShulkers.put(serverLevel, new CopyOnWriteArrayList<Entity>());
-	}
-	
+
 	public static void onWorldTick(ServerLevel serverLevel) {
-		if (respawnShulkers.getOrDefault(serverLevel, new CopyOnWriteArrayList<Entity>()).size() > 0) {
+		if (respawnShulkers.computeIfAbsent(serverLevel, k -> new CopyOnWriteArrayList<Entity>()).size() > 0) {
 			for (Entity shulker : respawnShulkers.get(serverLevel)) {
 				int ticksleft = shulkersTicksLeft.get(shulker) - 1;
 				if (ticksleft == 0) {
@@ -76,7 +72,7 @@ public class ShulkerEvent {
 		newshulker.setHealth(30F);
 		
 		shulkersTicksLeft.put(newshulker, ConfigHandler.timeInTicksToRespawn);
-		respawnShulkers.get(level).add(newshulker);
+		respawnShulkers.computeIfAbsent(level, k -> new CopyOnWriteArrayList<Entity>()).add(newshulker);
 	}
 	
 	public static void onServerShutdown(MinecraftServer server) {

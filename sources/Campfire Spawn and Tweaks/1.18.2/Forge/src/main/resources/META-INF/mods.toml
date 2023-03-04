@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="campfirespawnandtweaks"
-version="3.1"
+version="3.2"
 displayName="Campfire Spawn and Tweaks"
 displayURL="https://curseforge.com/minecraft/mc-mods/campfire-spawn-and-tweaks"
 authors="Rick South"
@@ -14,7 +14,7 @@ description='''Allows player to set spawn points inside a campfire, gives fire r
 '''
 credits='''Thank you very much to my Membership sponsors for supporting the development of this mod:  
 
-Adam E, Alister, aternosorg, Cherriesaurus, Kreezxil, Michael W. S., Mir3JonCZ, Rebecca Hb., Robert Gilbert, Shana Gitnick, Sija, Tyler Behl, Wendi S   
+Adam E, Alister, aternosorg, Cherriesaurus, Kreezxil, Michael W. S., Mir3JonCZ, nbtc971, Rebecca Hb., Robert Gilbert, Shana Gitnick, Sija, silver Bowsman, Tyler Behl   
 
 If you would like to contribute too, check out https://ricksouth.com/donate. Appreciate it! <3   
 '''
@@ -22,6 +22,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.campfirespawnandtweaks]]
     modId="collective"
     mandatory=true
-    versionRange="[6.45,)"
+    versionRange="[6.48,)"
     ordering="NONE"
     side="BOTH"

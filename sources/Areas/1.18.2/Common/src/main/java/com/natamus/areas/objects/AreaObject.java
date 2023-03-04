@@ -16,15 +16,15 @@
 
 package com.natamus.areas.objects;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
-
 public class AreaObject {
-	public Level world;
+	public Level level;
 	public BlockPos location;
 	public String areaname;
 	public int radius;
@@ -33,15 +33,15 @@ public class AreaObject {
 	public List<Player> containsplayers;
 	
 	public AreaObject(Level w, BlockPos l, String a, int r, String rgb) {
-		world = w;
+		level = w;
 		location = l;
 		areaname = a;
 		radius = r;
 		customrgb = rgb;
 		containsplayers = new ArrayList<Player>();
 		
-		if (Variables.areasperworld.containsKey(world)) {
-			Variables.areasperworld.get(world).put(l, this);
+		if (Variables.areasperlevel.containsKey(level)) {
+			Variables.areasperlevel.get(level).put(l, this);
 		}
 	}
 }

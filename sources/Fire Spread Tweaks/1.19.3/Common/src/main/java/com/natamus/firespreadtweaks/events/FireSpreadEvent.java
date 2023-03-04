@@ -38,13 +38,8 @@ public class FireSpreadEvent {
 	
 	private static final List<Block> fireblocks = new ArrayList<Block>(Arrays.asList(Blocks.NETHERRACK, Blocks.MAGMA_BLOCK, Blocks.SOUL_SAND, Blocks.SOUL_SOIL));
 	
-	public static void onWorldTick(ServerLevel world) {
-		if (!firepositions.containsKey(world)) {
-			firepositions.put(world, new CopyOnWriteArrayList<BlockPos>());
-			return;
-		}
-		
-		for (BlockPos firepos : firepositions.get(world)) {
+	public static void onWorldTick(ServerLevel level) {
+		for (BlockPos firepos : firepositions.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>())) {
 			if (!ticksleft.containsKey(firepos)) {
 				ticksleft.put(firepos, Util.getFireBurnDurationInTicks());
 				continue;
@@ -53,12 +48,12 @@ public class FireSpreadEvent {
 			int tl = ticksleft.get(firepos) -1;
 			if (tl <= 0) {
 				ticksleft.remove(firepos);
-				firepositions.get(world).remove(firepos);
+				firepositions.get(level).remove(firepos);
 				
-				BlockState firestate = world.getBlockState(firepos);
+				BlockState firestate = level.getBlockState(firepos);
 				Block fireblock = firestate.getBlock();
 				if (fireblock instanceof FireBlock) {
-					world.setBlockAndUpdate(firepos, Blocks.AIR.defaultBlockState());
+					level.setBlockAndUpdate(firepos, Blocks.AIR.defaultBlockState());
 				}
  				continue;
 			}
@@ -66,28 +61,26 @@ public class FireSpreadEvent {
 			ticksleft.put(firepos, tl);
 		}
 	}
-	
-	public static void onWorldLoad(ServerLevel world) {
-		BooleanValue firetickvalue = world.getGameRules().getRule(GameRules.RULE_DOFIRETICK);
+
+	public static void onWorldLoad(ServerLevel level) {
+		BooleanValue firetickvalue = level.getGameRules().getRule(GameRules.RULE_DOFIRETICK);
 		if (firetickvalue.get()) {
-			firetickvalue.set(false, world.getServer());
+			firetickvalue.set(false, level.getServer());
 		}
-		
-		firepositions.put(world, new CopyOnWriteArrayList<BlockPos>());
 	}
 	
-	public static void onWorldUnload(ServerLevel world) {
-		for (BlockPos firepos : firepositions.get(world)) {
-			BlockState firestate = world.getBlockState(firepos);
+	public static void onWorldUnload(ServerLevel level) {
+		for (BlockPos firepos : firepositions.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>())) {
+			BlockState firestate = level.getBlockState(firepos);
 			Block fireblock = firestate.getBlock();
 			if (fireblock instanceof FireBlock) {
-				world.setBlockAndUpdate(firepos, Blocks.AIR.defaultBlockState());
+				level.setBlockAndUpdate(firepos, Blocks.AIR.defaultBlockState());
 			}		
 		}
 	}
 	
-	public static void onNeighbourNotice(Level world, BlockPos pos, BlockState state, EnumSet<Direction> notifiedSides, boolean forceRedstoneUpdate) {
-		if (world.isClientSide) {
+	public static void onNeighbourNotice(Level level, BlockPos pos, BlockState state, EnumSet<Direction> notifiedSides, boolean forceRedstoneUpdate) {
+		if (level.isClientSide) {
 			return;
 		}
 		
@@ -96,12 +89,12 @@ public class FireSpreadEvent {
 			return;
 		}
 		
-		Block belowblock = world.getBlockState(pos.below()).getBlock();
+		Block belowblock = level.getBlockState(pos.below()).getBlock();
 		if (BlockFunctions.isOneOfBlocks(fireblocks, belowblock)) {
 			return;
 		}
 		
 		ticksleft.put(pos, Util.getFireBurnDurationInTicks());
-		firepositions.get(world).add(pos);
+		firepositions.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).add(pos);
 	}
 }

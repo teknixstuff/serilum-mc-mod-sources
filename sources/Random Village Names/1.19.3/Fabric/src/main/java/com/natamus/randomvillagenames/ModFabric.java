@@ -22,8 +22,6 @@ import com.natamus.randomvillagenames.util.Reference;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.chunk.LevelChunk;
 
@@ -40,12 +38,10 @@ public class ModFabric implements ModInitializer {
 	}
 
 	private void loadEvents() {
-		ServerWorldEvents.LOAD.register((MinecraftServer server, ServerLevel level) -> {
-			SetVillageSignEvent.onWorldLoad(level);
-		});
 		ServerTickEvents.START_WORLD_TICK.register((ServerLevel level) -> {
 			SetVillageSignEvent.onWorldTick(level);
 		});
+
 		ServerChunkEvents.CHUNK_LOAD.register((ServerLevel level, LevelChunk chunk) -> {
 			SetVillageSignEvent.onChunkLoad(level, chunk);
 		});

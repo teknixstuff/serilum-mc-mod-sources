@@ -44,24 +44,18 @@ public class SetVillageSignEvent {
 
 	private static final HashMap<ServerLevel, CopyOnWriteArrayList<BlockPos>> existingvillages = new HashMap<ServerLevel, CopyOnWriteArrayList<BlockPos>>();
 	private static final HashMap<ServerLevel, ArrayList<ChunkPos>> cachedchunks = new HashMap<ServerLevel, ArrayList<ChunkPos>>();
-	
-	public static void onWorldLoad(ServerLevel serverlevel) {
-		processChunks.put(serverlevel, new ArrayList<ChunkPos>());
-		existingvillages.put(serverlevel, new CopyOnWriteArrayList<BlockPos>());
-		cachedchunks.put(serverlevel, new ArrayList<ChunkPos>());
-	}
 
 	public static void onWorldTick(ServerLevel serverlevel) {
-		if (processChunks.get(serverlevel).size() > 0) {
+		if (processChunks.computeIfAbsent(serverlevel, k -> new ArrayList<ChunkPos>()).size() > 0) {
 			ChunkPos chunkpos = processChunks.get(serverlevel).get(0);
 
-			if (!cachedchunks.get(serverlevel).contains(chunkpos)) {
+			if (!cachedchunks.computeIfAbsent(serverlevel, k -> new ArrayList<ChunkPos>()).contains(chunkpos)) {
 				cachedchunks.get(serverlevel).add(chunkpos);
 
 				BlockPos worldpos = chunkpos.getWorldPosition();
 
 				if (serverlevel.sectionsToVillage(SectionPos.of(worldpos)) <= 4) {
-					for (BlockPos existingvillage : existingvillages.get(serverlevel)) {
+					for (BlockPos existingvillage : existingvillages.computeIfAbsent(serverlevel, k -> new CopyOnWriteArrayList<BlockPos>())) {
 						if (Math.abs(existingvillage.getX() - worldpos.getX()) <= 200) {
 							if (Math.abs(existingvillage.getZ() - worldpos.getZ()) <= 200) {
 								return;
@@ -69,7 +63,7 @@ public class SetVillageSignEvent {
 						}
 					}
 
-					BlockPos villagepos = BlockPosFunctions.getNearbyVillage(serverlevel, worldpos); // BlockPosFunctions.getNearbyStructure(serverworld, StructureFeature.VILLAGE, ppos, 100);
+					BlockPos villagepos = BlockPosFunctions.getNearbyVillage(serverlevel, worldpos);
 					if (villagepos == null) {
 						return;
 					}
@@ -130,10 +124,10 @@ public class SetVillageSignEvent {
 
 		ChunkPos chunkpos = chunk.getPos();
 
-		if (cachedchunks.get(serverlevel).contains(chunkpos)) {
+		if (cachedchunks.computeIfAbsent(serverlevel, k -> new ArrayList<ChunkPos>()).contains(chunkpos)) {
 			return;
 		}
 
-		processChunks.get(serverlevel).add(chunkpos);
+		processChunks.computeIfAbsent(serverlevel, k -> new ArrayList<ChunkPos>()).add(chunkpos);
 	}
 }

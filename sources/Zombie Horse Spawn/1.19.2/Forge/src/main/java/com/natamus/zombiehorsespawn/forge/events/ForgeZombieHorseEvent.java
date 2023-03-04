@@ -30,16 +30,6 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 @EventBusSubscriber
 public class ForgeZombieHorseEvent {
 	@SubscribeEvent
-	public void onWorldLoad(LevelEvent.Load e) {
-		Level level = WorldFunctions.getWorldIfInstanceOfAndNotRemote(e.getLevel());
-		if (level == null) {
-			return;
-		}
-
-		ZombieHorseEvent.onWorldLoad((ServerLevel)level);
-	}
-	
-	@SubscribeEvent
 	public void onEntityJoin(EntityJoinLevelEvent e) {
 		ZombieHorseEvent.onEntityJoin(e.getLevel(), e.getEntity());
 	}

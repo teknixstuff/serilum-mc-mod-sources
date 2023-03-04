@@ -30,45 +30,36 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ZombieHorseEvent {
 	public static HashMap<Level, CopyOnWriteArrayList<Entity>> zombiehorses_per_world = new HashMap<Level, CopyOnWriteArrayList<Entity>>();
 	public static HashMap<Level, Integer> tickdelay_per_world = new HashMap<Level, Integer>();
-	
-	public static void onWorldLoad(ServerLevel level) {
-		zombiehorses_per_world.put(level, new CopyOnWriteArrayList<Entity>());
-		tickdelay_per_world.put(level, 1);
-	}
-	
+
 	public static void onEntityJoin(Level level, Entity entity) {
 		if (level.isClientSide) {
 			return;
 		}
 
 		if (entity instanceof ZombieHorse) {
-			if (!zombiehorses_per_world.containsKey(level)) {
-				zombiehorses_per_world.put(level, new CopyOnWriteArrayList<Entity>());
-			}
-
-			if (!zombiehorses_per_world.get(level).contains(entity)) {
+			if (!zombiehorses_per_world.computeIfAbsent(level, k -> new CopyOnWriteArrayList<Entity>()).contains(entity)) {
 				zombiehorses_per_world.get(level).add(entity);
 			}
 		}
 	}
-	
+
 	public static void onWorldTick(ServerLevel level) {
-		int ticks = tickdelay_per_world.getOrDefault(level, 1);
+		int ticks = tickdelay_per_world.computeIfAbsent(level, k -> 1);
 		if (ticks % 20 != 0) {
 			tickdelay_per_world.put(level, ticks+1);
 			return;
 		}
 		tickdelay_per_world.put(level, 1);
-		
+
 		if (!ConfigHandler.shouldBurnZombieHorsesInDaylight) {
 			return;
 		}
-		
+
 		if (!level.isDay()) {
 			return;
 		}
-		
-		for (Entity zombiehorse : zombiehorses_per_world.get(level)) {
+
+		for (Entity zombiehorse : zombiehorses_per_world.computeIfAbsent(level, k -> new CopyOnWriteArrayList<Entity>())) {
 			if (zombiehorse.isAlive()) {
 				if (!zombiehorse.isInWaterRainOrBubble()) {
 					BlockPos epos = zombiehorse.blockPosition();

@@ -16,29 +16,17 @@
 
 package com.natamus.skeletonhorsespawn.forge.events;
 
-import com.natamus.collective.functions.WorldFunctions;
 import com.natamus.skeletonhorsespawn.events.SkeletonHorseEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent.LevelTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 @EventBusSubscriber
 public class ForgeSkeletonHorseEvent {
-	@SubscribeEvent
-	public void onWorldLoad(LevelEvent.Load e) {
-		Level level = WorldFunctions.getWorldIfInstanceOfAndNotRemote(e.getLevel());
-		if (level == null) {
-			return;
-		}
-
-		SkeletonHorseEvent.onWorldLoad((ServerLevel)level);
-	}
-	
 	@SubscribeEvent
 	public void onEntityJoin(EntityJoinLevelEvent e) {
 		SkeletonHorseEvent.onEntityJoin(e.getLevel(), e.getEntity());

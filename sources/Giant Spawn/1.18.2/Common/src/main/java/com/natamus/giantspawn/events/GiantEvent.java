@@ -41,51 +41,46 @@ public class GiantEvent {
 			return;
 		}
 		
-		if (!giants_per_world.get(level).contains(entity)) {
+		if (!giants_per_world.computeIfAbsent(level, k -> new CopyOnWriteArrayList<Entity>()).contains(entity)) {
 			giants_per_world.get(level).add(entity);
 		}
 
 		Giant giant = (Giant)entity;
-		
+
 		giant.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(35.0D); // FOLLOW_RANGE
 		giant.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue((double)0.23F * ConfigHandler.giantMovementSpeedModifier); // MOVEMENT_SPEED
 		giant.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(3.0D * ConfigHandler.giantAttackDamageModifier); // ATTACK_DAMAGE
 		giant.getAttribute(Attributes.ARMOR).setBaseValue(2.0D); // ARMOR
 	}
-	
+
 	public static void onWorldTick(ServerLevel level) {
-		int ticks = tickdelay_per_world.get(level);
+		int ticks = tickdelay_per_world.computeIfAbsent(level, k -> 1);
 		if (ticks % 20 != 0) {
 			tickdelay_per_world.put(level, ticks + 1);
 			return;
 		}
 		tickdelay_per_world.put(level, 1);
-		
+
 		if (!ConfigHandler.shouldBurnGiantsInDaylight) {
 			return;
 		}
-		
+
 		if (!level.isDay()) {
 			return;
 		}
-		
-		for (Entity giant : giants_per_world.get(level)) {
+
+		for (Entity giant : giants_per_world.computeIfAbsent(level, k -> new CopyOnWriteArrayList<Entity>())) {
 			if (giant.isAlive()) {
 				if (!giant.isInWaterRainOrBubble()) {
 					BlockPos epos = giant.blockPosition();
 					if (BlockPosFunctions.isOnSurface(level, epos)) {
 						giant.setSecondsOnFire(3);
 					}
-				}	
+				}
 			}
 			else {
 				giants_per_world.get(level).remove(giant);
-			}		
+			}
 		}
-	}
-	
-	public static void onWorldLoad(ServerLevel level) {
-		giants_per_world.put(level, new CopyOnWriteArrayList<Entity>());
-		tickdelay_per_world.put(level, 1);
 	}
 }

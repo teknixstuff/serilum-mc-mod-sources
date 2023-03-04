@@ -62,13 +62,9 @@ public class TreeEvent {
 			System.out.println("[Tree Harvester] Something went wrong setting up the axe blacklist file.");
 		}
 	}
-
-	public static void onWorldLoad(ServerLevel level) {
-		processleaves.put(level, new CopyOnWriteArrayList<List<BlockPos>>());
-	}
 	
 	public static void onWorldTick(ServerLevel level) {
-		if (processleaves.get(level).size() == 0) {
+		if (processleaves.computeIfAbsent(level, k -> new CopyOnWriteArrayList<List<BlockPos>>()).size() == 0) {
 			return;
 		}
 		
@@ -285,7 +281,7 @@ public class TreeEvent {
 			}
 			else {
 				Collections.shuffle(leaves);
-				processleaves.get(level).add(leaves);
+				processleaves.computeIfAbsent(level, k -> new CopyOnWriteArrayList<List<BlockPos>>()).add(leaves);
 			}
 
 			Util.highestleaf.remove(bpos);

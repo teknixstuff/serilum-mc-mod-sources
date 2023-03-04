@@ -25,16 +25,10 @@ import java.util.WeakHashMap;
 
 public class SpawnEntityFunctions {
 	public static void spawnEntityOnNextTick(ServerLevel serverlevel, Entity entity) {
-		if (!CollectiveEvents.entitiesToSpawn.containsKey(serverlevel)) {
-			CollectiveEvents.entitiesToSpawn.put(serverlevel, new ArrayList<Entity>());
-		}
-		CollectiveEvents.entitiesToSpawn.get(serverlevel).add(entity);
+		CollectiveEvents.entitiesToSpawn.computeIfAbsent(serverlevel, k -> new ArrayList<Entity>()).add(entity);
 	}
 
 	public static void startRidingEntityOnNextTick(ServerLevel serverlevel, Entity ridden, Entity rider) {
-		if (!CollectiveEvents.entitiesToRide.containsKey(serverlevel)) {
-			CollectiveEvents.entitiesToRide.put(serverlevel, new WeakHashMap<Entity, Entity>());
-		}
-		CollectiveEvents.entitiesToRide.get(serverlevel).put(ridden, rider);
+		CollectiveEvents.entitiesToRide.computeIfAbsent(serverlevel, k -> new WeakHashMap<Entity, Entity>()).put(ridden, rider);
 	}
 }
