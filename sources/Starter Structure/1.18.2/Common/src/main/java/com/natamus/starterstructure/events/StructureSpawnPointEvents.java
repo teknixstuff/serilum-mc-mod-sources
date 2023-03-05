@@ -32,15 +32,15 @@ import java.util.Optional;
 
 public class StructureSpawnPointEvents {
 	public static void onPlayerRespawn(ServerPlayer oldPlayer, ServerPlayer serverPlayer, boolean alive) {
-		if (ConfigHandler.forceExactSpawnMiddleStructure) {
-			ServerLevel serverworld = (ServerLevel)serverPlayer.level;
+		if (ConfigHandler.forceExactSpawn) {
+			ServerLevel serverLevel = (ServerLevel)serverPlayer.level;
 
-			BlockPos respawnlocation = serverworld.getSharedSpawnPos();
+			BlockPos respawnlocation = serverLevel.getSharedSpawnPos();
 			Vec3 respawnvec = new Vec3(respawnlocation.getX()+0.5, respawnlocation.getY(), respawnlocation.getZ()+0.5);
 
 			BlockPos bedpos = serverPlayer.getRespawnPosition();
 			if (bedpos != null) {
-				Optional<Vec3> optionalbed = Player.findRespawnPositionAndUseSpawnBlock(serverworld, bedpos, 1.0f, false, false);
+				Optional<Vec3> optionalbed = Player.findRespawnPositionAndUseSpawnBlock(serverLevel, bedpos, 1.0f, false, false);
 				if (optionalbed.isPresent()) {
 					return;
 				}
@@ -57,7 +57,7 @@ public class StructureSpawnPointEvents {
 
 		Util.processEntityMovementOnJoin(entity);
 
-		if (!ConfigHandler.forceExactSpawnMiddleStructure) {
+		if (!ConfigHandler.forceExactSpawn) {
 			return;
 		}
 

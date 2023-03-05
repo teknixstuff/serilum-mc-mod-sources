@@ -40,6 +40,7 @@ public class ConfigHandler extends DuskConfig {
 	@Entry public static boolean clockPositionIsRight = true;
 	@Entry(min = 0, max = 3000) public static int clockHeightOffset = 5;
 	@Entry(min = -3000, max = 3000) public static int clockWidthOffset = 0;
+	@Entry public static boolean drawTextShadow = true;
 	@Entry(min = 0, max = 255) public static int RGB_R = 255;
 	@Entry(min = 0, max = 255) public static int RGB_G = 255;
 	@Entry(min = 0, max = 255) public static int RGB_B = 255;
@@ -86,6 +87,9 @@ public class ConfigHandler extends DuskConfig {
 		));
 		configMetaData.put("clockWidthOffset", Arrays.asList(
 			"The horizontal offset (x coord) for the Clock."
+		));
+		configMetaData.put("drawTextShadow", Arrays.asList(
+			"If the text displayed should have a shadow drawn below it."
 		));
 		configMetaData.put("RGB_R", Arrays.asList(
 			"The red RGB value for the clock text."

@@ -37,6 +37,7 @@ public class ConfigHandler extends DuskConfig {
 	@Entry public static boolean followerListPositionIsCenter = false;
 	@Entry public static boolean followerListPositionIsRight = false;
 	@Entry(min = 0, max = 3000) public static int followerListHeightOffset = 20;
+	@Entry public static boolean drawTextShadow = true;
 	@Entry(min = 0, max = 255) public static int RGB_R = 255;
 	@Entry(min = 0, max = 255) public static int RGB_G = 255;
 	@Entry(min = 0, max = 255) public static int RGB_B = 255;
@@ -74,6 +75,9 @@ public class ConfigHandler extends DuskConfig {
 		));
 		configMetaData.put("followerListHeightOffset", Arrays.asList(
 			"The vertical offset (y coord) for the follower list. This determines how far down the list should be on the screen. Can be changed to prevent GUIs from overlapping."
+		));
+		configMetaData.put("drawTextShadow", Arrays.asList(
+			"If the text displayed should have a shadow drawn below it."
 		));
 		configMetaData.put("RGB_R", Arrays.asList(
 			"The red RGB value for the clock text."

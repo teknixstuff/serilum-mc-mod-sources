@@ -37,7 +37,11 @@ public class GUIEvent {
 	private static final Minecraft mc = Minecraft.getInstance();
 
 	public static void renderOverlay(PoseStack posestack, float tickDelta) {
-		Font fontRender = mc.font;
+		if (mc.options.renderDebug) {
+			return;
+		}
+
+		Font fontRenderer = mc.font;
 		Window scaled = mc.getWindow();
 		posestack.pushPose();
 		
@@ -46,7 +50,7 @@ public class GUIEvent {
 			
 			String displaystring = ConfigHandler.followerListHeaderFormat;
 			
-			int stringWidth = fontRender.width(displaystring);
+			int stringWidth = fontRenderer.width(displaystring);
 			
 			Color colour = new Color(ConfigHandler.RGB_R, ConfigHandler.RGB_G, ConfigHandler.RGB_B, 255);
 			
@@ -112,7 +116,7 @@ public class GUIEvent {
 					follower_string = follower_string + distanceformat.replaceAll("<distance>", String.format("%.2f", distance));
 				}
 
-				int follower_stringWidth = fontRender.width(follower_string);
+				int follower_stringWidth = fontRenderer.width(follower_string);
 
 				if (ConfigHandler.followerListPositionIsCenter) {
 					xcoord = (width / 2) - (follower_stringWidth / 2) - xoffset;
@@ -121,12 +125,12 @@ public class GUIEvent {
 				}
 
 				if (!drawnfirst) {
-					fontRender.draw(posestack, displaystring, xcoord, heightoffset, colour.getRGB());
+					drawText(fontRenderer, posestack, displaystring, xcoord, heightoffset, colour.getRGB(), ConfigHandler.drawTextShadow);
 					drawnfirst = true;
 				}
 
 				heightoffset += 10;
-				fontRender.draw(posestack, follower_string, xcoord + xoffset, heightoffset, colour.getRGB());
+				drawText(fontRenderer, posestack, follower_string, xcoord + xoffset, heightoffset, colour.getRGB(), ConfigHandler.drawTextShadow);
 			}
 			
 			if (toremove.size() > 0) {
@@ -137,5 +141,13 @@ public class GUIEvent {
 		}
 		
 		posestack.popPose();
+	}
+
+	private static void drawText(Font fontRenderer, PoseStack poseStack, String content, float x, float y, int rgb, boolean drawShadow) {
+		if (drawShadow) {
+			fontRenderer.drawShadow(poseStack, content, x, y, rgb);
+			return;
+		}
+		fontRenderer.draw(poseStack, content, x, y, rgb);
 	}
 }

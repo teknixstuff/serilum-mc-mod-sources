@@ -103,18 +103,31 @@ public class Util {
             return;
         }
 
-        int configYOffset = ConfigHandler.generatedStructureYOffset;
         boolean automaticCenter = schematicFile.getName().endsWith(".nbt");
 
-        BlockPos spawnPos = serverLevel.getSharedSpawnPos().offset(0, configYOffset, 0).immutable();
+        BlockPos spawnPos = serverLevel.getSharedSpawnPos();
+
+        if (ConfigHandler.ignoreTreesDuringStructurePlacement) {
+            spawnPos = getSpawnPos(serverLevel, BlockPosFunctions.getSurfaceBlockPos(serverLevel, spawnPos.getX(), spawnPos.getZ(), true), false);
+        }
+        else {
+            spawnPos = getSpawnPos(serverLevel, serverLevel.getSharedSpawnPos(), false);
+        }
+
+        BlockPos structurePos = spawnPos;
+
+        if (ConfigHandler.shouldUseStructurePosition) {
+            structurePos = new BlockPos(ConfigHandler.generatedStructureXPosition, ConfigHandler.generatedStructureYPosition, ConfigHandler.generatedStructureZPosition);
+        }
+        if (ConfigHandler.shouldUseStructureOffset) {
+            structurePos = serverLevel.getSharedSpawnPos().offset(ConfigHandler.generatedStructureXOffset, ConfigHandler.generatedStructureYOffset, ConfigHandler.generatedStructureZOffset).immutable();
+        }
+
+        structurePos = structurePos.immutable();
 
         ParsedSchematicObject parsedSchematicObject;
         try (FileInputStream fileInputStream = new FileInputStream(schematicFile)){
-            if (ConfigHandler.ignoreTreesDuringStructurePlacement) {
-                spawnPos = BlockPosFunctions.getSurfaceBlockPos(serverLevel, spawnPos.getX(), spawnPos.getZ(), true);
-            }
-
-            parsedSchematicObject = ParseSchematicFile.getParsedSchematicObject(fileInputStream, serverLevel, spawnPos, configYOffset, false, automaticCenter);
+            parsedSchematicObject = ParseSchematicFile.getParsedSchematicObject(fileInputStream, serverLevel, structurePos, 0, false, automaticCenter);
         }
         catch (Exception ex) {
             logger.info(logPrefix + "Exception while attempting to parse schematic file.");
@@ -127,7 +140,7 @@ public class Util {
             return;
         }
 
-        BlockPos finalSpawnPos = spawnPos;
+        BlockPos finalStructurePos = structurePos;
         MinecraftServer minecraftServer = serverLevel.getServer();
 
         minecraftServer.execute(() -> {
@@ -240,11 +253,11 @@ public class Util {
                 minecraftServer.execute(() -> {
                     float spawnAngle = serverLevel.getSharedSpawnAngle();
 
-                    if (!isSpawnablePos(serverLevel, finalSpawnPos)) {
+                    if (!isSpawnablePos(serverLevel, finalStructurePos)) {
                         List<Integer> absoluteArray = Arrays.asList(-1, 1);
 
                         for (int i = 0; i <= 10; i++) {
-                            for (BlockPos aroundPos : BlockPos.betweenClosed(finalSpawnPos.getX()-i, finalSpawnPos.getY()-i, finalSpawnPos.getZ()-i, finalSpawnPos.getX()+i, finalSpawnPos.getY()+i, finalSpawnPos.getZ()+i)) {
+                            for (BlockPos aroundPos : BlockPos.betweenClosed(finalStructurePos.getX()-i, finalStructurePos.getY()-i, finalStructurePos.getZ()-i, finalStructurePos.getX()+i, finalStructurePos.getY()+i, finalStructurePos.getZ()+i)) {
                                 BlockPos upPos = aroundPos.above();
                                 if (isSpawnablePos(serverLevel, aroundPos) && isSpawnablePos(serverLevel, upPos)) {
                                     serverLevel.setDefaultSpawnPos(aroundPos, spawnAngle);
@@ -253,8 +266,6 @@ public class Util {
                             }
                         }
                     }
-
-                    serverLevel.setDefaultSpawnPos(finalSpawnPos, spawnAngle);
                 });
             });
         });
@@ -351,5 +362,35 @@ public class Util {
 				}
 			}
 		}
+    }
+
+    public static BlockPos getSpawnPos(ServerLevel serverLevel, BlockPos blockPos, boolean onSurface) {
+        int x = blockPos.getX();
+        int y = blockPos.getY();
+        int z = blockPos.getZ();
+
+        if (onSurface) {
+            y = BlockPosFunctions.getSurfaceBlockPos(serverLevel, x, z).getY();
+        }
+
+        if (ConfigHandler.shouldUseSpawnCoordinates) {
+            x = ConfigHandler.spawnXCoordinate;
+            y = ConfigHandler.spawnYCoordinate;
+            z = ConfigHandler.spawnZCoordinate;
+        }
+        if (ConfigHandler.shouldUseSpawnCoordOffsets) {
+            x += ConfigHandler.spawnXCoordOffset;
+            y += ConfigHandler.spawnYCoordOffset;
+            z += ConfigHandler.spawnZCoordOffset;
+        }
+
+        if (y < serverLevel.getMinBuildHeight()) {
+            y = serverLevel.getMinBuildHeight() + 1;
+        }
+        else if (y > serverLevel.getMaxBuildHeight()) {
+            y = serverLevel.getMaxBuildHeight() - 1;
+        }
+
+        return new BlockPos(x, y, z);
     }
 }

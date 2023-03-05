@@ -34,7 +34,11 @@ import java.util.List;
 public class GUIEvent {
 	private static final Minecraft mc = Minecraft.getInstance();
 
-	public static void renderOverlay(PoseStack posestack, float tickDelta){
+	public static void renderOverlay(PoseStack poseStack, float tickDelta) {
+		if (mc.options.renderDebug) {
+			return;
+		}
+
 		if (ConfigHandler.mustHaveCompassInInventory) {
 			boolean found = Util.isCompass(mc.player.getOffhandItem());
 			if (!found) {
@@ -50,19 +54,19 @@ public class GUIEvent {
 				return;
 			}
 		}
-		
+
 		String coordinates = getCoordinates();
 
-		Font fontRender = mc.font;
+		Font fontRenderer = mc.font;
 		Window scaled = mc.getWindow();
 		int width = scaled.getGuiScaledWidth();
-		
-		int stringWidth = fontRender.width(coordinates);
-		
+
+		int stringWidth = fontRenderer.width(coordinates);
+
 		Color colour = new Color(ConfigHandler.RGB_R, ConfigHandler.RGB_G, ConfigHandler.RGB_B, 255);
-			
-		posestack.pushPose();
-		
+
+		poseStack.pushPose();
+
 		int xcoord;
 		if (ConfigHandler.compassPositionIsLeft) {
 			xcoord = 5;
@@ -74,9 +78,17 @@ public class GUIEvent {
 			xcoord = width - stringWidth - 5;
 		}
 
-		fontRender.draw(posestack, coordinates, xcoord, ConfigHandler.compassHeightOffset, colour.getRGB());
-		
-		posestack.popPose();
+		drawText(fontRenderer, poseStack, coordinates, xcoord, ConfigHandler.compassHeightOffset, colour.getRGB(), ConfigHandler.drawTextShadow);
+
+		poseStack.popPose();
+	}
+
+	private static void drawText(Font fontRenderer, PoseStack poseStack, String content, float x, float y, int rgb, boolean drawShadow) {
+		if (drawShadow) {
+			fontRenderer.drawShadow(poseStack, content, x, y, rgb);
+			return;
+		}
+		fontRenderer.draw(poseStack, content, x, y, rgb);
 	}
 
 	private static final List<String> direction = Arrays.asList("S", "SW", "W", "NW", "N", "NE", "E", "SE", "S");

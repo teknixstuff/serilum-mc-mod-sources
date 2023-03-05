@@ -36,7 +36,11 @@ public class GUIEvent {
 	private static final Minecraft mc = Minecraft.getInstance();
 	private static String daystring = "";
 	
-	public static void renderOverlay(PoseStack posestack, float tickDelta){
+	public static void renderOverlay(PoseStack poseStack, float tickDelta) {
+		if (mc.options.renderDebug) {
+			return;
+		}
+
 		boolean gametimeb = ConfigHandler.mustHaveClockInInventoryForGameTime;
 		boolean realtimeb = ConfigHandler.mustHaveClockInInventoryForRealTime;
 		boolean found = true;
@@ -54,9 +58,9 @@ public class GUIEvent {
 			}
 		}
 		
-		posestack.pushPose();
+		poseStack.pushPose();
 		
-		Font fontRender = mc.font;
+		Font fontRenderer = mc.font;
 		Window scaled = mc.getWindow();
 		int width = scaled.getGuiScaledWidth();
 		
@@ -159,8 +163,8 @@ public class GUIEvent {
 				return;
 			}
 			
-			int stringWidth = fontRender.width(time);
-			int daystringWidth = fontRender.width(daystring);
+			int stringWidth = fontRenderer.width(time);
+			int daystringWidth = fontRenderer.width(daystring);
 			
 			Color colour = new Color(ConfigHandler.RGB_R, ConfigHandler.RGB_G, ConfigHandler.RGB_B, 255);
 			
@@ -179,14 +183,23 @@ public class GUIEvent {
 			
 			xcoord += ConfigHandler.clockWidthOffset;
 			daycoord += ConfigHandler.clockWidthOffset;
-			
-			fontRender.draw(posestack, time, xcoord, heightoffset, colour.getRGB());
+
+			int rgb = colour.getRGB();
+			drawText(fontRenderer, poseStack, time, xcoord, heightoffset, rgb, ConfigHandler.drawTextShadow);
 			if (!daystring.equals("")) {
-				fontRender.draw(posestack, daystring, daycoord, heightoffset+10, colour.getRGB());
+				drawText(fontRenderer, poseStack, daystring, daycoord, heightoffset+10, rgb, ConfigHandler.drawTextShadow);
 			}
 		}
 		
-		posestack.popPose();
+		poseStack.popPose();
+	}
+
+	private static void drawText(Font fontRenderer, PoseStack poseStack, String content, float x, float y, int rgb, boolean drawShadow) {
+		if (drawShadow) {
+			fontRenderer.drawShadow(poseStack, content, x, y, rgb);
+			return;
+		}
+		fontRenderer.draw(poseStack, content, x, y, rgb);
 	}
 	
 	private static String getGameTime() {
@@ -233,8 +246,7 @@ public class GUIEvent {
 		for (int n = stringtime.length(); n < 4; n++) {
 			stringtime.insert(0, "0");
 		}
-		
-		
+
 		String[] strsplit = stringtime.toString().split("");
 		
 		int minutes = (int)Math.floor(Double.parseDouble(strsplit[2] + strsplit[3])/100*60);

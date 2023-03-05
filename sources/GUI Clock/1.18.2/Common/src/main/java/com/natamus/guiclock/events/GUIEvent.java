@@ -36,11 +36,15 @@ public class GUIEvent {
 	private static final Minecraft mc = Minecraft.getInstance();
 	private static String daystring = "";
 	
-	public static void renderOverlay(PoseStack posestack, float tickDelta){
+	public static void renderOverlay(PoseStack poseStack, float tickDelta) {
+		if (mc.options.renderDebug) {
+			return;
+		}
+
 		boolean gametimeb = ConfigHandler.mustHaveClockInInventoryForGameTime;
 		boolean realtimeb = ConfigHandler.mustHaveClockInInventoryForRealTime;
 		boolean found = true;
-		
+
 		if (gametimeb || realtimeb) {
 			found = mc.player.getOffhandItem().getItem().equals(Items.CLOCK);
 			if (!found) {
@@ -53,18 +57,18 @@ public class GUIEvent {
 				}
 			}
 		}
-		
-		posestack.pushPose();
-		
-		Font fontRender = mc.font;
+
+		poseStack.pushPose();
+
+		Font fontRenderer = mc.font;
 		Window scaled = mc.getWindow();
 		int width = scaled.getGuiScaledWidth();
-		
+
 		int heightoffset = ConfigHandler.clockHeightOffset;
 		if (heightoffset < 5) {
 			heightoffset = 5;
 		}
-		
+
 		if (ConfigHandler.lowerClockWhenPlayerHasEffects) {
 			Collection<MobEffectInstance> activeeffects = mc.player.getActiveEffects();
 			if (activeeffects.size() > 0) {
@@ -93,7 +97,7 @@ public class GUIEvent {
 				}
 			}
 		}
-		
+
 		int xcoord;
 		int daycoord;
 		if (ConfigHandler.showOnlyMinecraftClockIcon) {
@@ -102,7 +106,7 @@ public class GUIEvent {
 					return;
 				}
 			}
-			
+
 			if (ConfigHandler.clockPositionIsLeft) {
 				xcoord = 20;
 			}
@@ -112,9 +116,9 @@ public class GUIEvent {
 			else {
 				xcoord = width - 20;
 			}
-			
+
 			xcoord += ConfigHandler.clockWidthOffset;
-			
+
 			ItemRenderer itemrenderer = mc.getItemRenderer();
 			itemrenderer.renderAndDecorateItem(new ItemStack(Items.CLOCK), xcoord, heightoffset);
 		}
@@ -154,16 +158,16 @@ public class GUIEvent {
 				}
 				time = getGameTime();
 			}
-			
+
 			if (time.equals("")) {
 				return;
 			}
-			
-			int stringWidth = fontRender.width(time);
-			int daystringWidth = fontRender.width(daystring);
-			
+
+			int stringWidth = fontRenderer.width(time);
+			int daystringWidth = fontRenderer.width(daystring);
+
 			Color colour = new Color(ConfigHandler.RGB_R, ConfigHandler.RGB_G, ConfigHandler.RGB_B, 255);
-			
+
 			if (ConfigHandler.clockPositionIsLeft) {
 				xcoord = 5;
 				daycoord = 5;
@@ -176,29 +180,38 @@ public class GUIEvent {
 				xcoord = width - stringWidth - 5;
 				daycoord = width - daystringWidth - 5;
 			}
-			
+
 			xcoord += ConfigHandler.clockWidthOffset;
 			daycoord += ConfigHandler.clockWidthOffset;
-			
-			fontRender.draw(posestack, time, xcoord, heightoffset, colour.getRGB());
+
+			int rgb = colour.getRGB();
+			drawText(fontRenderer, poseStack, time, xcoord, heightoffset, rgb, ConfigHandler.drawTextShadow);
 			if (!daystring.equals("")) {
-				fontRender.draw(posestack, daystring, daycoord, heightoffset+10, colour.getRGB());
+				drawText(fontRenderer, poseStack, daystring, daycoord, heightoffset+10, rgb, ConfigHandler.drawTextShadow);
 			}
 		}
-		
-		posestack.popPose();
+
+		poseStack.popPose();
 	}
-	
+
+	private static void drawText(Font fontRenderer, PoseStack poseStack, String content, float x, float y, int rgb, boolean drawShadow) {
+		if (drawShadow) {
+			fontRenderer.drawShadow(poseStack, content, x, y, rgb);
+			return;
+		}
+		fontRenderer.draw(poseStack, content, x, y, rgb);
+	}
+
 	private static String getGameTime() {
 		int time;
 		int gametime = (int)mc.level.getDayTime();
 		int daysplayed = 0;
-		
+
 		while (gametime >= 24000) {
 			gametime-=24000;
 			daysplayed += 1;
 		}
-		
+
 		if (ConfigHandler.showDaysPlayedWorld) {
 			daystring = "Day " + daysplayed;
 		}
@@ -209,7 +222,7 @@ public class GUIEvent {
 		else {
 			time = 6000+gametime;
 		}
-		
+
 		String suffix = "";
 		if (!ConfigHandler._24hourformat) {
 			if (time >= 13000) {
@@ -228,13 +241,12 @@ public class GUIEvent {
 				}
 			}
 		}
-		
+
 		StringBuilder stringtime = new StringBuilder(time / 10 + "");
 		for (int n = stringtime.length(); n < 4; n++) {
 			stringtime.insert(0, "0");
 		}
-		
-		
+
 		String[] strsplit = stringtime.toString().split("");
 		
 		int minutes = (int)Math.floor(Double.parseDouble(strsplit[2] + strsplit[3])/100*60);

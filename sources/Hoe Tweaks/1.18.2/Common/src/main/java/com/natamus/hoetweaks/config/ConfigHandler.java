@@ -50,19 +50,19 @@ public class ConfigHandler extends DuskConfig {
 			"The wooden hoe till range (default while crouching). 0 = 1x1"
 		));
 		configMetaData.put("stoneTierHoeRange", Arrays.asList(
-			"The wooden hoe till range (default while crouching). 1 = 3x3"
+			"The stone hoe till range (default while crouching). 1 = 3x3"
 		));
 		configMetaData.put("goldTierHoeRange", Arrays.asList(
-			"The wooden hoe till range (default while crouching). 2 = 5x5"
+			"The gold hoe till range (default while crouching). 2 = 5x5"
 		));
 		configMetaData.put("ironTierHoeRange", Arrays.asList(
-			"The wooden hoe till range (default while crouching). 2 = 5x5"
+			"The iron hoe till range (default while crouching). 2 = 5x5"
 		));
 		configMetaData.put("diamondTierHoeRange", Arrays.asList(
-			"The wooden hoe till range (default while crouching). 3 = 7x7"
+			"The diamond hoe till range (default while crouching). 3 = 7x7"
 		));
 		configMetaData.put("netheriteTierHoeRange", Arrays.asList(
-			"The wooden hoe till range (default while crouching). 4 = 9x9"
+			"The netherite hoe till range (default while crouching). 4 = 9x9"
 		));
 
 		DuskConfig.init(Reference.NAME, Reference.MOD_ID, ConfigHandler.class);

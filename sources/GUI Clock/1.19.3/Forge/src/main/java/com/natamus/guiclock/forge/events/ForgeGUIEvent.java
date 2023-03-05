@@ -30,7 +30,7 @@ public class ForgeGUIEvent extends Gui {
 	}
 	
 	@SubscribeEvent(priority = EventPriority.NORMAL)
-	public void renderOverlay(RenderGuiOverlayEvent.Post e){
+	public void renderOverlay(RenderGuiOverlayEvent.Post e) {
 		GUIEvent.renderOverlay(e.getPoseStack(), e.getPartialTick());
 	}
 }
