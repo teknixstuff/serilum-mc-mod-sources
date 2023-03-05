@@ -69,7 +69,7 @@ public class CampfireEvent {
 			
 			firestoextinguish.get(level).remove(0);
 		}
-		if (playerstorespawn.get(level).size() > 0) {
+		if (playerstorespawn.computeIfAbsent(level, k -> new ArrayList<Pair<Player, BlockPos>>()).size() > 0) {
 			Pair<Player, BlockPos> pair = playerstorespawn.get(level).get(0);
 			Player player = pair.getFirst();
 			BlockPos respawnpos = pair.getSecond();
@@ -116,7 +116,7 @@ public class CampfireEvent {
 				}
 			}
 			
-			playerstorespawn.computeIfAbsent(level, k -> new ArrayList<Pair<Player, BlockPos>>()).remove(0);
+			playerstorespawn.get(level).remove(0);
 		}
 	}
 	
