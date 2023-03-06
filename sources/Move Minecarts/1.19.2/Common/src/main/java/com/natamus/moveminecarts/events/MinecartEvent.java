@@ -22,6 +22,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -69,7 +70,7 @@ public class MinecartEvent {
 	}
 
 	public static InteractionResult onMinecartClick(Player player, Level world, InteractionHand hand, Entity target, EntityHitResult hitResult) {
-		if (!target.getClass().getName().toLowerCase().contains(".minecart")) {
+		if (!(target instanceof AbstractMinecart)) {
 			return InteractionResult.PASS;
 		}
 

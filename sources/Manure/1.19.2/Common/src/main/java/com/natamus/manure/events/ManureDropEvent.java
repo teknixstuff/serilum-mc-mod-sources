@@ -18,6 +18,7 @@ package com.natamus.manure.events;
 
 import com.natamus.manure.config.ConfigHandler;
 import com.natamus.manure.items.ManureItems;
+import com.natamus.manure.util.Util;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -47,7 +48,9 @@ public class ManureDropEvent {
 
 	public static void onEntityJoin(Entity entity, ServerLevel world) {
 		if (entity instanceof Animal) {
-			loadedAnimals.add((Animal)entity);
+			if (Util.manureAnimals.contains(entity.getType())) {
+				loadedAnimals.add((Animal) entity);
+			}
 		}
 	}
 

@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="moveminecarts"
-version="3.1"
+version="3.2"
 displayName="Move Minecarts"
 displayURL="https://curseforge.com/minecraft/mc-mods/move-minecarts"
 authors="Rick South"
@@ -15,7 +15,7 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 '''
 credits='''Thank you very much to my Membership sponsors for supporting the development of this mod:  
 
-Adam E, Alister, aternosorg, Cherriesaurus, Kreezxil, Michael W. S., Mir3JonCZ, Rebecca Hb., Robert Gilbert, Shana Gitnick, Sija, Tyler Behl, Wendi S   
+Adam E, Alister, aternosorg, Cherriesaurus, Kreezxil, Michael W. S., Mir3JonCZ, nbtc971, Rebecca Hb., Robert Gilbert, Shana Gitnick, Sija, silver Bowsman, Tyler Behl   
 
 If you would like to contribute too, check out https://ricksouth.com/donate. Appreciate it! <3   
 '''
@@ -23,6 +23,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.moveminecarts]]
     modId="collective"
     mandatory=true
-    versionRange="[6.21,)"
+    versionRange="[6.49,)"
     ordering="NONE"
     side="BOTH"

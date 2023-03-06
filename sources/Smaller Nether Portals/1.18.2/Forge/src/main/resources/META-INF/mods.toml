@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="smallernetherportals"
-version="3.3"
+version="3.4"
 displayName="Smaller Nether Portals"
 displayURL="https://curseforge.com/minecraft/mc-mods/smaller-nether-portals"
 authors="Rick South"

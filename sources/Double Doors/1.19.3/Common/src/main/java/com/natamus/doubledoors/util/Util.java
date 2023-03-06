@@ -19,6 +19,8 @@ package com.natamus.doubledoors.util;
 import com.natamus.collective.functions.BlockPosFunctions;
 import com.natamus.doubledoors.config.ConfigHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -36,7 +38,7 @@ import java.util.List;
 public class Util {
 	public static boolean isDoorBlock(BlockState blockstate) {
 		Block block = blockstate.getBlock();
-		return block instanceof DoorBlock || block instanceof TrapDoorBlock || block instanceof FenceGateBlock;
+		return (block instanceof DoorBlock && ConfigHandler.enableDoors) || (block instanceof TrapDoorBlock && ConfigHandler.enableTrapdoors) || (block instanceof FenceGateBlock && ConfigHandler.enableFenceGates);
 	}
 
 	public static boolean isPressureBlock(BlockState blockstate) {
@@ -50,12 +52,12 @@ public class Util {
 		return false;
 	}
 	
-	public static boolean processDoor(Player player, Level world, BlockPos pos, BlockState state, Boolean isopen, boolean playsound) {
+	public static boolean processDoor(Player player, Level level, BlockPos pos, BlockState state, Boolean isopen, boolean playsound) {
 		Block block = state.getBlock();
 		if (block instanceof DoorBlock) {
 			if (state.getValue(DoorBlock.HALF).equals(DoubleBlockHalf.UPPER)) {
 				pos = pos.below().immutable();
-				state = world.getBlockState(pos);
+				state = level.getBlockState(pos);
 			}
 		}
 		
@@ -68,13 +70,13 @@ public class Util {
 			yoffset = 1;
 		}
 		
-		List<BlockPos> postoopen = recursivelyOpenDoors(new ArrayList<BlockPos>(Arrays.asList(pos.immutable())), new ArrayList<BlockPos>(), world, pos, pos, block, yoffset);
+		List<BlockPos> postoopen = recursivelyOpenDoors(new ArrayList<BlockPos>(Arrays.asList(pos.immutable())), new ArrayList<BlockPos>(), level, pos, pos, block, yoffset);
 		if (postoopen.size() <= 1) {
 			return false;
 		}
 		
 		for (BlockPos toopen : postoopen) {
-			BlockState ostate = world.getBlockState(toopen);
+			BlockState ostate = level.getBlockState(toopen);
 			Block oblock = ostate.getBlock();
 			
 			if (block instanceof DoorBlock) {
@@ -85,11 +87,11 @@ public class Util {
 				DoorBlock door = (DoorBlock)oblock;
 				
 				if (playsound) {
-					door.setOpen(player, world, ostate, toopen, isopen); // toggleDoor
+					door.setOpen(player, level, ostate, toopen, isopen); // toggleDoor
 					playsound = false;
 				}
 				else {
-					world.setBlock(toopen, ostate.setValue(DoorBlock.OPEN, isopen), 10);
+					level.setBlock(toopen, ostate.setValue(DoorBlock.OPEN, isopen), 10);
 				}
 			}
 			else if (block instanceof TrapDoorBlock) {
@@ -100,22 +102,27 @@ public class Util {
 				if (playsound) {
 					if (isopen) {
 						int i = ostate.getMaterial() == Material.METAL ? 1037 : 1007;
-						world.levelEvent(null, i, pos, 0);
+						level.levelEvent(null, i, pos, 0);
 					} else {
 						int j = ostate.getMaterial() == Material.METAL ? 1036 : 1013;
-						world.levelEvent(null, j, pos, 0);
+						level.levelEvent(null, j, pos, 0);
 					}
 					playsound = false;
 				}
 
-				world.setBlock(toopen, ostate.setValue(BlockStateProperties.OPEN, isopen), 10);
+				level.setBlock(toopen, ostate.setValue(BlockStateProperties.OPEN, isopen), 10);
 			}
 			else if (block instanceof FenceGateBlock) {
 				if (!ConfigHandler.enableFenceGates) {
 					continue;
 				}
+
+				if (playsound) {
+					level.playSound(null, pos, isopen ? SoundEvents.FENCE_GATE_OPEN : SoundEvents.FENCE_GATE_CLOSE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
+					playsound = false;
+				}
 				
-				world.setBlock(toopen, ostate.setValue(DoorBlock.OPEN, isopen), 10);
+				level.setBlock(toopen, ostate.setValue(DoorBlock.OPEN, isopen), 10);
 			}
 		}
 
@@ -126,7 +133,7 @@ public class Util {
 		return postoopen.size() > 1;
 	}
 	
-	private static List<BlockPos> recursivelyOpenDoors(List<BlockPos> postoopen, List<BlockPos> ignoreoopen, Level world, BlockPos originalpos, BlockPos pos, Block block, int yoffset) {
+	private static List<BlockPos> recursivelyOpenDoors(List<BlockPos> postoopen, List<BlockPos> ignoreoopen, Level level, BlockPos originalpos, BlockPos pos, Block block, int yoffset) {
 		Iterator<BlockPos> blocksaround = BlockPos.betweenClosedStream(pos.getX()-1, pos.getY()-yoffset, pos.getZ()-1, pos.getX()+1, pos.getY()+yoffset, pos.getZ()+1).iterator();
 		while (blocksaround.hasNext()) {
 			BlockPos bpa = blocksaround.next();
@@ -138,14 +145,14 @@ public class Util {
 				continue;
 			}
 			
-			BlockState ostate = world.getBlockState(bpa);
+			BlockState ostate = level.getBlockState(bpa);
 			Block oblock = ostate.getBlock();
 			if (Util.isDoorBlock(ostate)) {
 				if (oblock.getName().equals(block.getName())) {
 					postoopen.add(bpa.immutable());
 					
 					if (ConfigHandler.enableRecursiveOpening) {
-						recursivelyOpenDoors(postoopen, ignoreoopen, world, originalpos, bpa, block, yoffset);
+						recursivelyOpenDoors(postoopen, ignoreoopen, level, originalpos, bpa, block, yoffset);
 					}
 					continue;
 				}

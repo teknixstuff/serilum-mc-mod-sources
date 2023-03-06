@@ -19,7 +19,6 @@ package com.natamus.randombonemealflowers;
 import com.natamus.collective.check.RegisterMod;
 import com.natamus.randombonemealflowers.forge.events.ForgeFlowerEvent;
 import com.natamus.randombonemealflowers.util.Reference;
-import com.natamus.randombonemealflowers.util.Util;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -40,13 +39,6 @@ public class ModForge {
 	}
 
 	private void loadComplete(final FMLLoadCompleteEvent event) {
-    	try {
-			Util.setFlowerList();
-		} catch (Exception ex) {
-			System.out.println("[" + Reference.NAME + "] Error: Unable to generate flower list.");
-			return;
-		}
-
     	MinecraftForge.EVENT_BUS.register(new ForgeFlowerEvent());
 	}
 

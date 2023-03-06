@@ -85,7 +85,6 @@ public class DoorEvent {
 			}
 		}
 
-		boolean playsound = true;
 		boolean stateprop;
 		if (block instanceof WeightedPressurePlateBlock) {
 			stateprop = state.getValue(weightedpower) > 0;
@@ -94,7 +93,8 @@ public class DoorEvent {
 			stateprop = state.getValue(proppowered);
 		}
 
-		Iterator<BlockPos> blocksaround = BlockPos.betweenClosedStream(pos.getX()-1, pos.getY(), pos.getZ()-1, pos.getX()+1, pos.getY()+1, pos.getZ()+1).iterator();
+		int radius = block instanceof ButtonBlock ? 2 : 1;
+		Iterator<BlockPos> blocksaround = BlockPos.betweenClosedStream(pos.getX()-radius, pos.getY(), pos.getZ()-radius, pos.getX()+radius, pos.getY()+1, pos.getZ()+radius).iterator();
 
 		BlockPos doorpos = null;
 		while (blocksaround.hasNext()) {
@@ -107,7 +107,7 @@ public class DoorEvent {
 		}
 
 		if (doorpos != null) {
-			if (Util.processDoor(null, world, doorpos, world.getBlockState(doorpos), stateprop, playsound)) {
+			if (Util.processDoor(null, world, doorpos, world.getBlockState(doorpos), stateprop, true)) {
 				if (stateprop) {
 					prevpoweredpos.add(pos);
 				}

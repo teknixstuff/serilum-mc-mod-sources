@@ -18,8 +18,10 @@ package com.natamus.randombonemealflowers.util;
 
 import com.natamus.collective.data.GlobalVariables;
 import com.natamus.collective.functions.DataFunctions;
+import com.natamus.randombonemealflowers.data.Variables;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FlowerBlock;
 
@@ -35,16 +37,29 @@ import java.util.List;
 public class Util {
 	public static List<Block> allflowers = new ArrayList<Block>();
 	public static List<Block> flowers = new ArrayList<Block>();
-	
+
 	private static final String dirpath = DataFunctions.getConfigDirectory() + File.separator + "randombonemealflowers";
 	private static final File dir = new File(dirpath);
 	private static final File file = new File(dirpath + File.separator + "blacklist.txt");
-	
-	public static void setFlowerList() throws IOException {
+
+	public static void attemptFlowerlistProcessing(Level level) {
+		if (!Variables.processedBlacklist) {
+			try {
+				setFlowerList(level);
+				Variables.processedBlacklist = true;
+			} catch (Exception ex) {
+				System.out.println("[" + Reference.NAME + "] Error: Unable to generate flower list.");
+			}
+		}
+	}
+
+	public static void setFlowerList(Level level) throws IOException {
+		Registry<Block> blockRegistry = level.registryAccess().registryOrThrow(Registry.BLOCK_REGISTRY);
 		List<String> blacklist = new ArrayList<String>();
+
 		allflowers = new ArrayList<Block>();
 		flowers = new ArrayList<Block>();
-		
+
 		PrintWriter writer = null;
 		if (!dir.isDirectory() || !file.isFile()) {
 			if (dir.mkdirs()) {
@@ -60,10 +75,10 @@ public class Util {
 				}
 			}
 		}
-		
-		for (Block block : Registry.BLOCK) {
+
+		for (Block block : blockRegistry) {
 			if (block instanceof FlowerBlock) {
-				ResourceLocation rl = Registry.BLOCK.getKey(block);
+				ResourceLocation rl = blockRegistry.getKey(block);
 				if (rl == null) {
 					continue;
 				}

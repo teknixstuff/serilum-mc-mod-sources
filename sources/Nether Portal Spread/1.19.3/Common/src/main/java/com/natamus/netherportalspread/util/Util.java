@@ -19,11 +19,13 @@ package com.natamus.netherportalspread.util;
 import com.natamus.collective.functions.*;
 import com.natamus.collective.objects.RandomCollection;
 import com.natamus.netherportalspread.config.ConfigHandler;
+import com.natamus.netherportalspread.data.Variables;
 import net.minecraft.ChatFormatting;
 import net.minecraft.ResourceLocationException;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.core.Vec3i;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -54,7 +56,20 @@ public class Util {
 	private static final List<Block> convertedblocks = new ArrayList<Block>();
 	private static Block preventSpreadBlock = null;
 
-	public static void loadSpreadBlocks() throws IOException {
+	public static void attemptSpreadBlockProcess(Level level) {
+		if (!Variables.processedSpreadBlockLoad) {
+			try {
+				loadSpreadBlocks(level);
+				Variables.processedSpreadBlockLoad = true;
+			} catch (IOException ex) {
+				System.out.println("[" + Reference.NAME + "] Something went wrong loading the nether spread block config.");
+			}
+		}
+	}
+
+	public static void loadSpreadBlocks(Level level) throws IOException {
+		Registry<Block> blockRegistry = level.registryAccess().registryOrThrow(Registries.BLOCK);
+
 		String dirpath = DataFunctions.getConfigDirectory() + File.separator + "netherportalspread";
 		File dir = new File(dirpath);
 		File file = new File(dirpath + File.separator + "spreadsettings.txt");
@@ -80,11 +95,11 @@ public class Util {
 					fromblockstr = "minecraft:" + fromblockstr;
 				}
 				ResourceLocation frl = new ResourceLocation(fromblockstr);
-				if (!BuiltInRegistries.BLOCK.keySet().contains(frl)) {
+				if (!blockRegistry.keySet().contains(frl)) {
 					System.out.println("[Nether Portal Spread] Unable to find from-block '" + fromblockstr + "' in the Forge block registry. Ignoring it.");
 					continue;
 				}
-				Block fromblock = BuiltInRegistries.BLOCK.get(frl);
+				Block fromblock = blockRegistry.get(frl);
 
 				String toblocks = linespl[1].replace("[", "").replace("]", "");
 
@@ -109,8 +124,8 @@ public class Util {
 					totalweight += weight;
 
 					ResourceLocation trl = new ResourceLocation(toblockstr);
-					if (BuiltInRegistries.BLOCK.keySet().contains(trl)) {
-						tempmap.put(BuiltInRegistries.BLOCK.get(trl), weight);
+					if (blockRegistry.keySet().contains(trl)) {
+						tempmap.put(blockRegistry.get(trl), weight);
 					}
 					else {
 						System.out.println("[Nether Portal Spread] Unable to find to-block '" + toblockstr + "' in the Forge block registry. Ignoring it.");
@@ -145,15 +160,15 @@ public class Util {
 			}
 			writer.close();
 
-			loadSpreadBlocks();
+			loadSpreadBlocks(level);
 		}
 
 		if (preventSpreadBlock == null) {
 			String psbstr = ConfigHandler.preventSpreadBlockString.strip().replaceAll("[^a-z0-9_.-:]", "");
 			try {
 				ResourceLocation psbrl = new ResourceLocation(psbstr);
-				if (BuiltInRegistries.BLOCK.keySet().contains(psbrl)) {
-					preventSpreadBlock = BuiltInRegistries.BLOCK.get(psbrl);
+				if (blockRegistry.keySet().contains(psbrl)) {
+					preventSpreadBlock = blockRegistry.get(psbrl);
 					return;
 				}
 			}

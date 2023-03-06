@@ -21,9 +21,11 @@ import com.natamus.manure.dispenser.RecipeManager;
 import com.natamus.manure.events.ManureDropEvent;
 import com.natamus.manure.items.ManureItems;
 import com.natamus.manure.util.Reference;
+import com.natamus.manure.util.Util;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -59,6 +61,10 @@ public class ModFabric implements ModInitializer {
 	}
 
 	private void loadEvents() {
+		ServerWorldEvents.LOAD.register((MinecraftServer server, ServerLevel level) -> {
+			Util.attemptBlacklistProcessing(level);
+		});
+
 		ServerTickEvents.END_SERVER_TICK.register((MinecraftServer minecraftServer) -> {
 			ManureDropEvent.onServerTick(minecraftServer);
 		});

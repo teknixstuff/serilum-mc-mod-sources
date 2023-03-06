@@ -1,6 +1,6 @@
 /*
  * This is the latest source code of Nether Portal Spread.
- * Minecraft version: 1.18.2.
+ * Minecraft version: 1.19.3.
  *
  * Please don't distribute without permission.
  * For all Minecraft modding projects, feel free to visit my profile page on CurseForge or Modrinth.
@@ -14,26 +14,8 @@
  * Thanks for looking at the source code! Hope it's of some use to your project. Happy modding!
  */
 
-package com.natamus.netherportalspread;
+package com.natamus.netherportalspread.data;
 
-import com.natamus.netherportalspread.config.ConfigHandler;
-import com.natamus.netherportalspread.util.Reference;
-import com.natamus.netherportalspread.util.Util;
-
-import java.io.IOException;
-
-public class ModCommon {
-
-	public static void init() {
-		ConfigHandler.initConfig();
-		load();
-	}
-
-	private static void load() {
-		try {
-			Util.loadSpreadBlocks();
-		} catch (IOException ex) {
-			System.out.println("[" + Reference.NAME + "] Something went wrong loading the nether spread block config.");
-		}
-	}
+public class Variables {
+    public static boolean processedSpreadBlockLoad = false;
 }

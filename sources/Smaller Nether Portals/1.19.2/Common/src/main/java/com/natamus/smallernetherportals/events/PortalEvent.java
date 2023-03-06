@@ -26,8 +26,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.NetherPortalBlock;
 import net.minecraft.world.phys.BlockHitResult;
 
@@ -64,7 +64,7 @@ public class PortalEvent {
 						Block bsblock = level.getBlockState(np).getBlock();
 						if (bsblock instanceof NetherPortalBlock) {
 							foundportal = true;
-						} else if (bsblock.equals(Blocks.FIRE)) {
+						} else if (bsblock instanceof BaseFireBlock) {
 							if (Util.isAir(level.getBlockState(np.below(1)))) {
 								topos = np.below(1).immutable();
 							} else if (Util.isAir(level.getBlockState(np.below(2)))) {

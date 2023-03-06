@@ -33,11 +33,11 @@ public class SpreadEvent {
 	private static final HashMap<Level, Integer> levelTicks = new HashMap<Level, Integer>();
 
 	public static void onWorldLoad(ServerLevel level) {
-		if (WorldFunctions.isNether(level)) {
-			return;
-		}
+		Util.attemptSpreadBlockProcess(level);
 
-		Util.loadPortalsFromWorld(level);
+		if (!WorldFunctions.isNether(level)) {
+			Util.loadPortalsFromWorld(level);
+		}
 	}
 
 	public static void onWorldTick(ServerLevel level) {

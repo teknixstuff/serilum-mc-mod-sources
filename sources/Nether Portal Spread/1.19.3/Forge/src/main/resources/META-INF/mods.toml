@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="netherportalspread"
-version="7.3"
+version="7.4"
 displayName="Nether Portal Spread"
 displayURL="https://curseforge.com/minecraft/mc-mods/nether-portal-spread"
 authors="Rick South"
@@ -23,6 +23,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.netherportalspread]]
     modId="collective"
     mandatory=true
-    versionRange="[6.48,)"
+    versionRange="[6.49,)"
     ordering="NONE"
     side="BOTH"

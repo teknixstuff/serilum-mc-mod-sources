@@ -22,8 +22,10 @@ import com.natamus.randombonemealflowers.events.FlowerEvent;
 import com.natamus.randombonemealflowers.util.Reference;
 import com.natamus.randombonemealflowers.util.Util;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -40,21 +42,13 @@ public class ModFabric implements ModInitializer {
 		RegisterMod.register(Reference.NAME, Reference.MOD_ID, Reference.VERSION, Reference.ACCEPTED_VERSIONS);
 	}
 
-	private boolean shouldrun = true;
 	private void loadEvents() {
-		ServerLifecycleEvents.SERVER_STARTING.register(server -> {
-			try {
-				Util.setFlowerList();
-			} catch (Exception ex) {
-				System.out.println("[" + Reference.NAME + "] Error: Unable to generate flower list.");
-				shouldrun = false;
-			}
+		ServerWorldEvents.LOAD.register((MinecraftServer server, ServerLevel level) -> {
+			Util.attemptFlowerlistProcessing(level);
 		});
 
 		CollectiveCropEvents.ON_GENERAL_BONE_MEAL_APPLY.register((Level world, BlockPos pos, BlockState state, ItemStack stack) -> {
-			if (shouldrun) {
-				FlowerEvent.onBonemeal(world, pos, state, stack);
-			}
+			FlowerEvent.onBonemeal(world, pos, state, stack);
 			return true;
 		});
 	}

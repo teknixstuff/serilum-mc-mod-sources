@@ -17,10 +17,6 @@
 package com.natamus.netherportalspread;
 
 import com.natamus.netherportalspread.config.ConfigHandler;
-import com.natamus.netherportalspread.util.Reference;
-import com.natamus.netherportalspread.util.Util;
-
-import java.io.IOException;
 
 public class ModCommon {
 
@@ -30,10 +26,6 @@ public class ModCommon {
 	}
 
 	private static void load() {
-		try {
-			Util.loadSpreadBlocks();
-		} catch (IOException ex) {
-			System.out.println("[" + Reference.NAME + "] Something went wrong loading the nether spread block config.");
-		}
+
 	}
 }
