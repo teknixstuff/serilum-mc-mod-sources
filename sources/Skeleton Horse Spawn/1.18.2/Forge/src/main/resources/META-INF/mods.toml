@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="skeletonhorsespawn"
-version="3.5"
+version="3.6"
 displayName="Skeleton Horse Spawn"
 displayURL="https://curseforge.com/minecraft/mc-mods/skeleton-horse-spawn"
 authors="Rick South"
@@ -23,6 +23,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.skeletonhorsespawn]]
     modId="collective"
     mandatory=true
-    versionRange="[6.48,)"
+    versionRange="[6.50,)"
     ordering="NONE"
     side="BOTH"

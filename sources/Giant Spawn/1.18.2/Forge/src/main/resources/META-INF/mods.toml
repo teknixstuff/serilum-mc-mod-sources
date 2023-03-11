@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="giantspawn"
-version="4.4"
+version="4.5"
 displayName="Giant Spawn"
 displayURL="https://curseforge.com/minecraft/mc-mods/giant-spawn"
 authors="Rick South"
@@ -23,6 +23,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.giantspawn]]
     modId="collective"
     mandatory=true
-    versionRange="[6.48,)"
+    versionRange="[6.50,)"
     ordering="NONE"
     side="BOTH"

@@ -21,10 +21,7 @@ import com.natamus.areas.objects.AreaObject;
 import com.natamus.areas.objects.Variables;
 import com.natamus.areas.services.Services;
 import com.natamus.collective.data.GlobalVariables;
-import com.natamus.collective.functions.NumberFunctions;
-import com.natamus.collective.functions.SignFunctions;
-import com.natamus.collective.functions.StringFunctions;
-import com.natamus.collective.functions.TileEntityFunctions;
+import com.natamus.collective.functions.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TextComponent;
@@ -51,7 +48,7 @@ public class Util {
 			return null;
 		}
 
-		HashMap<BlockPos, AreaObject> hm = Variables.areasperlevel.computeIfAbsent(level, k -> new HashMap<BlockPos, AreaObject>());
+		HashMap<BlockPos, AreaObject> hm = HashMapFunctions.computeIfAbsent(Variables.areasperlevel, level, k -> new HashMap<BlockPos, AreaObject>());
 		if (hm != null) {
 			if (hm.containsKey(signpos)) {
 				return hm.get(signpos);

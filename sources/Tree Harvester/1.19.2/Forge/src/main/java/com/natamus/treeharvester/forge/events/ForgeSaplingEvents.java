@@ -1,6 +1,6 @@
 /*
  * This is the latest source code of Tree Harvester.
- * Minecraft version: 1.19.3.
+ * Minecraft version: 1.19.2.
  *
  * Please don't distribute without permission.
  * For all Minecraft modding projects, feel free to visit my profile page on CurseForge or Modrinth.
@@ -16,18 +16,15 @@
 
 package com.natamus.treeharvester.forge.events;
 
-import com.natamus.treeharvester.events.SoundHarvestEvent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.sound.PlaySoundEvent;
+import com.natamus.treeharvester.events.SaplingEvents;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
-@EventBusSubscriber(value = Dist.CLIENT)
-public class ForgeSoundHarvestEvent {
+@EventBusSubscriber
+public class ForgeSaplingEvents {
 	@SubscribeEvent
-	public void onSoundEvent(PlaySoundEvent e) {
-		if (!SoundHarvestEvent.onSoundEvent(e.getEngine(), e.getOriginalSound())) {
-			e.setSound(null);
-		}
+	public void onScaffoldingItem(EntityJoinLevelEvent e) {
+		SaplingEvents.onSaplingItem(e.getLevel(), e.getEntity());
 	}
 }

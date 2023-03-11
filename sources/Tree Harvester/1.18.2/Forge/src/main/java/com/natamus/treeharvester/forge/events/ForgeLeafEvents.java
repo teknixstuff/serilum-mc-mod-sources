@@ -17,55 +17,33 @@
 package com.natamus.treeharvester.forge.events;
 
 import com.natamus.collective.functions.WorldFunctions;
-import com.natamus.treeharvester.events.TreeEvent;
+import com.natamus.treeharvester.events.LeafEvents;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.TickEvent.Phase;
-import net.minecraftforge.event.TickEvent.WorldTickEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 @EventBusSubscriber
-public class ForgeTreeEvent {
+public class ForgeLeafEvents {
 	@SubscribeEvent
-	public void onServerStart(ServerStartedEvent e) {
-		TreeEvent.setupBlacklist();
-	}
-	
-	@SubscribeEvent
-	public void onWorldTick(WorldTickEvent e) {
+	public void onWorldTick(TickEvent.WorldTickEvent e) {
 		Level level = e.world;
-		if (level.isClientSide || !e.phase.equals(Phase.START)) {
+		if (level.isClientSide || !e.phase.equals(TickEvent.Phase.START)) {
 			return;
 		}
-		
-		TreeEvent.onWorldTick((ServerLevel)level);
+
+		LeafEvents.onWorldTick((ServerLevel)level);
 	}
-	
+
 	@SubscribeEvent
-	public void onTreeHarvest(BlockEvent.BreakEvent e) {
+	public void onNeighbourNotice(BlockEvent.NeighborNotifyEvent e) {
 		Level level = WorldFunctions.getWorldIfInstanceOfAndNotRemote(e.getWorld());
 		if (level == null) {
 			return;
 		}
-		
-		TreeEvent.onTreeHarvest(level, e.getPlayer(), e.getPos(), e.getState(), null);
-	}
 
-	@SubscribeEvent
-	public void onHarvestBreakSpeed(PlayerEvent.BreakSpeed e) {
-		Player player = e.getPlayer();
-		Level level = player.getCommandSenderWorld();
-
-		float originalSpeed = e.getOriginalSpeed();
-		float newSpeed = TreeEvent.onHarvestBreakSpeed(level, player, originalSpeed, e.getState());
-
-		if (originalSpeed != newSpeed) {
-			e.setNewSpeed(newSpeed);
-		}
+		LeafEvents.onNeighbourNotify(level, e.getPos(), e.getState(), e.getNotifiedSides(), e.getForceRedstoneUpdate());
 	}
 }

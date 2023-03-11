@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="areas"
-version="4.2"
+version="4.3"
 displayName="Areas"
 displayURL="https://curseforge.com/minecraft/mc-mods/areas"
 authors="Rick South"
@@ -23,6 +23,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.areas]]
     modId="collective"
     mandatory=true
-    versionRange="[6.48,)"
+    versionRange="[6.50,)"
     ordering="NONE"
     side="BOTH"

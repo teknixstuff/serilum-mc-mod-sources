@@ -18,8 +18,7 @@ package com.natamus.treeharvester;
 
 import com.natamus.collective.check.RegisterMod;
 import com.natamus.treeharvester.forge.config.IntegrateForgeConfig;
-import com.natamus.treeharvester.forge.events.ForgeSoundHarvestEvent;
-import com.natamus.treeharvester.forge.events.ForgeTreeEvent;
+import com.natamus.treeharvester.forge.events.*;
 import com.natamus.treeharvester.util.Reference;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -46,10 +45,13 @@ public class ModForge {
 	}
 
 	private void loadComplete(final FMLLoadCompleteEvent event) {
-        MinecraftForge.EVENT_BUS.register(new ForgeTreeEvent());
+		MinecraftForge.EVENT_BUS.register(new ForgeLeafEvents());
+		MinecraftForge.EVENT_BUS.register(new ForgeSaplingEvents());
+        MinecraftForge.EVENT_BUS.register(new ForgeTreeCutEvents());
+		MinecraftForge.EVENT_BUS.register(new ForgeWorldEvents());
 
 		if (FMLEnvironment.dist.equals(Dist.CLIENT)) {
-			MinecraftForge.EVENT_BUS.register(new ForgeSoundHarvestEvent());
+			MinecraftForge.EVENT_BUS.register(new ForgeSoundEvents());
 		}
 	}
 

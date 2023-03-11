@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="zombiehorsespawn"
-version="4.5"
+version="4.6"
 displayName="Zombie Horse Spawn"
 displayURL="https://curseforge.com/minecraft/mc-mods/zombie-horse-spawn"
 authors="Rick South"
@@ -23,6 +23,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.zombiehorsespawn]]
     modId="collective"
     mandatory=true
-    versionRange="[6.48,)"
+    versionRange="[6.50,)"
     ordering="NONE"
     side="BOTH"

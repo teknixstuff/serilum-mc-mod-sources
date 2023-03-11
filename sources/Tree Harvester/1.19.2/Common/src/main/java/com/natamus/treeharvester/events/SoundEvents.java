@@ -21,7 +21,7 @@ import net.minecraft.client.sounds.SoundEngine;
 
 import java.util.Date;
 
-public class SoundHarvestEvent {
+public class SoundEvents {
 	public static Date lastplayedlog = null;
 	public static Date lastplayedleaf = null;
 	

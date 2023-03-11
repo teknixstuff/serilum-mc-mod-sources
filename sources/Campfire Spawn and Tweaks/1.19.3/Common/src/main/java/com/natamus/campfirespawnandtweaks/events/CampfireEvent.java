@@ -19,10 +19,7 @@ package com.natamus.campfirespawnandtweaks.events;
 import com.mojang.datafixers.util.Pair;
 import com.natamus.campfirespawnandtweaks.config.ConfigHandler;
 import com.natamus.campfirespawnandtweaks.util.Util;
-import com.natamus.collective.functions.BlockFunctions;
-import com.natamus.collective.functions.EntityFunctions;
-import com.natamus.collective.functions.StringFunctions;
-import com.natamus.collective.functions.WorldFunctions;
+import com.natamus.collective.functions.*;
 import com.natamus.collective.services.Services;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -60,7 +57,7 @@ public class CampfireEvent {
 	}
 	
 	public static void onWorldTick(ServerLevel level) {
-		if (firestoextinguish.computeIfAbsent(level, k -> new ArrayList<BlockPos>()).size() > 0) {
+		if (HashMapFunctions.computeIfAbsent(firestoextinguish, level, k -> new ArrayList<BlockPos>()).size() > 0) {
 			BlockPos campfirepos = firestoextinguish.get(level).get(0);
 			BlockState state = level.getBlockState(campfirepos);
 			if (state.getBlock() instanceof CampfireBlock) {
@@ -69,7 +66,7 @@ public class CampfireEvent {
 			
 			firestoextinguish.get(level).remove(0);
 		}
-		if (playerstorespawn.computeIfAbsent(level, k -> new ArrayList<Pair<Player, BlockPos>>()).size() > 0) {
+		if (HashMapFunctions.computeIfAbsent(playerstorespawn, level, k -> new ArrayList<Pair<Player, BlockPos>>()).size() > 0) {
 			Pair<Player, BlockPos> pair = playerstorespawn.get(level).get(0);
 			Player player = pair.getFirst();
 			BlockPos respawnpos = pair.getSecond();
@@ -191,7 +188,7 @@ public class CampfireEvent {
 					level.setBlockAndUpdate(pos, state.setValue(CampfireBlock.LIT, false));
 					
 					if (iswaterbucket) {
-						firestoextinguish.computeIfAbsent(level, k -> new ArrayList<BlockPos>()).add(pos);
+						HashMapFunctions.computeIfAbsent(firestoextinguish, level, k -> new ArrayList<BlockPos>()).add(pos);
 					}
 					
 					if (Util.checkForCampfireSpawnRemoval(level, playername, pos)) {
@@ -293,6 +290,6 @@ public class CampfireEvent {
 		}
 		
 		Pair<Level, BlockPos> pair = playercampfires.get(playername);
-		playerstorespawn.computeIfAbsent(pair.getFirst(), k -> new ArrayList<Pair<Player, BlockPos>>()).add(new Pair<Player, BlockPos>(newPlayer, pair.getSecond().immutable()));
+		HashMapFunctions.computeIfAbsent(playerstorespawn, pair.getFirst(), k -> new ArrayList<Pair<Player, BlockPos>>()).add(new Pair<Player, BlockPos>(newPlayer, pair.getSecond().immutable()));
 	}
 }

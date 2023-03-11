@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "randomvillagenames",
-  "version": "3.1",
+  "version": "3.2",
 
   "name": "Random Village Names",
   "description": "Gives all villages a random name from a preset list. Uses the Areas mod to display the name in the GUI.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.48",
+    "collective": ">=6.50",
     "areas" : ">=4.0"
   },
 

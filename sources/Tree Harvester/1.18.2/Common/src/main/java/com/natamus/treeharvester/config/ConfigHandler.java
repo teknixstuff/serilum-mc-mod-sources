@@ -28,7 +28,6 @@ public class ConfigHandler extends DuskConfig {
 
 	@Entry public static boolean mustHoldAxeForTreeHarvest = true;
 	@Entry public static boolean treeHarvestWithoutSneak = false;
-	@Entry public static boolean instantBreakLeavesAround = false;
 	@Entry public static boolean automaticallyFindBottomBlock = true;
 	@Entry public static boolean enableFastLeafDecay = true;
 	@Entry public static boolean enableNetherTrees = true;
@@ -41,7 +40,7 @@ public class ConfigHandler extends DuskConfig {
 	@Entry(min = 0.001, max = 1.0) public static double increaseExhaustionModifier = 1.0;
 	@Entry public static boolean increaseHarvestingTimePerLog = true;
 	@Entry(min = 0.01, max = 10.0) public static double increasedHarvestingTimePerLogModifier = 0.2;
-	@Entry(min = 1, max = 16) public static int amountOfLeavesBrokenPerTick = 3;
+	@Entry(min = 1, max = 16) public static int amountOfLeavesBrokenPerTick = 5;
 
 	public static void initConfig() {
 		configMetaData.put("mustHoldAxeForTreeHarvest", Arrays.asList(
@@ -49,9 +48,6 @@ public class ConfigHandler extends DuskConfig {
 		));
 		configMetaData.put("treeHarvestWithoutSneak", Arrays.asList(
 			"If enabled, tree harvesting works when not holding the sneak button. If disabled it's reversed, and only works when sneaking."
-		));
-		configMetaData.put("instantBreakLeavesAround", Arrays.asList(
-			"If enabled, players instantly break the leaves as well as all logs of the tree when a bottom log is broken."
 		));
 		configMetaData.put("automaticallyFindBottomBlock", Arrays.asList(
 			"Whether the mod should attempt to find the actual bottom log of the tree and start there. This means you can break a tree in the middle and it will still completely be felled."

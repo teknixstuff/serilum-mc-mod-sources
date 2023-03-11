@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "skeletonhorsespawn",
-  "version": "3.5",
+  "version": "3.6",
 
   "name": "Skeleton Horse Spawn",
   "description": "Allows the skeleton horse to spawn naturally with a skeleton riding it and other tweaks.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.48"
+    "collective": ">=6.50"
   },
 
   "custom": {

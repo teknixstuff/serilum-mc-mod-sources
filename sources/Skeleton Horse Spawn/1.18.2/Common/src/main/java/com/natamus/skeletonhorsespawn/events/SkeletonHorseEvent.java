@@ -17,6 +17,7 @@
 package com.natamus.skeletonhorsespawn.events;
 
 import com.natamus.collective.functions.BlockPosFunctions;
+import com.natamus.collective.functions.HashMapFunctions;
 import com.natamus.skeletonhorsespawn.config.ConfigHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -30,21 +31,21 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class SkeletonHorseEvent {
 	private static final HashMap<Level, CopyOnWriteArrayList<Entity>> skeletonhorses_per_world = new HashMap<Level, CopyOnWriteArrayList<Entity>>();
 	private static final HashMap<Level, Integer> tickdelay_per_world = new HashMap<Level, Integer>();
-	
+
 	public static void onEntityJoin(Level level, Entity entity) {
 		if (level.isClientSide) {
 			return;
 		}
 
 		if (entity instanceof SkeletonHorse) {
-			if (!skeletonhorses_per_world.computeIfAbsent(level, k -> new CopyOnWriteArrayList<Entity>()).contains(entity)) {
+			if (!HashMapFunctions.computeIfAbsent(skeletonhorses_per_world, level, k -> new CopyOnWriteArrayList<Entity>()).contains(entity)) {
 				skeletonhorses_per_world.get(level).add(entity);
 			}
 		}
 	}
 
 	public static void onWorldTick(ServerLevel level) {
-		int ticks = tickdelay_per_world.computeIfAbsent(level, k -> 1);
+		int ticks = HashMapFunctions.computeIfAbsent(tickdelay_per_world, level, k -> 1);
 		if (ticks % 20 != 0) {
 			tickdelay_per_world.put(level, ticks+1);
 			return;
@@ -59,7 +60,7 @@ public class SkeletonHorseEvent {
 			return;
 		}
 
-		for (Entity skeletonhorse : skeletonhorses_per_world.computeIfAbsent(level, k -> new CopyOnWriteArrayList<Entity>())) {
+		for (Entity skeletonhorse : HashMapFunctions.computeIfAbsent(skeletonhorses_per_world, level, k -> new CopyOnWriteArrayList<Entity>())) {
 			if (skeletonhorse.isAlive()) {
 				if (!skeletonhorse.isInWaterRainOrBubble()) {
 					BlockPos epos = skeletonhorse.blockPosition();

@@ -16,6 +16,7 @@
 
 package com.natamus.respawningshulkers.events;
 
+import com.natamus.collective.functions.HashMapFunctions;
 import com.natamus.collective.util.CollectiveReference;
 import com.natamus.respawningshulkers.config.ConfigHandler;
 import net.minecraft.server.MinecraftServer;
@@ -35,7 +36,7 @@ public class ShulkerEvent {
 	private static final HashMap<Level, CopyOnWriteArrayList<Entity>> respawnShulkers = new HashMap<Level, CopyOnWriteArrayList<Entity>>();
 
 	public static void onWorldTick(ServerLevel serverLevel) {
-		if (respawnShulkers.computeIfAbsent(serverLevel, k -> new CopyOnWriteArrayList<Entity>()).size() > 0) {
+		if (HashMapFunctions.computeIfAbsent(respawnShulkers, serverLevel, k -> new CopyOnWriteArrayList<Entity>()).size() > 0) {
 			for (Entity shulker : respawnShulkers.get(serverLevel)) {
 				int ticksleft = shulkersTicksLeft.get(shulker) - 1;
 				if (ticksleft == 0) {
@@ -72,7 +73,7 @@ public class ShulkerEvent {
 		newshulker.setHealth(30F);
 
 		shulkersTicksLeft.put(newshulker, ConfigHandler.timeInTicksToRespawn);
-		respawnShulkers.computeIfAbsent(level, k -> new CopyOnWriteArrayList<Entity>()).add(newshulker);
+		HashMapFunctions.computeIfAbsent(respawnShulkers, level, k -> new CopyOnWriteArrayList<Entity>()).add(newshulker);
 	}
 	
 	public static void onServerShutdown(MinecraftServer server) {

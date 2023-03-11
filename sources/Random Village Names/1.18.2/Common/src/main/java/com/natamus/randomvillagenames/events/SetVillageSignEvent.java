@@ -17,6 +17,7 @@
 package com.natamus.randomvillagenames.events;
 
 import com.natamus.collective.functions.BlockPosFunctions;
+import com.natamus.collective.functions.HashMapFunctions;
 import com.natamus.collective.functions.TileEntityFunctions;
 import com.natamus.randomvillagenames.util.Util;
 import net.minecraft.core.BlockPos;
@@ -46,16 +47,16 @@ public class SetVillageSignEvent {
 	private static final HashMap<ServerLevel, ArrayList<ChunkPos>> cachedchunks = new HashMap<ServerLevel, ArrayList<ChunkPos>>();
 
 	public static void onWorldTick(ServerLevel serverlevel) {
-		if (processChunks.computeIfAbsent(serverlevel, k -> new ArrayList<ChunkPos>()).size() > 0) {
+		if (HashMapFunctions.computeIfAbsent(processChunks, serverlevel, k -> new ArrayList<ChunkPos>()).size() > 0) {
 			ChunkPos chunkpos = processChunks.get(serverlevel).get(0);
 
-			if (!cachedchunks.computeIfAbsent(serverlevel, k -> new ArrayList<ChunkPos>()).contains(chunkpos)) {
+			if (!HashMapFunctions.computeIfAbsent(cachedchunks, serverlevel, k -> new ArrayList<ChunkPos>()).contains(chunkpos)) {
 				cachedchunks.get(serverlevel).add(chunkpos);
 
 				BlockPos worldpos = chunkpos.getWorldPosition();
 
 				if (serverlevel.sectionsToVillage(SectionPos.of(worldpos)) <= 4) {
-					for (BlockPos existingvillage : existingvillages.computeIfAbsent(serverlevel, k -> new CopyOnWriteArrayList<BlockPos>())) {
+					for (BlockPos existingvillage : HashMapFunctions.computeIfAbsent(existingvillages, serverlevel, k -> new CopyOnWriteArrayList<BlockPos>())) {
 						if (Math.abs(existingvillage.getX() - worldpos.getX()) <= 200) {
 							if (Math.abs(existingvillage.getZ() - worldpos.getZ()) <= 200) {
 								return;
@@ -124,10 +125,10 @@ public class SetVillageSignEvent {
 
 		ChunkPos chunkpos = chunk.getPos();
 
-		if (cachedchunks.computeIfAbsent(serverlevel, k -> new ArrayList<ChunkPos>()).contains(chunkpos)) {
+		if (HashMapFunctions.computeIfAbsent(cachedchunks, serverlevel, k -> new ArrayList<ChunkPos>()).contains(chunkpos)) {
 			return;
 		}
 
-		processChunks.computeIfAbsent(serverlevel, k -> new ArrayList<ChunkPos>()).add(chunkpos);
+		HashMapFunctions.computeIfAbsent(processChunks, serverlevel, k -> new ArrayList<ChunkPos>()).add(chunkpos);
 	}
 }

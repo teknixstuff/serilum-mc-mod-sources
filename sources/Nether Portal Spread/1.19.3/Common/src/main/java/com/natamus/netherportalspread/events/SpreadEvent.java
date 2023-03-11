@@ -16,6 +16,7 @@
 
 package com.natamus.netherportalspread.events;
 
+import com.natamus.collective.functions.HashMapFunctions;
 import com.natamus.collective.functions.WorldFunctions;
 import com.natamus.netherportalspread.config.ConfigHandler;
 import com.natamus.netherportalspread.util.Util;
@@ -45,24 +46,24 @@ public class SpreadEvent {
 			return;
 		}
 
-		if (portals_to_process.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).size() > 0) {
+		if (HashMapFunctions.computeIfAbsent(portals_to_process, level, k -> new CopyOnWriteArrayList<BlockPos>()).size() > 0) {
 			BlockPos portal = portals_to_process.get(level).get(0);
 
-			if (!Util.portals.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).contains(portal) && !Util.preventedportals.computeIfAbsent(level, k -> new HashMap<BlockPos, Boolean>()).containsKey(portal)) {
+			if (!HashMapFunctions.computeIfAbsent(Util.portals, level, k -> new CopyOnWriteArrayList<BlockPos>()).contains(portal) && !HashMapFunctions.computeIfAbsent(Util.preventedportals, level, k -> new HashMap<BlockPos, Boolean>()).containsKey(portal)) {
 				Util.validatePortalAndAdd(level, portal);
 			}
 
 			portals_to_process.get(level).remove(0);
 		}
 
-		int leveltick = levelTicks.computeIfAbsent(level, k -> 1);
+		int leveltick = HashMapFunctions.computeIfAbsent(levelTicks, level, k -> 1);
 		if (leveltick % ConfigHandler.spreadDelayTicks != 0) {
 			levelTicks.put(level, leveltick+1);
 			return;
 		}
 		levelTicks.put(level, 1);
 
-		for (BlockPos portal : Util.portals.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>())) {
+		for (BlockPos portal : HashMapFunctions.computeIfAbsent(Util.portals, level, k -> new CopyOnWriteArrayList<BlockPos>())) {
 			Util.spreadNextBlock(level, portal);
 		}
 	}
@@ -76,7 +77,7 @@ public class SpreadEvent {
 			return;
 		}
 
-		portals_to_process.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).add(pos);
+		HashMapFunctions.computeIfAbsent(portals_to_process, level, k -> new CopyOnWriteArrayList<BlockPos>()).add(pos);
 	}
 
 	public static void onDimensionChange(ServerLevel level, ServerPlayer player) {
@@ -89,6 +90,6 @@ public class SpreadEvent {
 		}
 
 		BlockPos ppos = player.blockPosition();
-		portals_to_process.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).add(ppos);
+		HashMapFunctions.computeIfAbsent(portals_to_process, level, k -> new CopyOnWriteArrayList<BlockPos>()).add(ppos);
 	}
 }

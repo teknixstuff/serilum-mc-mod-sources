@@ -21,6 +21,7 @@ import com.natamus.areas.objects.AreaObject;
 import com.natamus.areas.objects.Variables;
 import com.natamus.areas.util.Util;
 import com.natamus.collective.functions.FABFunctions;
+import com.natamus.collective.functions.HashMapFunctions;
 import com.natamus.collective.functions.StringFunctions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
@@ -50,18 +51,18 @@ public class AreaEvent {
 		
 		for (Level level : Variables.checkifshouldignoreperlevel.keySet()) {
 			for (BlockPos pos : Variables.checkifshouldignoreperlevel.get(level)) {
-				if (Variables.areasperlevel.computeIfAbsent(level, k -> new HashMap<BlockPos, AreaObject>()).containsKey(pos)) {
+				if (HashMapFunctions.computeIfAbsent(Variables.areasperlevel, level, k -> new HashMap<BlockPos, AreaObject>()).containsKey(pos)) {
 					Variables.checkifshouldignoreperlevel.get(level).remove(pos);
-					Variables.ignoremap.computeIfAbsent(level, k -> new HashMap<BlockPos, Integer>()).remove(pos);
+					HashMapFunctions.computeIfAbsent(Variables.ignoremap, level, k -> new HashMap<BlockPos, Integer>()).remove(pos);
 					continue;
 				}
 				
-				int checkleft = Variables.ignoremap.computeIfAbsent(level, k -> new HashMap<BlockPos, Integer>()).get(pos);
+				int checkleft = HashMapFunctions.computeIfAbsent(Variables.ignoremap, level, k -> new HashMap<BlockPos, Integer>()).get(pos);
 				if (checkleft <= 0) {
 					Variables.checkifshouldignoreperlevel.get(level).remove(pos);
 					Variables.ignoremap.get(level).remove(pos);
 					
-					Variables.ignoresignsperlevel.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).add(pos);
+					HashMapFunctions.computeIfAbsent(Variables.ignoresignsperlevel, level, k -> new CopyOnWriteArrayList<BlockPos>()).add(pos);
 					continue;
 				}
 				
@@ -83,7 +84,7 @@ public class AreaEvent {
 		
 		List<AreaObject> aos = new ArrayList<AreaObject>();
 		List<String> enteredareas = new ArrayList<String>();
-		List<BlockPos> ignoresigns = Variables.ignoresignsperlevel.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>());
+		List<BlockPos> ignoresigns = HashMapFunctions.computeIfAbsent(Variables.ignoresignsperlevel, level, k -> new CopyOnWriteArrayList<BlockPos>());
 		
 		List<BlockPos> nearbysigns = FABFunctions.getAllTileEntityPositionsNearbyEntity(BlockEntityType.SIGN, ConfigHandler.radiusAroundPlayerToCheckForSigns, level, player);
 		for (BlockPos nspos : nearbysigns) {
@@ -93,9 +94,9 @@ public class AreaEvent {
 			
 			AreaObject ao = Util.getAreaSign(level, nspos);
 			if (ao == null) {
-				if (!Variables.checkifshouldignoreperlevel.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).contains(nspos)) {
+				if (!HashMapFunctions.computeIfAbsent(Variables.checkifshouldignoreperlevel, level, k -> new CopyOnWriteArrayList<BlockPos>()).contains(nspos)) {
 					Variables.checkifshouldignoreperlevel.get(level).add(nspos);
-					Variables.ignoremap.computeIfAbsent(level, k -> new HashMap<BlockPos, Integer>()).put(nspos, 10);
+					HashMapFunctions.computeIfAbsent(Variables.ignoremap, level, k -> new HashMap<BlockPos, Integer>()).put(nspos, 10);
 				}
 				continue;
 			}
@@ -141,7 +142,7 @@ public class AreaEvent {
 		}
 
 		if (Util.isSignBlock(state.getBlock())) {
-			if (Variables.areasperlevel.computeIfAbsent(level, k -> new HashMap<BlockPos, AreaObject>()).containsKey(signpos)) {
+			if (HashMapFunctions.computeIfAbsent(Variables.areasperlevel, level, k -> new HashMap<BlockPos, AreaObject>()).containsKey(signpos)) {
 				AreaObject ao = Variables.areasperlevel.get(level).get(signpos);
 				List<Player> playersinside = ao.containsplayers;
 				for (Player insideplayer : playersinside) {
@@ -151,9 +152,9 @@ public class AreaEvent {
 				Variables.areasperlevel.get(level).remove(signpos);
 			}
 
-			Variables.ignoresignsperlevel.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).remove(signpos);
-			Variables.checkifshouldignoreperlevel.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).remove(signpos);
-			Variables.ignoremap.computeIfAbsent(level, k -> new HashMap<BlockPos, Integer>()).remove(signpos);
+			HashMapFunctions.computeIfAbsent(Variables.ignoresignsperlevel, level, k -> new CopyOnWriteArrayList<BlockPos>()).remove(signpos);
+			HashMapFunctions.computeIfAbsent(Variables.checkifshouldignoreperlevel, level, k -> new CopyOnWriteArrayList<BlockPos>()).remove(signpos);
+			HashMapFunctions.computeIfAbsent(Variables.ignoremap, level, k -> new HashMap<BlockPos, Integer>()).remove(signpos);
 		}
 	}
 }

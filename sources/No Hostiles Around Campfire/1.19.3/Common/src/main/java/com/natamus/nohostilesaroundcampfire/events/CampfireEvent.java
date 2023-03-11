@@ -19,6 +19,7 @@ package com.natamus.nohostilesaroundcampfire.events;
 import com.natamus.collective.functions.CompareBlockFunctions;
 import com.natamus.collective.functions.EntityFunctions;
 import com.natamus.collective.functions.FABFunctions;
+import com.natamus.collective.functions.HashMapFunctions;
 import com.natamus.nohostilesaroundcampfire.config.ConfigHandler;
 import com.natamus.nohostilesaroundcampfire.util.Reference;
 import com.natamus.nohostilesaroundcampfire.util.Util;
@@ -51,7 +52,7 @@ public class CampfireEvent {
 	private static final HashMap<Level, List<BlockPos>> checkCampfireBurn = new HashMap<Level, List<BlockPos>>();
 
 	public static void onWorldTick(ServerLevel level) {
-		if (checkCampfireBurn.computeIfAbsent(level, k -> new ArrayList<BlockPos>()).size() > 0) {
+		if (HashMapFunctions.computeIfAbsent(checkCampfireBurn, level, k -> new ArrayList<BlockPos>()).size() > 0) {
 			BlockPos campfirepos = checkCampfireBurn.get(level).get(0);
 			BlockState campfirestate = level.getBlockState(campfirepos);
 			if (CompareBlockFunctions.blockIsInRegistryHolder(campfirestate.getBlock(), BlockTags.CAMPFIRES)) {
@@ -170,7 +171,7 @@ public class CampfireEvent {
 			}
 		}
 		
-		checkCampfireBurn.computeIfAbsent(level, k -> new ArrayList<BlockPos>()).add(blockPos.immutable());
+		HashMapFunctions.computeIfAbsent(checkCampfireBurn, level, k -> new ArrayList<BlockPos>()).add(blockPos.immutable());
 	}
 	
 	public static boolean onRightClickCampfireBlock(Level level, Player player, InteractionHand hand, BlockPos pos, BlockHitResult hitVec) {
@@ -187,7 +188,7 @@ public class CampfireEvent {
 			}
 			
 			if (player.getMainHandItem().getItem() instanceof FlintAndSteelItem || player.getOffhandItem().getItem() instanceof FlintAndSteelItem) {
-				checkCampfireBurn.computeIfAbsent(level, k -> new ArrayList<BlockPos>()).add(pos.immutable());
+				HashMapFunctions.computeIfAbsent(checkCampfireBurn, level, k -> new ArrayList<BlockPos>()).add(pos.immutable());
 			}
 		}
 		

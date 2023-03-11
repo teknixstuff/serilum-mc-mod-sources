@@ -220,7 +220,7 @@ public class Util {
 						int z = Integer.parseInt(cs[2]);
 
 						BlockPos portal = new BlockPos(x, y, z);
-						portals.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).add(portal);
+						HashMapFunctions.computeIfAbsent(portals, level, k -> new CopyOnWriteArrayList<BlockPos>()).add(portal);
 
 						if (ConfigHandler.preventSpreadWithBlock) {
 							int coalcount = 0;
@@ -237,7 +237,7 @@ public class Util {
 								} catch (NullPointerException ignored) { }
 							}
 
-							preventedportals.computeIfAbsent(level, k -> new HashMap<BlockPos, Boolean>()).put(portal, coalcount >= psamount);
+							HashMapFunctions.computeIfAbsent(preventedportals, level, k -> new HashMap<BlockPos, Boolean>()).put(portal, coalcount >= psamount);
 						}
 					}
 				}
@@ -260,7 +260,7 @@ public class Util {
 	}
 
 	private static Boolean portalExists(Level level, BlockPos pos) {
-		for (BlockPos portalpos : portals.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>())) {
+		for (BlockPos portalpos : HashMapFunctions.computeIfAbsent(portals, level, k -> new CopyOnWriteArrayList<BlockPos>())) {
 			double distance = pos.distSqr(new Vec3i(portalpos.getX(), portalpos.getY(), portalpos.getZ()));
 			if (distance < 10) {
 				return true;
@@ -297,7 +297,7 @@ public class Util {
 			rawportal = rawportal.north().immutable();
 		}
 
-		if (portals.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).contains(rawportal) || preventedportals.computeIfAbsent(level, k -> new HashMap<BlockPos, Boolean>()).containsKey(rawportal)) {
+		if (HashMapFunctions.computeIfAbsent(portals, level, k -> new CopyOnWriteArrayList<BlockPos>()).contains(rawportal) || HashMapFunctions.computeIfAbsent(preventedportals, level, k -> new HashMap<BlockPos, Boolean>()).containsKey(rawportal)) {
 			return;
 		}
 
@@ -332,8 +332,8 @@ public class Util {
 			System.out.println("[Error] Nether Portal Spread: Something went wrong while removing an old portal location.");
 		}
 
-		portals.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).remove(portal);
-		preventedportals.computeIfAbsent(level, k -> new HashMap<BlockPos, Boolean>()).remove(portal);
+		HashMapFunctions.computeIfAbsent(portals, level, k -> new CopyOnWriteArrayList<BlockPos>()).remove(portal);
+		HashMapFunctions.computeIfAbsent(preventedportals, level, k -> new HashMap<BlockPos, Boolean>()).remove(portal);
 		sendBrokenPortalMessage(level, portal);
 	}
 
@@ -385,7 +385,7 @@ public class Util {
 		if (ConfigHandler.preventSpreadWithBlock) {
 			if (coalcount >= psamount) {
 				boolean prevented = false;
-				if (preventedportals.computeIfAbsent(level, k -> new HashMap<BlockPos, Boolean>()).containsKey(portal)) {
+				if (HashMapFunctions.computeIfAbsent(preventedportals, level, k -> new HashMap<BlockPos, Boolean>()).containsKey(portal)) {
 					prevented = preventedportals.get(level).get(portal);
 				}
 
@@ -400,7 +400,7 @@ public class Util {
 
 		if (closest != null) {
 			boolean prevented = false;
-			if (preventedportals.computeIfAbsent(level, k -> new HashMap<BlockPos, Boolean>()).containsKey(portal)) {
+			if (HashMapFunctions.computeIfAbsent(preventedportals, level, k -> new HashMap<BlockPos, Boolean>()).containsKey(portal)) {
 				prevented = preventedportals.get(level).get(portal);
 			}
 

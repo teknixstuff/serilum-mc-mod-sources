@@ -18,6 +18,7 @@ package com.natamus.automaticdoors.events;
 
 import com.natamus.automaticdoors.config.ConfigHandler;
 import com.natamus.automaticdoors.util.Util;
+import com.natamus.collective.functions.HashMapFunctions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,7 +35,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-public class DoorEvent {	
+public class DoorEvent {
 	public static HashMap<Level, List<BlockPos>> toclosedoors = new HashMap<Level, List<BlockPos>>();
 	public static HashMap<Level, List<BlockPos>> newclosedoors = new HashMap<Level, List<BlockPos>>();
 
@@ -43,14 +44,14 @@ public class DoorEvent {
 			return;
 		}
 
-		if (newclosedoors.computeIfAbsent(level, k -> new ArrayList<BlockPos>()).size() > 0) {
-			toclosedoors.computeIfAbsent(level, k -> new ArrayList<BlockPos>()).addAll(newclosedoors.get(level));
+		if (HashMapFunctions.computeIfAbsent(newclosedoors, level, k -> new ArrayList<BlockPos>()).size() > 0) {
+			HashMapFunctions.computeIfAbsent(toclosedoors, level, k -> new ArrayList<BlockPos>()).addAll(newclosedoors.get(level));
 			newclosedoors.get(level).clear();
 		}
 
 		List<BlockPos> closetoremove = new ArrayList<BlockPos>();
 
-		for (BlockPos bp : toclosedoors.computeIfAbsent(level, k -> new ArrayList<BlockPos>())) {
+		for (BlockPos bp : HashMapFunctions.computeIfAbsent(toclosedoors, level, k -> new ArrayList<BlockPos>())) {
 			if (bp == null) {
 				closetoremove.add(bp);
 				continue;
@@ -122,7 +123,7 @@ public class DoorEvent {
 			BlockState state = level.getBlockState(np);
 			Block block = state.getBlock();
 			if (Util.isDoor(block)) {
-				if (toclosedoors.computeIfAbsent(level, k -> new ArrayList<BlockPos>()).contains(np) || newclosedoors.computeIfAbsent(level, k -> new ArrayList<BlockPos>()).contains(np)) {
+				if (HashMapFunctions.computeIfAbsent(toclosedoors, level, k -> new ArrayList<BlockPos>()).contains(np) || HashMapFunctions.computeIfAbsent(newclosedoors, level, k -> new ArrayList<BlockPos>()).contains(np)) {
 					continue;
 				}
 

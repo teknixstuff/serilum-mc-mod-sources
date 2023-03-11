@@ -1,6 +1,6 @@
 /*
  * This is the latest source code of Tree Harvester.
- * Minecraft version: 1.18.2.
+ * Minecraft version: 1.19.2.
  *
  * Please don't distribute without permission.
  * For all Minecraft modding projects, feel free to visit my profile page on CurseForge or Modrinth.
@@ -14,20 +14,14 @@
  * Thanks for looking at the source code! Hope it's of some use to your project. Happy modding!
  */
 
-package com.natamus.treeharvester.forge.events;
+package com.natamus.treeharvester.data;
 
-import com.natamus.treeharvester.events.SoundHarvestEvent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.sound.PlaySoundEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import com.natamus.collective.functions.DataFunctions;
 
-@EventBusSubscriber(value = Dist.CLIENT)
-public class ForgeSoundHarvestEvent {
-	@SubscribeEvent
-	public void onSoundEvent(PlaySoundEvent e) {
-		if (!SoundHarvestEvent.onSoundEvent(e.getEngine(), e.getOriginalSound())) {
-			e.setSound(null);
-		}
-	}
+import java.io.File;
+
+public class Constants {
+	public static final String dirpath = DataFunctions.getConfigDirectory() + File.separator + "treeharvester";
+	public static final File dir = new File(dirpath);
+	public static final File file = new File(dirpath + File.separator + "harvestable_axe_blacklist.txt");
 }

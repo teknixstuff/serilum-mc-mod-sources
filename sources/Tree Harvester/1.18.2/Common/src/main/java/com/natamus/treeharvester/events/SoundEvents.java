@@ -1,6 +1,6 @@
 /*
  * This is the latest source code of Tree Harvester.
- * Minecraft version: 1.19.3.
+ * Minecraft version: 1.18.2.
  *
  * Please don't distribute without permission.
  * For all Minecraft modding projects, feel free to visit my profile page on CurseForge or Modrinth.
@@ -21,7 +21,7 @@ import net.minecraft.client.sounds.SoundEngine;
 
 import java.util.Date;
 
-public class SoundHarvestEvent {
+public class SoundEvents {
 	public static Date lastplayedlog = null;
 	public static Date lastplayedleaf = null;
 	

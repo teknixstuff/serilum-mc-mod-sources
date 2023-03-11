@@ -17,6 +17,7 @@
 package com.natamus.giantspawn.events;
 
 import com.natamus.collective.functions.BlockPosFunctions;
+import com.natamus.collective.functions.HashMapFunctions;
 import com.natamus.giantspawn.config.ConfigHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -41,7 +42,7 @@ public class GiantEvent {
 			return;
 		}
 		
-		if (!giants_per_world.computeIfAbsent(level, k -> new CopyOnWriteArrayList<Entity>()).contains(entity)) {
+		if (!HashMapFunctions.computeIfAbsent(giants_per_world, level, k -> new CopyOnWriteArrayList<Entity>()).contains(entity)) {
 			giants_per_world.get(level).add(entity);
 		}
 
@@ -54,7 +55,7 @@ public class GiantEvent {
 	}
 	
 	public static void onWorldTick(ServerLevel level) {
-		int ticks = tickdelay_per_world.computeIfAbsent(level, k -> 1);
+		int ticks = HashMapFunctions.computeIfAbsent(tickdelay_per_world, level, k -> 1);
 		if (ticks % 20 != 0) {
 			tickdelay_per_world.put(level, ticks + 1);
 			return;
@@ -69,7 +70,7 @@ public class GiantEvent {
 			return;
 		}
 		
-		for (Entity giant : giants_per_world.computeIfAbsent(level, k -> new CopyOnWriteArrayList<Entity>())) {
+		for (Entity giant : HashMapFunctions.computeIfAbsent(giants_per_world, level, k -> new CopyOnWriteArrayList<Entity>())) {
 			if (giant.isAlive()) {
 				if (!giant.isInWaterRainOrBubble()) {
 					BlockPos epos = giant.blockPosition();

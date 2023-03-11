@@ -17,6 +17,7 @@
 package com.natamus.firespreadtweaks.events;
 
 import com.natamus.collective.functions.BlockFunctions;
+import com.natamus.collective.functions.HashMapFunctions;
 import com.natamus.firespreadtweaks.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -35,11 +36,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class FireSpreadEvent {
 	private static final HashMap<BlockPos, Integer> ticksleft = new HashMap<BlockPos, Integer>();
 	private static final HashMap<Level, CopyOnWriteArrayList<BlockPos>> firepositions = new HashMap<Level, CopyOnWriteArrayList<BlockPos>>();
-	
+
 	private static final List<Block> fireblocks = new ArrayList<Block>(Arrays.asList(Blocks.NETHERRACK, Blocks.MAGMA_BLOCK, Blocks.SOUL_SAND, Blocks.SOUL_SOIL));
-	
+
 	public static void onWorldTick(ServerLevel level) {
-		for (BlockPos firepos : firepositions.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>())) {
+		for (BlockPos firepos : HashMapFunctions.computeIfAbsent(firepositions, level, k -> new CopyOnWriteArrayList<BlockPos>())) {
 			if (!ticksleft.containsKey(firepos)) {
 				ticksleft.put(firepos, Util.getFireBurnDurationInTicks());
 				continue;
@@ -70,7 +71,7 @@ public class FireSpreadEvent {
 	}
 
 	public static void onWorldUnload(ServerLevel level) {
-		for (BlockPos firepos : firepositions.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>())) {
+		for (BlockPos firepos : HashMapFunctions.computeIfAbsent(firepositions, level, k -> new CopyOnWriteArrayList<BlockPos>())) {
 			BlockState firestate = level.getBlockState(firepos);
 			Block fireblock = firestate.getBlock();
 			if (fireblock instanceof FireBlock) {
@@ -95,6 +96,6 @@ public class FireSpreadEvent {
 		}
 
 		ticksleft.put(pos, Util.getFireBurnDurationInTicks());
-		firepositions.computeIfAbsent(level, k -> new CopyOnWriteArrayList<BlockPos>()).add(pos);
+		HashMapFunctions.computeIfAbsent(firepositions, level, k -> new CopyOnWriteArrayList<BlockPos>()).add(pos);
 	}
 }

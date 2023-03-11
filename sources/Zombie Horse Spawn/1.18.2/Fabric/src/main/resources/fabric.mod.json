@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "zombiehorsespawn",
-  "version": "4.5",
+  "version": "4.6",
 
   "name": "Zombie Horse Spawn",
   "description": "Allows the zombie horse to spawn with a zombie riding it and other tweaks.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.18",
     "java": ">=17",
-    "collective": ">=6.48"
+    "collective": ">=6.50"
   },
 
   "custom": {
