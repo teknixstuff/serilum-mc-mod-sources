@@ -26,6 +26,7 @@ import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.WorldTickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -51,8 +52,20 @@ public class RegisterCollectiveEvents {
         CollectiveEvents.onServerTick(ServerLifecycleHooks.getCurrentServer());
     }
 
-    @SubscribeEvent
-    public void onMobSpawnerSpawn(LivingSpawnEvent.SpecialSpawn e) {
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public void onMobSpawnerSpecialSpawn(LivingSpawnEvent.SpecialSpawn e) {
+        Level Level = WorldFunctions.getWorldIfInstanceOfAndNotRemote(e.getWorld());
+        if (Level == null) {
+            return;
+        }
+
+        if (e.getSpawner() != null) {
+            e.getEntity().addTag(CollectiveReference.MOD_ID + ".fromspawner");
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public void onMobSpawnerCheckSpawn(LivingSpawnEvent.CheckSpawn e) {
         Level Level = WorldFunctions.getWorldIfInstanceOfAndNotRemote(e.getWorld());
         if (Level == null) {
             return;

@@ -77,6 +77,10 @@ public class CampfireEvent {
 	}
 
 	public static boolean onEntityCheckSpawn(Mob entity, ServerLevel world, BlockPos spawnerPos, MobSpawnType spawnReason) {
+		if (entity == null) {
+			return true;
+		}
+
 		if (entity.getTags().contains(Reference.MOD_ID + ".checked" )) {
 			return true;
 		}

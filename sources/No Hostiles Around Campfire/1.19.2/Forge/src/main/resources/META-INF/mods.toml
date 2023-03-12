@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="nohostilesaroundcampfire"
-version="5.3"
+version="5.4"
 displayName="No Hostiles Around Campfire"
 displayURL="https://curseforge.com/minecraft/mc-mods/no-hostiles-around-campfire"
 authors="Rick South"
@@ -23,6 +23,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.nohostilesaroundcampfire]]
     modId="collective"
     mandatory=true
-    versionRange="[6.50,)"
+    versionRange="[6.52,)"
     ordering="NONE"
     side="BOTH"

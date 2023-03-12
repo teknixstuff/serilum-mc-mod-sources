@@ -18,3 +18,4 @@ accessible field net/minecraft/world/entity/Mob targetSelector Lnet/minecraft/wo
 accessible method net/minecraft/world/damagesource/DamageSource <init> (Ljava/lang/String;)V
 accessible field net/minecraft/world/item/Item category Lnet/minecraft/world/item/CreativeModeTab;
 mutable field net/minecraft/world/item/Item category Lnet/minecraft/world/item/CreativeModeTab;
+accessible field net/minecraft/client/KeyMapping key Lcom/mojang/blaze3d/platform/InputConstants$Key;

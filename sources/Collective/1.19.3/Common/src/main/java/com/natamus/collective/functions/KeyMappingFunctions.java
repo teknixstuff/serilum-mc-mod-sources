@@ -1,5 +1,5 @@
 /*
- * This is the latest source code of Vanilla Zoom.
+ * This is the latest source code of Collective.
  * Minecraft version: 1.19.3.
  *
  * Please don't distribute without permission.
@@ -14,11 +14,13 @@
  * Thanks for looking at the source code! Hope it's of some use to your project. Happy modding!
  */
 
-package com.natamus.vanillazoom.util;
+package com.natamus.collective.functions;
 
-public class Reference {
-	public static final String MOD_ID = "vanillazoom";
-	public static final String NAME = "Vanilla Zoom";
-	public static final String VERSION = "2.1";
-	public static final String ACCEPTED_VERSIONS = "[1.19.3]";
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.KeyMapping;
+
+public class KeyMappingFunctions {
+    public static InputConstants.Key getKey(KeyMapping keyMapping) {
+        return keyMapping.key;
+    }
 }

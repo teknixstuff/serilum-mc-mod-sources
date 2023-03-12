@@ -16,10 +16,11 @@
 
 package com.natamus.vanillazoom.events;
 
+import com.mojang.blaze3d.platform.InputConstants;
+import com.natamus.collective.functions.KeyMappingFunctions;
 import com.natamus.vanillazoom.util.Variables;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -49,10 +50,12 @@ public class ZoomEvent {
 			return;
 		}
 
+		InputConstants.Key key = KeyMappingFunctions.getKey(useKeyMapping);
+
 		boolean forceRelease = false;
 		if (showZoom) {
-			KeyMapping.set(useKeyMapping.getDefaultKey(), true);
-			KeyMapping.click(useKeyMapping.getDefaultKey());
+			KeyMapping.set(key, true);
+			KeyMapping.click(key);
 
 			if (!(player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof SpyglassItem)) {
 				forceRelease = true;
@@ -73,7 +76,7 @@ public class ZoomEvent {
 		else {
 			if (showZoom) {
 				showZoom = false;
-				KeyMapping.set(useKeyMapping.getDefaultKey(), false);
+				KeyMapping.set(key, false);
 
 				if (previousStack != null) {
 					player.setItemInHand(InteractionHand.OFF_HAND, previousStack.copy());

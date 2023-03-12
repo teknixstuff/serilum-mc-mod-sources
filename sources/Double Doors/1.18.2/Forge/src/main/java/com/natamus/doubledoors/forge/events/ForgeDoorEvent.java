@@ -38,6 +38,8 @@ public class ForgeDoorEvent {
 	
 	@SubscribeEvent
 	public void onDoorClick(PlayerInteractEvent.RightClickBlock e) {
-		DoorEvent.onDoorClick(e.getWorld(), e.getPlayer(), e.getHand(), e.getPos(), e.getHitVec());
+		if (!DoorEvent.onDoorClick(e.getWorld(), e.getPlayer(), e.getHand(), e.getPos(), e.getHitVec())) {
+			e.setCanceled(true);
+		}
 	}
 }
