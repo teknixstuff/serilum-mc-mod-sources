@@ -87,12 +87,11 @@ public class Util {
 				DoorBlock door = (DoorBlock)oblock;
 				
 				if (playsound) {
-					door.setOpen(player, level, ostate, toopen, isopen); // toggleDoor
+					level.playSound(null, pos, isopen ? SoundEvents.WOODEN_DOOR_OPEN : SoundEvents.WOODEN_DOOR_CLOSE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
 					playsound = false;
 				}
-				else {
-					level.setBlock(toopen, ostate.setValue(DoorBlock.OPEN, isopen), 10);
-				}
+
+				level.setBlock(toopen, ostate.setValue(DoorBlock.OPEN, isopen), 10);
 			}
 			else if (block instanceof TrapDoorBlock) {
 				if (!ConfigHandler.enableTrapdoors) {

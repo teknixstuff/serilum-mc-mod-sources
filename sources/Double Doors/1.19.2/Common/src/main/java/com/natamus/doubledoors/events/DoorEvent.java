@@ -137,6 +137,6 @@ public class DoorEvent {
 			return true;
 		}
 
-		return !Util.processDoor(player, level, cpos, clickstate, null, true);
+		return !Util.processDoor(player, level, cpos, clickstate, null, false);
 	}
 }

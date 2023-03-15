@@ -47,10 +47,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DeathEvent {
-	private static final List<EquipmentSlot> slottypes = new ArrayList<EquipmentSlot>(Arrays.asList(EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET));
+	private static final List<EquipmentSlot> slotTypes = new ArrayList<EquipmentSlot>(Arrays.asList(EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND, EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET));
 	
 	public static void onPlayerDeath(ServerPlayer player, DamageSource damageSource, float damageAmount) {
-		Level world = player.level;
+		Level level = player.level;
 
 		int chestcount = 1;
 		String playername = player.getName().getString();
@@ -65,7 +65,7 @@ public class DeathEvent {
 		}
 		
 		if (!ConfigHandler.createArmorStand) {
-			for (EquipmentSlot slottype : slottypes) {
+			for (EquipmentSlot slottype : slotTypes) {
 				if (!player.getItemBySlot(slottype).isEmpty()) {
 					totalitemcount += 1;
 				}
@@ -152,37 +152,45 @@ public class DeathEvent {
 		}
 		
 		BlockPos deathpos = player.blockPosition().immutable();
-		if (CompareBlockFunctions.isAirOrOverwritableBlock(world.getBlockState(deathpos.below()).getBlock())) {
+		if (CompareBlockFunctions.isAirOrOverwritableBlock(level.getBlockState(deathpos.below()).getBlock())) {
 			deathpos = deathpos.below().immutable();
 		}
 	
 		ArmorStand armorstand = null;
-		
+
+		List<EquipmentSlot> localSlotTypes = new ArrayList<EquipmentSlot>(slotTypes);
 		if (ConfigHandler.createArmorStand) {
-			armorstand = new ArmorStand(EntityType.ARMOR_STAND, world);
+			ItemStack helmetStack = null;
+			armorstand = new ArmorStand(EntityType.ARMOR_STAND, level);
+
+			if (ConfigHandler.addPlayerHeadToArmorStand) {
+				ItemStack headstack = HeadFunctions.getPlayerHead(playername, 1);
+
+				if (headstack != null) {
+					if (!player.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
+						helmetStack = player.getItemBySlot(EquipmentSlot.HEAD).copy();
+						player.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
+					}
+
+					armorstand.setItemSlot(EquipmentSlot.HEAD, headstack);
+					localSlotTypes.remove(EquipmentSlot.HEAD);
+				}
+			}
 	
-			for (EquipmentSlot slottype : slottypes) {
+			for (EquipmentSlot slottype : localSlotTypes) {
 				armorstand.setItemSlot(slottype, player.getItemBySlot(slottype).copy());
 				player.setItemSlot(slottype, ItemStack.EMPTY);
 			}
-			
-			itemstacks = new ArrayList<>(player.getInventory().items);
-			
-			if (ConfigHandler.addPlayerHeadToArmorStand) {
-				ItemStack headstack = HeadFunctions.getPlayerHead(playername, 1);
-				
-				if (headstack != null) {
-					if (!player.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
-						itemstacks.add(player.getItemBySlot(EquipmentSlot.HEAD).copy());
-						player.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
-					}
-					
-					armorstand.setItemSlot(EquipmentSlot.HEAD, headstack);
-				}
+
+			if (helmetStack != null) {
+				armorstand.setItemSlot(EquipmentSlot.HEAD, player.getItemBySlot(EquipmentSlot.HEAD).copy());
+				player.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
 			}
+
+			itemstacks = new ArrayList<>(player.getInventory().items);
 		}
 		else {
-			for (EquipmentSlot slottype : slottypes) {
+			for (EquipmentSlot slottype : localSlotTypes) {
 				if (slottype.equals(EquipmentSlot.MAINHAND)) {
 					continue;
 				}
@@ -197,8 +205,8 @@ public class DeathEvent {
 		
 		BlockState cheststate = Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.SOUTH);
 		ChestBlockEntity chestentity = new ChestBlockEntity(deathpos, cheststate);
-		world.setBlock(deathpos, cheststate, 3);
-		world.setBlockEntity(chestentity);
+		level.setBlock(deathpos, cheststate, 3);
+		level.setBlockEntity(chestentity);
 		
 		BlockPos deathposup = new BlockPos(deathpos.getX(), deathpos.getY()+1, deathpos.getZ());
 		ChestBlockEntity chestentitytwo = new ChestBlockEntity(deathposup, cheststate);
@@ -216,8 +224,8 @@ public class DeathEvent {
 			else if (i >= 27) {
 				if (chestcount == 1) {
 					chestcount+=1;
-					world.setBlock(deathposup, cheststate, 3);
-					world.setBlockEntity(chestentitytwo);
+					level.setBlock(deathposup, cheststate, 3);
+					level.setBlockEntity(chestentitytwo);
 				}
 
 				if (i-27 > 26) {
@@ -234,23 +242,23 @@ public class DeathEvent {
 		if (armorstand != null) {
 			armorstand.setPos(deathpos.getX()+0.5, deathpos.getY()+chestcount, deathpos.getZ()+0.5);
 			armorstand.getEntityData().set(ArmorStand.DATA_CLIENT_FLAGS, DataFunctions.setBit(armorstand.getEntityData().get(ArmorStand.DATA_CLIENT_FLAGS), 4, true));
-			world.addFreshEntity(armorstand);
+			level.addFreshEntity(armorstand);
 		}
 		
 		Util.successMessage(player);
 		
 		if (ConfigHandler.createSignWithPlayerName) {
 			BlockPos signpos = deathpos.south().immutable();
-			world.setBlockAndUpdate(signpos, Blocks.OAK_WALL_SIGN.defaultBlockState().setValue(WallSignBlock.FACING, Direction.SOUTH));
+			level.setBlockAndUpdate(signpos, Blocks.OAK_WALL_SIGN.defaultBlockState().setValue(WallSignBlock.FACING, Direction.SOUTH));
 			
-			BlockEntity te = world.getBlockEntity(signpos);
+			BlockEntity te = level.getBlockEntity(signpos);
 			if (!(te instanceof SignBlockEntity)) {
 				return;
 			}
 			
 			SignBlockEntity signentity = (SignBlockEntity)te;
 			signentity.setMessage(1, Component.literal(playername));
-			TileEntityFunctions.updateTileEntity(world, signpos, signentity);
+			TileEntityFunctions.updateTileEntity(level, signpos, signentity);
 		}
 	}
 }

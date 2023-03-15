@@ -16,6 +16,8 @@
 
 package com.natamus.collective.functions;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.natamus.collective.data.GlobalVariables;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -23,37 +25,35 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-import java.util.Base64;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class HeadFunctions {
 	public static ItemStack getPlayerHead(String playername, Integer amount) {
-		// Head Data
-		String data1 = DataFunctions.readStringFromURL(GlobalVariables.playerdataurl + playername.toLowerCase());
-		if (data1.equals("")) {
+		String nameIdJsonString = DataFunctions.readStringFromURL(GlobalVariables.playerdataurl + playername.toLowerCase());
+		if (nameIdJsonString.equals("")) {
 			return null;
 		}
 
 		try {
-			String[] sdata1 = data1.split("\":\"");
-			String pname = sdata1[1].split("\"")[0];
-			String pid = sdata1[2].split("\"")[0];
+			Map<String, String> nameIdJson = new Gson().fromJson(nameIdJsonString, new TypeToken<HashMap<String, String>>() {}.getType());
 
-			String data2 = DataFunctions.readStringFromURL(GlobalVariables.skindataurl + pid);
-			if (data2.equals("")) {
+			String headName = nameIdJson.get("name");
+			String headUUID = nameIdJson.get("id");
+
+			String profileJsonString = DataFunctions.readStringFromURL(GlobalVariables.skindataurl + headUUID);
+			if (profileJsonString.equals("")) {
 				return null;
 			}
 
-			String[] sdata2 = data2.replaceAll(" ", "").split("value\":\"");
+			String[] rawValue = profileJsonString.replaceAll(" ", "").split("value\":\"");
 
-			String tvalue = sdata2[1].split("\"")[0];
-			String d = new String(Base64.getDecoder().decode((tvalue.getBytes())));
+			String texturevalue = rawValue[1].split("\"")[0];
+			String d = new String(Base64.getDecoder().decode((texturevalue.getBytes())));
 
 			String texture = Base64.getEncoder().encodeToString((("{\"textures\"" + d.split("\"textures\"")[1]).getBytes()));
 			String oldid = new UUID(texture.hashCode(), texture.hashCode()).toString();
 
-			return getTexturedHead(pname + "'s Head", texture, oldid, 1);
+			return HeadFunctions.getTexturedHead(headName + "'s Head", texture, oldid, 1);
 		}
 		catch (ArrayIndexOutOfBoundsException ignored) { }
 
