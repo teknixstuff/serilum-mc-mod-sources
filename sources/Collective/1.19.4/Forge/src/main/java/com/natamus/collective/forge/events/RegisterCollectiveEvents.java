@@ -24,7 +24,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -51,26 +51,16 @@ public class RegisterCollectiveEvents {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onMobSpawnerSpecialSpawn(LivingSpawnEvent.SpecialSpawn e) {
+    public void onMobSpawnerSpecialSpawn(MobSpawnEvent.FinalizeSpawn e) {
         Level Level = WorldFunctions.getWorldIfInstanceOfAndNotRemote(e.getLevel());
         if (Level == null) {
             return;
         }
 
-        if (e.getSpawner() != null) {
-            e.getEntity().addTag(CollectiveReference.MOD_ID + ".fromspawner");
-        }
-    }
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onMobSpawnerCheckSpawn(LivingSpawnEvent.CheckSpawn e) {
-        Level Level = WorldFunctions.getWorldIfInstanceOfAndNotRemote(e.getLevel());
-        if (Level == null) {
-            return;
-        }
-
-        if (e.getSpawner() != null) {
-            e.getEntity().addTag(CollectiveReference.MOD_ID + ".fromspawner");
+        if (!e.isSpawnCancelled()) {
+            if (e.getSpawner() != null) {
+                e.getEntity().addTag(CollectiveReference.MOD_ID + ".fromspawner");
+            }
         }
     }
 

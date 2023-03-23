@@ -16,7 +16,7 @@
 
 package com.natamus.betterspawnercontrol;
 
-import com.natamus.betterspawnercontrol.events.MobSpawnEvent;
+import com.natamus.betterspawnercontrol.events.MobSpawnerEvent;
 import com.natamus.betterspawnercontrol.util.Reference;
 import com.natamus.collective.check.RegisterMod;
 import com.natamus.collective.fabric.callbacks.CollectiveSpawnEvents;
@@ -40,7 +40,7 @@ public class ModFabric implements ModInitializer {
 
 	private void loadEvents() {
 		CollectiveSpawnEvents.MOB_CHECK_SPAWN.register((Mob entity, ServerLevel world, BlockPos spawnerPos, MobSpawnType spawnReason) -> {
-			return MobSpawnEvent.onMobSpawn(entity, world, spawnerPos, spawnReason);
+			return MobSpawnerEvent.onMobSpawn(entity, world, spawnerPos, spawnReason);
 		});
 	}
 

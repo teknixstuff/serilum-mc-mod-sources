@@ -16,7 +16,7 @@
 
 package com.natamus.betterspawnercontrol;
 
-import com.natamus.betterspawnercontrol.forge.events.ForgeMobSpawnEvent;
+import com.natamus.betterspawnercontrol.forge.events.ForgeMobSpawnerEvent;
 import com.natamus.betterspawnercontrol.util.Reference;
 import com.natamus.collective.check.RegisterMod;
 import net.minecraftforge.common.MinecraftForge;
@@ -39,7 +39,7 @@ public class ModForge {
 	}
 
 	private void loadComplete(final FMLLoadCompleteEvent event) {
-    	MinecraftForge.EVENT_BUS.register(new ForgeMobSpawnEvent());
+    	MinecraftForge.EVENT_BUS.register(new ForgeMobSpawnerEvent());
 	}
 
 	private static void setGlobalConstants() {

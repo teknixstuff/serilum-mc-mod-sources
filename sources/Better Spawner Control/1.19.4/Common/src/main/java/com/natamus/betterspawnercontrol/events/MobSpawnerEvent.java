@@ -30,7 +30,7 @@ import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 
-public class MobSpawnEvent {
+public class MobSpawnerEvent {
 	public static boolean onMobSpawn(Mob entity, ServerLevel world, BlockPos spawnerPos, MobSpawnType spawnReason) {
 		if (EntityFunctions.isEntityFromSpawner(entity)) {
 			if (spawnerPos == null) {

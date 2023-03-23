@@ -25,7 +25,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent.LevelTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
@@ -46,7 +46,7 @@ public class ForgeCampfireEvent {
 	}
 	
 	@SubscribeEvent
-	public void onEntityCheckSpawn(LivingSpawnEvent.CheckSpawn e) {
+	public void onEntityCheckSpawn(MobSpawnEvent.FinalizeSpawn e) {
 		Level level = WorldFunctions.getWorldIfInstanceOfAndNotRemote(e.getLevel());
 		if (level == null) {
 			return;
@@ -57,7 +57,7 @@ public class ForgeCampfireEvent {
 			return;
 		}
 
-		if (!CampfireEvent.onEntityCheckSpawn((Mob)entity, (ServerLevel)level, null, e.getSpawnReason())) {
+		if (!CampfireEvent.onEntityCheckSpawn((Mob)entity, (ServerLevel)level, null, e.getSpawnType())) {
 			e.setResult(Result.DENY);
 		}
 	}
