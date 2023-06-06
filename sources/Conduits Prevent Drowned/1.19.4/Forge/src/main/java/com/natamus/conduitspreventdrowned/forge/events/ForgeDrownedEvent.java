@@ -23,7 +23,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
@@ -42,7 +41,8 @@ public class ForgeDrownedEvent {
 		}
 		
 		if (!DrownedEvent.onDrownedSpawn((Mob)entity, (ServerLevel)level, null, e.getSpawnType())) {
-			e.setResult(Event.Result.DENY);
+			e.setSpawnCancelled(true);
+			e.setCanceled(true);
 		}
 	}
 }

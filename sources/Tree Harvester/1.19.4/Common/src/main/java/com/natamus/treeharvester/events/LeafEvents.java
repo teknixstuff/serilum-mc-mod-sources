@@ -64,8 +64,11 @@ public class LeafEvents {
 
 				BlockState state = level.getBlockState(leafPos);
 				if (Util.isTreeLeaf(state.getBlock())) {
-					state.tick(level, leafPos, level.random);
-					state.randomTick(level, leafPos, level.random);
+					try {
+						state.tick(level, leafPos, level.random);
+						state.randomTick(level, leafPos, level.random);
+					}
+					catch (IllegalArgumentException ignored) { }
 
 					leavesLeft--;
 					if (leavesLeft < 0) {

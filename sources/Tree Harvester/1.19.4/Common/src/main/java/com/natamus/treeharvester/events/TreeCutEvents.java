@@ -59,6 +59,9 @@ public class TreeCutEvents {
 				}
 			}
 		}
+		else {
+			Variables.harvestSpeedCache.remove(cachepair);
+		}
 
 		Block block = level.getBlockState(bpos).getBlock();
 		if (!Util.isTreeLog(block)) {

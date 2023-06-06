@@ -50,9 +50,7 @@ public class TreeProcessing {
 			prevleafcount = leafcount;
 			prevlogCount = logCount;
 
-			Iterator<BlockPos> it = BlockPos.betweenClosedStream(pos.getX()-2, pos.getY()+(y-1), pos.getZ()-2, pos.getX()+2, pos.getY()+(y-1), pos.getZ()+2).iterator();
-			while (it.hasNext()) {
-				BlockPos npos = it.next();
+			for (BlockPos npos : BlockPos.betweenClosed(pos.getX()-2, pos.getY()+(y-1), pos.getZ()-2, pos.getX()+2, pos.getY()+(y-1), pos.getZ()+2)) {
 				Block nblock = level.getBlockState(npos).getBlock();
 				if (CompareBlockFunctions.isTreeLeaf(nblock, ConfigHandler.enableNetherTrees) || Util.isGiantMushroomLeafBlock(nblock)) {
 					leafcount-=1;

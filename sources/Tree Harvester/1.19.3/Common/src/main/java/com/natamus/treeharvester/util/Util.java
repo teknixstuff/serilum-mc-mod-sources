@@ -31,7 +31,7 @@ import java.util.List;
 
 public class Util {
 	public static boolean isTreeLog(Block block) {
-		return CompareBlockFunctions.isTreeLog(block) || isGiantMushroomStemBlock(block) || isTreeRoot(block);
+		return (CompareBlockFunctions.isTreeLog(block) || isGiantMushroomStemBlock(block) || isTreeRoot(block)) && !block.getName().getString().toLowerCase().contains("stripped");
 	}
 	public static boolean isTreeLeaf(Block block) {
 		return CompareBlockFunctions.isTreeLeaf(block, ConfigHandler.enableNetherTrees) || isGiantMushroomLeafBlock(block);

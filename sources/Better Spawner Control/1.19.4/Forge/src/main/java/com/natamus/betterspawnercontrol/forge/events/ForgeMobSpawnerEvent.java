@@ -24,7 +24,6 @@ import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
-import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
@@ -46,7 +45,8 @@ public class ForgeMobSpawnerEvent {
 
 			BlockPos spawnerPos = spawnerEntity.getBlockPos();
 			if (!(MobSpawnerEvent.onMobSpawn(e.getEntity(), (ServerLevel)level, spawnerPos, null))) {
-				e.setResult(Result.DENY);
+				e.setSpawnCancelled(true);
+				e.setCanceled(true);
 			}
 		}
 	}

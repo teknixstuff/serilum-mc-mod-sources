@@ -75,8 +75,9 @@ public class RegisterMod {
 				}
 				
 				StringFunctions.sendMessage(player, "You are receiving this message because you are using some of Serilum's mods, but probably haven't downloaded them from the original source. Unofficial sources can contain malicious software, supply no income for developers and host outdated versions.", ChatFormatting.RED, projecturl);
-				StringFunctions.sendMessage(player, "Serilum's mod downloads are only officially available at:", ChatFormatting.DARK_GREEN, projecturl);
-				StringFunctions.sendMessage(player, " https://curseforge.com/members/serilum/projects (click)", ChatFormatting.YELLOW, projecturl);
+				StringFunctions.sendMessage(player, "Serilum's mod downloads are only officially available at CurseForge and Modrinth.", ChatFormatting.DARK_GREEN, projecturl);
+				StringFunctions.sendMessage(player, "  CF: https://curseforge.com/members/serilum/projects", ChatFormatting.YELLOW, projecturl);
+				StringFunctions.sendMessage(player, "  MR: https://modrinth.com/user/Serilum", ChatFormatting.YELLOW, "https://modrinth.com/user/Serilum");
 				StringFunctions.sendMessage(player, "You won't see this message again in this instance. Thank you for reading.", ChatFormatting.DARK_GREEN, projecturl);
 				StringFunctions.sendMessage(player, "-Rick (Serilum)", ChatFormatting.YELLOW, projecturl);
 				
