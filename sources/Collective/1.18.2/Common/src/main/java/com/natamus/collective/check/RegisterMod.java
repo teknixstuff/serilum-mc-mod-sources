@@ -39,8 +39,15 @@ public class RegisterMod {
 	private static final HashMap<String, String> jartoname = new HashMap<String, String>();
 	public static boolean shouldDoCheck = true;
 	
-	public static void register(String modname, String modid, String modversion, String version) {
-		String jarname = modid + "-" + version.replaceAll("\\[", "").replaceAll("\\]","") + "-" + modversion + ".jar";
+	public static void register(String modname, String modid, String modVersion, String rawGameVersion) {
+		String gameVersion = rawGameVersion.replaceAll("\\[", "").replaceAll("]","");
+
+		int dotCount = gameVersion.length() - gameVersion.replace(".", "").length();
+		if (dotCount == 1) {
+			gameVersion += ".0";
+		}
+
+		String jarname = modid + "-" + gameVersion + "-" + modVersion + ".jar";
 		
 		jarlist.add(jarname);
 		jartoname.put(jarname, modname);

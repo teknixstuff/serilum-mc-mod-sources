@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "id": "pumpkillagersquest",
+  "version": "3.2",
+
+  "name": "Pumpkillager's Quest",
+  "description": "Help out the Pumpkillager! With custom encounters, cosmetics and a boss fight. A SpookyJam 2022 submission.",
+  "authors": [ "Rick South" ],
+  "contact": {
+    "homepage": "https://curseforge.com/minecraft/mc-mods/pumpkillagers-quest",
+    "sources": "https://github.com/ricksouth/serilum-mc-mod-sources/tree/main/sources/Pumpkillager%27s%20Quest",
+    "issues": "https://github.com/ricksouth/serilum-mc-mods/labels/Mod:%20Pumpkillager%27s%20Quest"
+  },
+
+  "license": "All Right Reserved",
+  "icon": "icon.png",
+
+  "environment": "*",
+  "entrypoints": { "main": [ "com.natamus.pumpkillagersquest.ModFabric" ], "client": [ "com.natamus.pumpkillagersquest.ModFabricClient" ], "modmenu": [ "com.natamus.pumpkillagersquest.fabric.config.IntegrateModMenu" ] },
+  "mixins": [
+    "pumpkillagersquest_fabric.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.12.5",
+    "fabric": "*",
+    "minecraft": ">=1.20",
+    "java": ">=17",
+    "collective": ">=6.56"
+  },
+
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/vFren9YzzN",
+        "Donate <3" : "https://ricksouth.com/donate"
+      }
+    }
+  },
+
+  "contributors": [
+	  " ",
+	  "Thank you very much to my Membership sponsors for supporting the development of this mod!",
+	  " ",
+	  "If you would like to contribute too, check out https://ricksouth.com/donate.",
+	  " ",
+	  "Membership sponsors:",
+	  " Adam E",
+	  " Alister",
+	  " aternosorg",
+	  " Cherriesaurus",
+	  " FireStriker",
+	  " Greg Johnson",
+	  " Kreezxil",
+	  " Michael W. S.",
+	  " Mir3JonCZ",
+	  " Rebecca Hb.",
+	  " Shana Gitnick",
+	  " silver Bowsman",
+	  " Tyler Behl"
+  ]
+}

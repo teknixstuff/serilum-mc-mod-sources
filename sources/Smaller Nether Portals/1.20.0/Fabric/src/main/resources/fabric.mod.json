@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "smallernetherportals",
+  "version": "3.4",
+
+  "name": "Smaller Nether Portals",
+  "description": "Allows the creation of smaller nether portals, specifically 1x2, 1x3 and 2x2.",
+  "authors": [ "Rick South" ],
+  "contact": {
+    "homepage": "https://curseforge.com/minecraft/mc-mods/smaller-nether-portals",
+    "sources": "https://github.com/ricksouth/serilum-mc-mod-sources/tree/main/sources/Smaller%20Nether%20Portals",
+    "issues": "https://github.com/ricksouth/serilum-mc-mods/labels/Mod:%20Smaller%20Nether%20Portals"
+  },
+
+  "license": "All Right Reserved",
+  "icon": "icon.png",
+
+  "environment": "*",
+  "entrypoints": { "main": [ "com.natamus.smallernetherportals.ModFabric" ] },
+
+  "depends": {
+    "fabricloader": ">=0.12.5",
+    "fabric": "*",
+    "minecraft": ">=1.20",
+    "java": ">=17",
+    "collective": ">=6.56"
+  },
+
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/vFren9YzzN",
+        "Donate <3" : "https://ricksouth.com/donate"
+      }
+    }
+  },
+
+  "contributors": [
+	  " ",
+	  "Thank you very much to my Membership sponsors for supporting the development of this mod!",
+	  " ",
+	  "If you would like to contribute too, check out https://ricksouth.com/donate.",
+	  " ",
+	  "Membership sponsors:",
+	  " Adam E",
+	  " Alister",
+	  " aternosorg",
+	  " Cherriesaurus",
+	  " FireStriker",
+	  " Greg Johnson",
+	  " Kreezxil",
+	  " Michael W. S.",
+	  " Mir3JonCZ",
+	  " Rebecca Hb.",
+	  " Shana Gitnick",
+	  " silver Bowsman",
+	  " Tyler Behl"
+  ]
+}
