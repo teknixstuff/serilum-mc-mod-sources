@@ -109,7 +109,7 @@ public class SetVillageSignEvent {
 					}
 
 					SignBlockEntity signentity = (SignBlockEntity) te;
-					signentity.getFrontText().setMessage(0, Component.literal("[Area] 60"));
+					signentity.setText(signentity.getFrontText().setMessage(0, Component.literal("[Area] 60")), true);
 					TileEntityFunctions.updateTileEntity(serverlevel, signpos, signentity);
 				}
 			}

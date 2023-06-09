@@ -24,6 +24,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
+import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.animal.horse.Llama;
 import net.minecraft.world.entity.animal.horse.TraderLlama;
@@ -184,6 +185,19 @@ public class MobHeads {
 			int type = axolotl.getVariant().getId();
 			if (type < axolotltypes.size()) {
 				mobname = axolotltypes.get(type) + "_axolotl";
+			}
+		}
+		else if (entity instanceof Frog) {
+			Frog frog = (Frog)entity;
+			FrogVariant variant = frog.getVariant();
+			if (variant.equals(FrogVariant.WARM)) {
+				mobname = "warm_frog";
+			}
+			else if (variant.equals(FrogVariant.COLD)) {
+				mobname = "cold_frog";
+			}
+			else if (variant.equals(FrogVariant.TEMPERATE)) {
+				mobname = "temperate_frog";
 			}
 		}
 		else if (entity instanceof Villager) {

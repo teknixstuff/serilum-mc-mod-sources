@@ -16,10 +16,10 @@
 
 package com.natamus.justmobheads.util;
 
+import com.mojang.datafixers.util.Pair;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.mojang.datafixers.util.Pair;
 
 public class HeadData {
 	public static Map<String, Pair<String, String>> headdata = new HashMap<String, Pair<String, String>>();
@@ -203,16 +203,17 @@ public class HeadData {
 		defaultchances.put("zombie_weaponsmith", 0.1); headdata.put("zombie_weaponsmith", new Pair<String, String>("888413da-fc55-4fdf-a47c-7485ed89cd8c", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjg2ZmE4ZDlmZmI3YjcwYjBlODk0NGE1NWRiMzMwNWFlYzM0NmFiMWRlNTRjZDk3YWVjYTVjNzIwZDk1ZjdlYSJ9fX0="));
 
 
-		boolean onefifteen = Reference.ACCEPTED_VERSIONS.contains("1.15.");
-		boolean onesixteen = Reference.ACCEPTED_VERSIONS.contains("1.16.");
-		boolean oneseventeen = Reference.ACCEPTED_VERSIONS.contains("1.17.");
-		boolean oneeighteen = Reference.ACCEPTED_VERSIONS.contains("1.18.");
-		boolean onenineteen = Reference.ACCEPTED_VERSIONS.contains("1.19.");
+		boolean onefifteen = Reference.ACCEPTED_VERSIONS.contains("1.15");
+		boolean onesixteen = Reference.ACCEPTED_VERSIONS.contains("1.16");
+		boolean oneseventeen = Reference.ACCEPTED_VERSIONS.contains("1.17");
+		boolean oneeighteen = Reference.ACCEPTED_VERSIONS.contains("1.18");
+		boolean onenineteen = Reference.ACCEPTED_VERSIONS.contains("1.19");
+		boolean onetwenty = Reference.ACCEPTED_VERSIONS.contains("1.20");
 
-		if (onefifteen || onesixteen || oneseventeen || oneeighteen || onenineteen) {
+		if (onefifteen || onesixteen || oneseventeen || oneeighteen || onenineteen || onetwenty) {
 			defaultchances.put("bee", 0.1); headdata.put("bee", new Pair<String, String>("77342662-8870-445a-869f-f0aef1406b3d", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTlhYzE2ZjI5NmI0NjFkMDVlYTA3ODVkNDc3MDMzZTUyNzM1OGI0ZjMwYzI2NmFhMDJmMDIwMTU3ZmZjYTczNiJ9fX0="));
 		}
-		if (onesixteen || oneseventeen || oneeighteen || onenineteen) {
+		if (onesixteen || oneseventeen || oneeighteen || onenineteen || onetwenty) {
 			defaultchances.put("hoglin", 0.1); headdata.put("hoglin", new Pair<String, String>("8196c240-e96a-4434-b630-6b191ceeb480", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWJiOWJjMGYwMWRiZDc2MmEwOGQ5ZTc3YzA4MDY5ZWQ3Yzk1MzY0YWEzMGNhMTA3MjIwODU2MWI3MzBlOGQ3NSJ9fX0="));
 			defaultchances.put("piglin", 0.05); headdata.put("piglin", new Pair<String, String>("dcc2d7eb-daca-4b6f-805a-a454e0d1d902", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTBiYzlkYmI0NDA0YjgwMGY4Y2YwMjU2MjIwZmY3NGIwYjcxZGJhOGI2NjYwMGI2NzM0ZjRkNjMzNjE2MThmNSJ9fX0="));
 			defaultchances.put("piglin_brute", 0.1); headdata.put("piglin_brute", new Pair<String, String>("a6db33b5-1e60-4cbe-a38f-881579f94336", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2UzMDBlOTAyNzM0OWM0OTA3NDk3NDM4YmFjMjllM2E0Yzg3YTg0OGM1MGIzNGMyMTI0MjcyN2I1N2Y0ZTFjZiJ9fX0="));
@@ -223,7 +224,7 @@ public class HeadData {
 		else {
 			defaultchances.put("zombie_pigman", 0.05); headdata.put("zombie_pigman", new Pair<String, String>("6540c046-d6ea-4aff-9766-32a54ebe6958", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzRlOWM2ZTk4NTgyZmZkOGZmOGZlYjMzMjJjZDE4NDljNDNmYjE2YjE1OGFiYjExY2E3YjQyZWRhNzc0M2ViIn19fQ=="));
 		}
-		if (oneseventeen || oneeighteen || onenineteen) {
+		if (oneseventeen || oneeighteen || onenineteen || onetwenty) {
 			defaultchances.put("lucy_axolotl", 0.5); headdata.put("lucy_axolotl", new Pair<String, String>("c6c9c2a1-f74a-4797-9d5d-e4b01f71e641", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjRhZDExYWNkMjkzYTNmMzk0NGQ4ZGUwM2YwNWU3MzFiOGYwMmQ5OWNlMGMyYTY4NWJlNzA1YzU2MjY0NzYxYSJ9fX0="));
 			defaultchances.put("wild_axolotl", 0.5); headdata.put("wild_axolotl", new Pair<String, String>("ac89cebb-a384-45b6-a1b3-a55e4749e1ff", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWExMGJjNGYzNjhlMTJjY2JkZWE0NjA2ZDJkM2ZiMjE5ZTkyNjM0MTA1ZDE5NzRkZTcxMGQxZmRiOWIwMjlhYyJ9fX0="));
 			defaultchances.put("gold_axolotl", 0.5); headdata.put("gold_axolotl", new Pair<String, String>("c661202e-5e98-4f87-a0f7-63987d9f12a8", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjIwZTgxNzU3MThlYWMzOTY3MmU5ZGM2YzRlZWNjMGEzMmI0YzYyOTcwZDQ2YWJmNTIxN2FjNjUyYzU2ZjMxNyJ9fX0="));
@@ -234,7 +235,7 @@ public class HeadData {
 			defaultchances.put("glow_squid", 0.2); headdata.put("glow_squid", new Pair<String, String>("de0e5ce0-b979-4bd2-a963-e665e424b525", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTczMjdlZTExODEyYjc2NGM3YWRlNzBiMjgyY2NlNGM1OGU2MzViMjAxNTI0NDA4MWQxNDkwNTQzZGE3MjgwZSJ9fX0="));
 		}
 
-		if (onenineteen) {
+		if (onenineteen || onetwenty) {
 			defaultchances.put("allay", 0.5); headdata.put("allay", new Pair<String, String>("3338ac33-a526-4b43-b838-061446933966", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTUwMjk0YTE3NDczMTBmMTA0MTI0YzYzNzNjYzYzOWI3MTJiYWE1N2I3ZDkyNjI5N2I2NDUxODhiN2JiOWFiOSJ9fX0="));
 
 			defaultchances.put("cold_frog", 0.1); headdata.put("cold_frog", new Pair<String, String>("8cc32108-4d41-456e-a3f9-738ccbf6b6f5", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2U2MmU4YTA0OGQwNDBlYjA1MzNiYTI2YTg2NmNkOWMyZDA5MjhjOTMxYzUwYjQ0ODJhYzNhMzI2MWZhYjZmMCJ9fX0="));
@@ -244,7 +245,12 @@ public class HeadData {
 
 			defaultchances.put("warden", 1.0); headdata.put("warden", new Pair<String, String>("5b4e4a47-fb56-41b9-9bcd-62f46ed51e3f", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmNmMzY3NGIyZGRjMGVmN2MzOWUzYjljNmI1ODY3N2RlNWNmMzc3ZDJlYjA3M2YyZjNmZTUwOTE5YjFjYTRjOSJ9fX0="));
 
+			// 1.19 experimental:
 			defaultchances.put("camel", 0.2); headdata.put("camel", new Pair<String, String>("250f9c55-d0e6-4271-870f-752c44741a36", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzRiOGEzMzNkZmE5MmU3ZTVhOTVhZDRhZTJkODRiMWJhZmEzM2RjMjhjMDU0OTI1Mjc3ZjYwZTc5ZGFmYzhjNCJ9fX0="));
+		}
+
+		if (onetwenty) {
+			defaultchances.put("sniffer", 0.25); headdata.put("sniffer", new Pair<String, String>("52704083-c7f8-4562-b20c-08b2ff0b90dc", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODdhZDkyMGE2NmUzOGNjMzQyNmE1YmZmMDg0NjY3ZTg3NzIxMTY5MTVlMjk4MDk4NTY3YzEzOWYyMjJlMmM0MiJ9fX0="));
 		}
 
 

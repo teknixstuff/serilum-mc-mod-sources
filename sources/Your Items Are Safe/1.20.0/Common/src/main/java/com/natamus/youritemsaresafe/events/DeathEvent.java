@@ -151,7 +151,7 @@ public class DeathEvent {
 			}
 		}
 		
-		BlockPos deathpos = player.blockPosition().immutable();
+		BlockPos deathpos = player.blockPosition().atY((int)Math.ceil(player.position().y)).immutable();
 		if (CompareBlockFunctions.isAirOrOverwritableBlock(level.getBlockState(deathpos.below()).getBlock())) {
 			deathpos = deathpos.below().immutable();
 		}
@@ -257,7 +257,7 @@ public class DeathEvent {
 			}
 			
 			SignBlockEntity signentity = (SignBlockEntity)te;
-			signentity.getFrontText().setMessage(1, Component.literal(playername));
+			signentity.setText(signentity.getFrontText().setMessage(1, Component.literal(playername)), true);
 			TileEntityFunctions.updateTileEntity(level, signpos, signentity);
 		}
 	}

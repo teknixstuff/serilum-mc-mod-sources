@@ -34,6 +34,7 @@ import net.minecraft.world.level.block.StandingSignBlock;
 import net.minecraft.world.level.block.WallSignBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.world.level.block.entity.SignText;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -145,10 +146,12 @@ public class Util {
 				}
 				
 				i = 0;
+				SignText signText = signBlockEntity.getFrontText();
 				for (String line : newsigncontentlist) {
-					signBlockEntity.getFrontText().setMessage(i, Component.literal(line));
+					signText = signText.setMessage(i, Component.literal(line));
 					i+=1;
 				}
+				signBlockEntity.setText(signText, true);
 				
 				updatesign = true;
 			}

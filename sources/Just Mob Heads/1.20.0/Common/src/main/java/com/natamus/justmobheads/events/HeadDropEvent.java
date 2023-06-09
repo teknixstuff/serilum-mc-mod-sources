@@ -110,7 +110,7 @@ public class HeadDropEvent {
 			else {
 				chance = ConfigHandler.creeperSkeletonZombieDropChance;
 			}
-			
+
 			if (chance == -1) {
 				if (num > ConfigHandler.overallDropChance + extrachance) {
 					return;
@@ -125,7 +125,6 @@ public class HeadDropEvent {
 		}
 		
 		BlockPos pos = entity.blockPosition();
-		
 		ItemEntity mobhead;
 		if (headname.equals("")) {
 			ItemStack headstack = MobHeads.getMobHead(mobname, 1);

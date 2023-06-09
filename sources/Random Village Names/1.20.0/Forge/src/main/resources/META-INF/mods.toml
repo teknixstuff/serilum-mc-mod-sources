@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="randomvillagenames"
-version="3.2"
+version="3.3"
 displayName="Random Village Names"
 displayURL="https://curseforge.com/minecraft/mc-mods/random-village-names"
 authors="Rick South"
@@ -22,7 +22,7 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.randomvillagenames]]
     modId="collective"
     mandatory=true
-    versionRange="[6.56,)"
+    versionRange="[6.57,)"
     ordering="NONE"
     side="BOTH"
 

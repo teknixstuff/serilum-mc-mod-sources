@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="areas"
-version="4.3"
+version="4.4"
 displayName="Areas"
 displayURL="https://curseforge.com/minecraft/mc-mods/areas"
 authors="Rick South"
