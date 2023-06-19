@@ -36,6 +36,7 @@
   ],
   "client": [
     "ChatListenerMixin",
+    "ClientLevelMixin",
     "ItemInHandRendererMixin",
     "MinecraftMixin",
     "MultiPlayerGameModeMixin",

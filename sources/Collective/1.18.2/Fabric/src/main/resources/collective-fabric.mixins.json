@@ -36,6 +36,7 @@
     "TeleportCommandMixin"
   ],
   "client": [
+    "ClientLevelMixin",
     "ClientPacketListenerMixin",
     "ItemInHandRendererMixin",
     "MinecraftMixin",

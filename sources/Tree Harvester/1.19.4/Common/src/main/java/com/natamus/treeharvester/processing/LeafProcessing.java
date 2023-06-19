@@ -22,10 +22,8 @@ import com.natamus.treeharvester.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.material.Material;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -113,9 +111,8 @@ public class LeafProcessing {
         }
     }
 
-    private static final List<Material> treeMaterials = Arrays.asList(Material.WOOD, Material.LEAVES, Material.GRASS, Material.NETHER_WOOD);
     private static boolean hasLogsWithinDistance(Level level, BlockPos checkPos, int distance) {
-        for (BlockPos treePos : BlockPosFunctions.getBlocksNextToEachOtherMaterial(level, checkPos, treeMaterials, distance)) {
+        for (BlockPos treePos : BlockPos.betweenClosed(checkPos.getX()-distance, checkPos.getY()-distance, checkPos.getZ()-distance, checkPos.getX()+distance, checkPos.getY()+distance, checkPos.getZ()+distance)) {
             if (Util.isTreeLog(level.getBlockState(treePos).getBlock())) {
                 return true;
             }

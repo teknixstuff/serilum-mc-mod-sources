@@ -44,7 +44,7 @@ public abstract class ChatListenerMixin {
 
     @Inject(method = "showMessageToPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;getChat()Lnet/minecraft/client/gui/components/ChatComponent;"), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
     public void showMessageToPlayer(ChatType.Bound bound, PlayerChatMessage playerChatMessage, Component component, GameProfile gameProfile, boolean bl, Instant instant, CallbackInfoReturnable<Boolean> cir, ChatTrustLevel chatTrustLevel, GuiMessageTag guiMessageTag, MessageSignature messageSignature, FilterMask filterMask) {
-        Component newMessage = CollectiveChatEvents.CLIENT_CHAT_RECEIVED.invoker().onClientChat(bound.chatType(), component, gameProfile.getId());
+        Component newMessage = CollectiveChatEvents.CLIENT_CHAT_RECEIVED.invoker().onClientChat(bound.chatType(), component, (gameProfile != null ? gameProfile.getId() : null));
 		if (component != newMessage) {
             this.minecraft.gui.getChat().addMessage(newMessage, messageSignature, guiMessageTag);
             this.narrateChatMessage(bound, playerChatMessage.decoratedContent());

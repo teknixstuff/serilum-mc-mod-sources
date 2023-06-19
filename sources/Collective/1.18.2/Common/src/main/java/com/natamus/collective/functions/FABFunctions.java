@@ -30,6 +30,7 @@ import net.minecraft.world.level.block.WallSignBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
 
 import java.util.*;
 
@@ -37,7 +38,7 @@ public class FABFunctions {
 	private static final Map<Block, WeakHashMap<Level, List<BlockPos>>> getMapFromBlock = new HashMap<Block, WeakHashMap<Level, List<BlockPos>>>();
 	private static final WeakHashMap<Level, Map<Date, BlockPos>> timeoutpositions = new WeakHashMap<Level, Map<Date, BlockPos>>();
 
-	public static List<BlockEntity> getBlockEntitiesAroundPosition(Level world, BlockPos pos, Integer radius) {
+	public static List<BlockEntity> getBlockEntitiesAroundPosition(Level level, BlockPos pos, Integer radius) {
 		List<BlockEntity> blockentities = new ArrayList<BlockEntity>();
 
 		int chunkradius = (int)Math.ceil(radius/16.0);
@@ -46,7 +47,12 @@ public class FABFunctions {
 
 		for (int x = chunkPosX - chunkradius; x < chunkPosX + chunkradius; x++) {
 			for (int z = chunkPosZ - chunkradius; z < chunkPosZ + chunkradius; z++) {
-				for (BlockEntity be : world.getChunk(x, z).getBlockEntities().values()) {
+				LevelChunk levelChunk = level.getChunk(x, z);
+				if (!level.isLoaded(levelChunk.getPos().getWorldPosition())) {
+					continue;
+				}
+
+				for (BlockEntity be : levelChunk.getBlockEntities().values()) {
 					if (!blockentities.contains(be)) {
 						blockentities.add(be);
 					}
@@ -57,13 +63,13 @@ public class FABFunctions {
 		return blockentities;
 	}
 
-	public static List<BlockPos> getAllTaggedTileEntityPositionsNearbyEntity(TagKey<Block> tetag, Integer radius, Level world, Entity entity) {
-		return getAllTaggedTileEntityPositionsNearbyPosition(tetag, radius, world, entity.blockPosition());
+	public static List<BlockPos> getAllTaggedTileEntityPositionsNearbyEntity(TagKey<Block> tetag, Integer radius, Level level, Entity entity) {
+		return getAllTaggedTileEntityPositionsNearbyPosition(tetag, radius, level, entity.blockPosition());
 	}
 
-	public static List<BlockPos> getAllTaggedTileEntityPositionsNearbyPosition(TagKey<Block> tetag, Integer radius, Level world, BlockPos pos) {
+	public static List<BlockPos> getAllTaggedTileEntityPositionsNearbyPosition(TagKey<Block> tetag, Integer radius, Level level, BlockPos pos) {
 		List<BlockPos> nearbypositions = new ArrayList<BlockPos>();
-		List<BlockEntity> blockentities = getBlockEntitiesAroundPosition(world, pos, radius);
+		List<BlockEntity> blockentities = getBlockEntitiesAroundPosition(level, pos, radius);
 
 		for (BlockEntity loadedtileentity : blockentities) {
 			BlockState loadedtilestate = loadedtileentity.getBlockState();
@@ -82,13 +88,13 @@ public class FABFunctions {
 		return nearbypositions;
 	}
 
-	public static List<BlockPos> getAllTileEntityPositionsNearbyEntity(BlockEntityType<?> tetype, Integer radius, Level world, Entity entity) {
-		return getAllTileEntityPositionsNearbyPosition(tetype, radius, world, entity.blockPosition());
+	public static List<BlockPos> getAllTileEntityPositionsNearbyEntity(BlockEntityType<?> tetype, Integer radius, Level level, Entity entity) {
+		return getAllTileEntityPositionsNearbyPosition(tetype, radius, level, entity.blockPosition());
 	}
 
-	public static List<BlockPos> getAllTileEntityPositionsNearbyPosition(BlockEntityType<?> tetype, Integer radius, Level world, BlockPos pos) {
+	public static List<BlockPos> getAllTileEntityPositionsNearbyPosition(BlockEntityType<?> tetype, Integer radius, Level level, BlockPos pos) {
 		List<BlockPos> nearbypositions = new ArrayList<BlockPos>();
-		List<BlockEntity> blockentities = getBlockEntitiesAroundPosition(world, pos, radius);
+		List<BlockEntity> blockentities = getBlockEntitiesAroundPosition(level, pos, radius);
 
 		for (BlockEntity loadedtileentity : blockentities) {
 			BlockEntityType<?> loadedtiletype = loadedtileentity.getType();
@@ -107,25 +113,25 @@ public class FABFunctions {
 		return nearbypositions;
 	}
 
-	public static BlockPos getRequestedBlockAroundEntitySpawn(Block rawqueryblock, Integer radius, Double radiusmodifier, Level world, Entity entity) {
+	public static BlockPos getRequestedBlockAroundEntitySpawn(Block rawqueryblock, Integer radius, Double radiusmodifier, Level level, Entity entity) {
 		Block requestedblock = processCommonBlock(rawqueryblock);
-		WeakHashMap<Level, List<BlockPos>> worldblocks = getMap(requestedblock);
+		WeakHashMap<Level, List<BlockPos>> levelblocks = getMap(requestedblock);
 
 		BlockPos epos = entity.blockPosition();
 
 		List<BlockPos> currentblocks;
 		BlockPos removeblockpos = null;
 
-		if (worldblocks.containsKey(world)) {
-			currentblocks = worldblocks.get(world);
+		if (levelblocks.containsKey(level)) {
+			currentblocks = levelblocks.get(level);
 
 			List<BlockPos> cbtoremove = new ArrayList<BlockPos>();
 			for (BlockPos cblock : currentblocks) {
-				if (!world.getChunkSource().hasChunk(cblock.getX() >> 4, cblock.getZ() >> 4)) {
+				if (!level.getChunkSource().hasChunk(cblock.getX() >> 4, cblock.getZ() >> 4)) {
 					cbtoremove.add(cblock);
 					continue;
 				}
-				if (!world.getBlockState(cblock).getBlock().equals(requestedblock)) {
+				if (!level.getBlockState(cblock).getBlock().equals(requestedblock)) {
 					cbtoremove.add(cblock);
 					continue;
 				}
@@ -147,8 +153,8 @@ public class FABFunctions {
 
 		// Timeout function which prevents too many of the loop through blocks.
 		Map<Date, BlockPos> timeouts;
-		if (timeoutpositions.containsKey(world)) {
-			timeouts = timeoutpositions.get(world);
+		if (timeoutpositions.containsKey(level)) {
+			timeouts = timeoutpositions.get(level);
 
 			List<Date> totoremove = new ArrayList<Date>();
 			if (timeouts.size() > 0) {
@@ -182,7 +188,7 @@ public class FABFunctions {
 		}
 
 		if (GlobalVariables.blocksWithTileEntity.containsKey(requestedblock)) {
-			List<BlockEntity> blockentities = getBlockEntitiesAroundPosition(world, epos, radius);
+			List<BlockEntity> blockentities = getBlockEntitiesAroundPosition(level, epos, radius);
 			BlockEntityType<?> tiletypetofind = GlobalVariables.blocksWithTileEntity.get(requestedblock);
 
 			for (BlockEntity loadedtileentity : blockentities) {
@@ -196,8 +202,8 @@ public class FABFunctions {
 
 					if (ltepos.closerThan(epos, radius*radiusmodifier)) {
 						currentblocks.add(ltepos.immutable());
-						worldblocks.put(world, currentblocks);
-						getMapFromBlock.put(requestedblock, worldblocks);
+						levelblocks.put(level, currentblocks);
+						getMapFromBlock.put(requestedblock, levelblocks);
 
 						return ltepos.immutable();
 					}
@@ -210,11 +216,11 @@ public class FABFunctions {
 				for (int y = -r; y < r; y++) {
 					for (int z = -r; z < r; z++) {
 						BlockPos cpos = epos.east(x).north(y).above(z);
-						BlockState state = world.getBlockState(cpos);
+						BlockState state = level.getBlockState(cpos);
 						if (state.getBlock().equals(requestedblock)) {
 							currentblocks.add(cpos.immutable());
-							worldblocks.put(world, currentblocks);
-							getMapFromBlock.put(requestedblock, worldblocks);
+							levelblocks.put(level, currentblocks);
+							getMapFromBlock.put(requestedblock, levelblocks);
 
 							return cpos.immutable();
 						}
@@ -224,18 +230,18 @@ public class FABFunctions {
 		}
 
 		timeouts.put(new Date(), epos.immutable());
-		timeoutpositions.put(world, timeouts);
+		timeoutpositions.put(level, timeouts);
 		return null;
 	}
 
-	public static BlockPos updatePlacedBlock(Block requestedblock, BlockPos bpos, Level world) {
-		BlockState state = world.getBlockState(bpos);
+	public static BlockPos updatePlacedBlock(Block requestedblock, BlockPos bpos, Level level) {
+		BlockState state = level.getBlockState(bpos);
 		if (state.getBlock().equals(requestedblock)) {
-			WeakHashMap<Level, List<BlockPos>> worldblocks = getMap(requestedblock);
+			WeakHashMap<Level, List<BlockPos>> levelblocks = getMap(requestedblock);
 
 			List<BlockPos> currentblocks;
-			if (worldblocks.containsKey(world)) {
-				currentblocks = worldblocks.get(world);
+			if (levelblocks.containsKey(level)) {
+				currentblocks = levelblocks.get(level);
 			}
 			else {
 				currentblocks = new ArrayList<BlockPos>();
@@ -243,8 +249,8 @@ public class FABFunctions {
 
 			if (!currentblocks.contains(bpos)) {
 				currentblocks.add(bpos);
-				worldblocks.put(world, currentblocks);
-				getMapFromBlock.put(requestedblock, worldblocks);
+				levelblocks.put(level, currentblocks);
+				getMapFromBlock.put(requestedblock, levelblocks);
 			}
 			return bpos;
 		}
@@ -254,14 +260,14 @@ public class FABFunctions {
 
 	// Internal util functions
 	private static WeakHashMap<Level,List<BlockPos>> getMap(Block requestedblock) {
-		WeakHashMap<Level, List<BlockPos>> worldblocks;
+		WeakHashMap<Level, List<BlockPos>> levelblocks;
 		if (getMapFromBlock.containsKey(requestedblock)) {
-			worldblocks = getMapFromBlock.get(requestedblock);
+			levelblocks = getMapFromBlock.get(requestedblock);
 		}
 		else {
-			worldblocks = new WeakHashMap<Level, List<BlockPos>>();
+			levelblocks = new WeakHashMap<Level, List<BlockPos>>();
 		}
-		return worldblocks;
+		return levelblocks;
 	}
 
 	private static Block processCommonBlock(Block requestedblock) {
