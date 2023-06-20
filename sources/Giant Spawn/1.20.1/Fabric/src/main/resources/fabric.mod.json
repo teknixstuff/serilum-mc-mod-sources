@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "giantspawn",
-  "version": "4.5",
+  "version": "4.6",
 
   "name": "Giant Spawn",
   "description": "Allows the giant to spawn naturally and other tweaks.",
@@ -26,7 +26,7 @@
     "fabric": "*",
     "minecraft": ">=1.20",
     "java": ">=17",
-    "collective": ">=6.57"
+    "collective": ">=6.61"
   },
 
   "custom": {

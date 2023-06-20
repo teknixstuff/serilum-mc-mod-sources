@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="justmobheads"
-version="7.2"
+version="7.3"
 displayName="Just Mob Heads"
 displayURL="https://curseforge.com/minecraft/mc-mods/just-mob-heads"
 authors="Rick South"
@@ -23,6 +23,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.justmobheads]]
     modId="collective"
     mandatory=true
-    versionRange="[6.57,)"
+    versionRange="[6.61,)"
     ordering="NONE"
     side="BOTH"

@@ -147,8 +147,13 @@ public class HeadDropEvent {
 			if (player.isCreative()) {
 				return true;
 			}
+
+			BlockEntity targetBlockEntity = world.getBlockEntity(pos);
+			if (!(targetBlockEntity instanceof SkullBlockEntity)) {
+				return true;
+			}
 			
-			SkullBlockEntity sbe = (SkullBlockEntity)world.getBlockEntity(pos);
+			SkullBlockEntity sbe = (SkullBlockEntity)targetBlockEntity;
 			if (sbe == null) {
 				return true;
 			}
