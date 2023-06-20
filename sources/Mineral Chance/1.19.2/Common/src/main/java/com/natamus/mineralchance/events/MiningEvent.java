@@ -21,15 +21,18 @@ import com.natamus.collective.fakeplayer.FakePlayer;
 import com.natamus.collective.functions.CompareBlockFunctions;
 import com.natamus.collective.functions.StringFunctions;
 import com.natamus.collective.functions.WorldFunctions;
+import com.natamus.collective.services.Services;
 import com.natamus.mineralchance.config.ConfigHandler;
 import com.natamus.mineralchance.util.Util;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -49,6 +52,17 @@ public class MiningEvent {
 		
 		if (player.isCreative()) {
 			return;
+		}
+
+		ItemStack handStack = player.getItemInHand(InteractionHand.MAIN_HAND);
+		if (!Services.TOOLFUNCTIONS.isPickaxe(handStack)) {
+			return;
+		}
+
+		if (ConfigHandler.disableMineralDropsWithSilkTouch) {
+			if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, handStack) >= 1) {
+				return;
+			}
 		}
 		
 		Block block = state.getBlock();

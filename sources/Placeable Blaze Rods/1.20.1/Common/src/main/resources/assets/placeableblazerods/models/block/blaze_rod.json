@@ -14,7 +14,7 @@
     "ambientocclusion": false,
     "textures": {
         "blaze_rod": "placeableblazerods:block/blaze_rod",
-        "particle": "placeableblazerods:block/blaze_rod"
+        "particle": "block/end_rod"
     },
     "elements": [
         {

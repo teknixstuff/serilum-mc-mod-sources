@@ -30,6 +30,7 @@ public class ConfigHandler extends DuskConfig {
 	@Entry(min = 0, max = 1.0) public static double extraMineralChanceOnNetherStoneBreak = 0.01;
 	@Entry public static boolean enableOverworldMinerals = true;
 	@Entry public static boolean enableNetherMinerals = true;
+	@Entry public static boolean disableMineralDropsWithSilkTouch = true;
 	@Entry public static boolean sendMessageOnMineralFind = true;
 	@Entry public static String foundMineralMessage = "You've found a mineral hidden in the block!";
 	@Entry public static boolean ignoreFakePlayers = true;
@@ -46,6 +47,9 @@ public class ConfigHandler extends DuskConfig {
 		));
 		configMetaData.put("enableNetherMinerals", Arrays.asList(
 			"If enabled, mining nether stone blocks in the nether has a chance to drop a nether mineral. These consist of quartz and gold nuggets."
+		));
+		configMetaData.put("disableMineralDropsWithSilkTouch", Arrays.asList(
+			"If enabled, minerals won't drop from stone mined with the silk touch enchantment."
 		));
 		configMetaData.put("sendMessageOnMineralFind", Arrays.asList(
 			"If enabled, sends a message when a mineral is found to the player who broke the stone block."

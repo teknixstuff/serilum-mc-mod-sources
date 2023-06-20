@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="youritemsaresafe"
-version="3.3"
+version="3.4"
 displayName="Your Items Are Safe"
 displayURL="https://curseforge.com/minecraft/mc-mods/your-items-are-safe"
 authors="Rick South"
@@ -22,6 +22,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.youritemsaresafe]]
     modId="collective"
     mandatory=true
-    versionRange="[6.57,)"
+    versionRange="[6.61,)"
     ordering="NONE"
     side="BOTH"

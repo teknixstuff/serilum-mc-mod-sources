@@ -25,7 +25,6 @@ import com.natamus.placeableblazerods.util.Reference;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -49,7 +48,7 @@ public class ModFabric implements ModInitializer {
 	}
 
 	private void registerBlocks() {
-		Constants.BLAZE_ROD_BLOCK = new BlazeRodBlock(BlockBehaviour.Properties.of(Material.DECORATION).strength(0.0F).lightLevel((p_235454_0_) -> { return 14; }).sound(SoundType.WOOD).noOcclusion());
+		Constants.BLAZE_ROD_BLOCK = new BlazeRodBlock(BlockBehaviour.Properties.of(Material.DECORATION).strength(0.0F).lightLevel((blockState) -> { return 14; }).sound(SoundType.WOOD).noOcclusion());
 
 		Registry.register(Registry.BLOCK, new ResourceLocation(Reference.MOD_ID, "blaze_rod"),  Constants.BLAZE_ROD_BLOCK);
 	}

@@ -31,7 +31,7 @@ public class AdvancementGetEvent {
 		
 		if (Util.takescreenshot) {
 			if (Util.cooldown < 0) {
-				Util.cooldown = 20;
+				Util.cooldown = ConfigHandler.takeScreenshotTickDelay;
 				return;
 			}
 			

@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="placeableblazerods"
-version="3.0"
+version="3.1"
 displayName="Placeable Blaze Rods"
 displayURL="https://curseforge.com/minecraft/mc-mods/placeable-blaze-rods"
 authors="Rick South"
@@ -22,6 +22,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.placeableblazerods]]
     modId="collective"
     mandatory=true
-    versionRange="[6.57,)"
+    versionRange="[6.61,)"
     ordering="NONE"
     side="BOTH"

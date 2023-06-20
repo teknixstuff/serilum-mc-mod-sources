@@ -48,7 +48,7 @@ public class ModFabric implements ModInitializer {
 	}
 
 	private void registerBlocks() {
-		Constants.BLAZE_ROD_BLOCK = new BlazeRodBlock(BlockBehaviour.Properties.of().strength(0.0F).lightLevel((p_235454_0_) -> { return 14; }).sound(SoundType.WOOD).noOcclusion());
+		Constants.BLAZE_ROD_BLOCK = new BlazeRodBlock(BlockBehaviour.Properties.of().strength(0.0F).lightLevel((blockState) -> { return 14; }).sound(SoundType.WOOD).noOcclusion());
 
 		Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Reference.MOD_ID, "blaze_rod"),  Constants.BLAZE_ROD_BLOCK);
 	}

@@ -18,7 +18,6 @@ package com.natamus.advancementscreenshot.events;
 
 import com.natamus.advancementscreenshot.config.ConfigHandler;
 import com.natamus.advancementscreenshot.util.Util;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
 
@@ -31,7 +30,7 @@ public class AdvancementGetEvent {
 		
 		if (Util.takescreenshot) {
 			if (Util.cooldown < 0) {
-				Util.cooldown = 20;
+				Util.cooldown = ConfigHandler.takeScreenshotTickDelay;
 				return;
 			}
 			

@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="advancementscreenshot"
-version="4.1"
+version="4.2"
 displayName="Advancement Screenshot"
 displayURL="https://curseforge.com/minecraft/mc-mods/advancement-screenshot"
 authors="Rick South"
@@ -22,6 +22,6 @@ If you would like to contribute too, check out https://ricksouth.com/donate. App
 [[dependencies.advancementscreenshot]]
     modId="collective"
     mandatory=true
-    versionRange="[6.57,)"
+    versionRange="[6.61,)"
     ordering="NONE"
     side="BOTH"

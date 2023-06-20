@@ -14,11 +14,10 @@
  * Thanks for looking at the source code! Hope it's of some use to your project. Happy modding!
  */
 
-package com.natamus.placeableblazerods.util;
+package com.natamus.placeableblazerods.data;
 
-public class Reference {
-	public static final String MOD_ID = "placeableblazerods";
-	public static final String NAME = "Placeable Blaze Rods";
-	public static final String VERSION = "3.1";
-	public static final String ACCEPTED_VERSIONS = "[1.18.2]";
+import com.natamus.placeableblazerods.blocks.BlazeRodBlock;
+
+public class Constants {
+    public static BlazeRodBlock BLAZE_ROD_BLOCK;
 }

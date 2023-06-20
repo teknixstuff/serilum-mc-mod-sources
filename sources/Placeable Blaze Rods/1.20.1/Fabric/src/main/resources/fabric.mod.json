@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "placeableblazerods",
-  "version": "3.0",
+  "version": "3.1",
 
   "name": "Placeable Blaze Rods",
   "description": "Makes blaze rods placeable as a block in the world, similar to end rods.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.20",
     "java": ">=17",
-    "collective": ">=6.57"
+    "collective": ">=6.61"
   },
 
   "custom": {

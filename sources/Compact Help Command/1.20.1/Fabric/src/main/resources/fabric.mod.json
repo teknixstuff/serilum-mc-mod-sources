@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "compacthelpcommand",
-  "version": "2.1",
+  "version": "2.3",
 
   "name": "Compact Help Command",
   "description": "Modifies the standard /help command to be colourful and have multiple pages.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.20",
     "java": ">=17",
-    "collective": ">=6.57"
+    "collective": ">=6.61"
   },
 
   "custom": {
