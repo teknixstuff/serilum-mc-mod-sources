@@ -16,18 +16,19 @@
 
 package com.natamus.areas;
 
-import com.natamus.areas.cmds.CommandAreas;
 import com.natamus.areas.events.AreaEvent;
 import com.natamus.areas.util.Reference;
 import com.natamus.collective.check.RegisterMod;
-import com.natamus.collective.fabric.callbacks.CollectivePlayerEvents;
+import com.natamus.collective.fabric.callbacks.CollectiveBlockEvents;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+
+import java.util.EnumSet;
 
 public class ModFabric implements ModInitializer {
 	
@@ -42,21 +43,14 @@ public class ModFabric implements ModInitializer {
 	}
 
 	private void loadEvents() {
-		ServerTickEvents.START_SERVER_TICK.register((MinecraftServer server) -> {
-			AreaEvent.onServerTick(server);
+		ServerTickEvents.START_WORLD_TICK.register((ServerLevel serverLevel) -> {
+			AreaEvent.onWorldTick(serverLevel);
 		});
 
-		CollectivePlayerEvents.PLAYER_TICK.register((ServerLevel world, ServerPlayer player) -> {
-			AreaEvent.onPlayerTick(world, player);
+		CollectiveBlockEvents.NEIGHBOUR_NOTIFY.register((Level level, BlockPos pos, BlockState state, EnumSet<Direction> notifiedSides, boolean forceRedstoneUpdate) -> {
+			AreaEvent.onNeighbourNotice(level, pos, state, notifiedSides, forceRedstoneUpdate);
+			return true;
 		});
-
-		PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, entity) -> {
-			AreaEvent.onSignBreak(world, player, pos, state, entity);
-		});
-
-		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            CommandAreas.register(dispatcher);
-        });
 	}
 
 	private static void setGlobalConstants() {

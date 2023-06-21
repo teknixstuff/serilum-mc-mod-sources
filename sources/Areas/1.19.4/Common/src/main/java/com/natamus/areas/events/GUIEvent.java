@@ -17,45 +17,34 @@
 package com.natamus.areas.events;
 
 import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.natamus.areas.config.ConfigHandler;
-import net.minecraft.client.Minecraft;
+import com.natamus.areas.data.ClientConstants;
+import com.natamus.areas.data.GUIVariables;
 import net.minecraft.client.gui.Font;
-
-import java.awt.*;
-import java.util.UUID;
+import net.minecraft.util.FastColor;
 
 public class GUIEvent {
-	public static String hudmessage = "";
-	public static String rgb = "";
-	public static int gopacity = 0;
-	
-	private static String currentmessage = "";
-	private static String currentrandom = "";
-	
-	private static final Minecraft mc = Minecraft.getInstance();
-
-	public static void renderOverlay(PoseStack posestack, float tickDelta){
-		if (!hudmessage.equals("")) {
-			Font fontRender = mc.font;
-			Window scaled = mc.getWindow();
+	public static void renderOverlay(PoseStack poseStack, float tickDelta) {
+		if (!GUIVariables.hudMessage.equals("")) {
+			Font font = ClientConstants.mc.font;
+			Window scaled = ClientConstants.mc.getWindow();
 			int width = scaled.getGuiScaledWidth();
 
-			double stringWidth = fontRender.width(hudmessage);
+			double stringWidth = font.width(GUIVariables.hudMessage);
 			
-			if (gopacity <= 0) {
-				gopacity = 0;
-				hudmessage = "";
+			if (GUIVariables.guiOpacity <= 0) {
+				GUIVariables.guiOpacity = 0;
+				GUIVariables.hudMessage = "";
 				return;
 			}
-			else if (gopacity > 255) {
-				gopacity = 255;
+			else if (GUIVariables.guiOpacity > 255) {
+				GUIVariables.guiOpacity = 255;
 			}
-			
-			Color colour = new Color(ConfigHandler.HUD_RGB_R, ConfigHandler.HUD_RGB_G, ConfigHandler.HUD_RGB_B, gopacity);
-			if (!rgb.equals("")) {
-				String[] rgbs = rgb.split(",");
+
+			int colour = FastColor.ARGB32.color(GUIVariables.guiOpacity, ConfigHandler.HUD_RGB_R, ConfigHandler.HUD_RGB_G, ConfigHandler.HUD_RGB_B);
+			if (!GUIVariables.rgb.equals("")) {
+				String[] rgbs = GUIVariables.rgb.split(",");
 				if (rgbs.length == 3) {
 					try {
 						int r = Integer.parseInt(rgbs[0]);
@@ -82,63 +71,52 @@ public class GUIEvent {
 							b = 255;
 						}
 						
-						colour = new Color(r, g, b, gopacity);
+						colour = FastColor.ARGB32.color(GUIVariables.guiOpacity, r, g, b);
 					}
 					catch(IllegalArgumentException ex) {
-						rgb = "";
-						hudmessage = "";
+						GUIVariables.rgb = "";
+						GUIVariables.hudMessage = "";
 					}
 				}
 			}
 
-			posestack.pushPose();
-			
-			RenderSystem.enableBlend(); // GL11.glEnable(GL11.GL_BLEND);
-			RenderSystem.blendFunc(0x302, 0x303); //GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			poseStack.pushPose();
 			
 			float modifier = ((float)ConfigHandler.HUD_FontSizeScaleModifier + 0.5F);
-			posestack.scale(modifier, modifier, modifier);
-			
-			fontRender.draw(posestack, hudmessage, (int)(Math.round((width / 2F) / modifier) - stringWidth/2), ConfigHandler.HUDMessageHeightOffset, colour.getRGB());
-			
-			posestack.popPose();
-			
-			if (!currentmessage.equals(hudmessage)) {
-				currentmessage = hudmessage;
-				setHUDFade(UUID.randomUUID().toString());
-			}
-		}
-	}
-	
-	public static void setHUDFade(String random) {
-		currentrandom = random;
-		
-		new Thread(() -> {
-			try  { Thread.sleep( ConfigHandler.HUDMessageFadeDelayMs ); }
-			catch (InterruptedException ignored)  {}
+			poseStack.scale(modifier, modifier, modifier);
 
-			if (currentrandom.equals(random)) {
-				startFadeOut(random);
+			int x = (int)(Math.round((width / 2F) / modifier) - stringWidth / 2);
+			if (ConfigHandler.showHUDTextShadow) {
+				font.drawShadow(poseStack, GUIVariables.hudMessage, x, ConfigHandler.HUDMessageHeightOffset, colour);
 			}
-		}).start();
+			else {
+				font.draw(poseStack, GUIVariables.hudMessage, x, ConfigHandler.HUDMessageHeightOffset, colour);
+			}
+
+			poseStack.popPose();
+			
+			if (!GUIVariables.currentMessage.equals(GUIVariables.hudMessage)) {
+				GUIVariables.currentMessage = GUIVariables.hudMessage;
+				GUIVariables.ticksLeftBeforeFade = ConfigHandler.HUDMessageFadeDelayMs/50;
+			}
+		}
 	}
-	
-	public static void startFadeOut(String random) {
-		if (!currentrandom.equals(random)) {
-			return;
+
+	public static void tickHUDFade() {
+		if (GUIVariables.ticksLeftBeforeFade == 0) {
+			GUIVariables.ticksLeftBeforeFade = -1;
 		}
-		
-		if (gopacity < 0) {
-			hudmessage = "";
-			rgb = "";
-			return;
+		else if (GUIVariables.ticksLeftBeforeFade > 0) {
+			GUIVariables.ticksLeftBeforeFade -= 1;
 		}
-		
-		gopacity -= 10;
-		new Thread(() -> {
-			try  { Thread.sleep( 50 ); }
-			catch (InterruptedException ignored)  {}
-			startFadeOut(random);
-		}).start();
+		else if (!GUIVariables.hudMessage.equals("")) {
+			if (GUIVariables.guiOpacity < 0) {
+				GUIVariables.hudMessage = "";
+				GUIVariables.rgb = "";
+				return;
+			}
+
+			GUIVariables.guiOpacity -= 5;
+		}
 	}
 }

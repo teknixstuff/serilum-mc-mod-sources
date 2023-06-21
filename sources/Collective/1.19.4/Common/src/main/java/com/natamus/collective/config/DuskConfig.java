@@ -238,7 +238,6 @@ public abstract class DuskConfig {
 	private static void textField(String modid, EntryInfo info, Function<String,Number> f, Pattern pattern, double min, double max, boolean cast) {
 		boolean isNumber = pattern != null;
 		info.widget = (BiFunction<EditBox, Button, Predicate<String>>) (t, b) -> s -> {
-			s = s.trim();
 			if (!(s.isEmpty() || !isNumber || pattern.matcher(s).matches())) return false;
 
 			Number value = 0;

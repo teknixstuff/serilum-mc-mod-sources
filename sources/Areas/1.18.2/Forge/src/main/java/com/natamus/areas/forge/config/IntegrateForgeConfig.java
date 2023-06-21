@@ -16,8 +16,8 @@
 
 package com.natamus.areas.forge.config;
 
-import com.natamus.collective.config.DuskConfig;
 import com.natamus.areas.util.Reference;
+import com.natamus.collective.config.DuskConfig;
 import net.minecraftforge.client.ConfigGuiHandler;
 import net.minecraftforge.fml.ModLoadingContext;
 

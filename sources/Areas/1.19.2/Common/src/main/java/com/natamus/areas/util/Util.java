@@ -17,107 +17,102 @@
 package com.natamus.areas.util;
 
 import com.natamus.areas.config.ConfigHandler;
+import com.natamus.areas.data.AreaVariables;
+import com.natamus.areas.data.ClientConstants;
+import com.natamus.areas.data.GUIVariables;
+import com.natamus.areas.functions.ZoneFunctions;
 import com.natamus.areas.objects.AreaObject;
-import com.natamus.areas.objects.Variables;
-import com.natamus.areas.services.Services;
 import com.natamus.collective.data.GlobalVariables;
-import com.natamus.collective.functions.*;
+import com.natamus.collective.functions.HashMapFunctions;
+import com.natamus.collective.functions.SignFunctions;
+import com.natamus.collective.functions.StringFunctions;
+import com.natamus.collective.functions.TileEntityFunctions;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.SignEditScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.StandingSignBlock;
-import net.minecraft.world.level.block.WallSignBlock;
+import net.minecraft.world.level.block.SignBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 public class Util {
-	private static final List<String> zoneprefixes = new ArrayList<String>(Arrays.asList("[na]", "[area]", "[region]", "[zone]"));
-
-	public static AreaObject getAreaSign(Level level, BlockPos signpos) {
-		if (level.isClientSide) {
+	public static AreaObject getAreaSign(Level level, BlockPos signPos) {
+		BlockEntity blockEntity = level.getBlockEntity(signPos);
+		if (!(blockEntity instanceof SignBlockEntity)) {
 			return null;
 		}
 
-		HashMap<BlockPos, AreaObject> hm = HashMapFunctions.computeIfAbsent(Variables.areasperlevel, level, k -> new HashMap<BlockPos, AreaObject>());
-		if (hm != null) {
-			if (hm.containsKey(signpos)) {
-				return hm.get(signpos);
-			}
-		}
-
-		BlockEntity te = level.getBlockEntity(signpos);
-		if (te == null) {
-			return null;
-		}
-
-		SignBlockEntity signentity;
-		try {
-			signentity = (SignBlockEntity)te;
-		}
-		catch (ClassCastException ex) {
-			return null;
-		}
-
-
-		StringBuilder areaname = new StringBuilder();
+		SignBlockEntity signBlockEntity = (SignBlockEntity)blockEntity;
+		
+		StringBuilder areaNameBuilder = new StringBuilder();
 		String rgb = "";
-		String zoneprefix = "Area";
-		int radius = 0;
+		String zonePrefix = "Area";
+		int radius = ConfigHandler.defaultAreaRadius;
 		boolean customrgb = false;
 
-		List<String> signlines = SignFunctions.getSignText(signentity);
+		List<String> signLines = SignFunctions.getSignText(signBlockEntity);
+
+		HashMap<BlockPos, AreaObject> areaObjectHashMap = HashMapFunctions.computeIfAbsent(AreaVariables.areaObjects, level, k -> new HashMap<BlockPos, AreaObject>());
+		if (areaObjectHashMap != null) {
+			if (areaObjectHashMap.containsKey(signPos)) {
+				AreaObject cachedAreaObject = areaObjectHashMap.get(signPos);
+				if (cachedAreaObject.signLines.equals(signLines)) {
+					return cachedAreaObject;
+				}
+				else {
+					AreaVariables.areaObjects.get(level).remove(signPos);
+				}
+			}
+		}
 
 		int i = -1;
-		for (String line : signlines) {
+		for (String line : signLines) {
 			i += 1;
-			if (i == 0 && !hasZonePrefix(line)) {
+			if (i == 0 && !ZoneFunctions.hasZonePrefix(line)) {
 				return null;
 			}
-
+			
 			if (line.length() < 1) {
 				continue;
 			}
-
-			for (String zpx : zoneprefixes) {
-				if (line.toLowerCase().contains(zpx)) {
-					zoneprefix = StringFunctions.capitalizeFirst(zpx.replace("[", "").replace("]", ""));
-					break;
-				}
-			}
-
-			Integer possibleradius = getZonePrefixgetRadius(line.toLowerCase());
+			
+			Integer possibleradius = ZoneFunctions.getZonePrefixgetRadius(line.toLowerCase());
 			if (possibleradius >= 0) {
 				radius = possibleradius;
 				continue;
 			}
 
-			String possiblergb = getZoneRGB(line.toLowerCase());
+			String possiblergb = ZoneFunctions.getZoneRGB(line.toLowerCase());
 			if (!possiblergb.equals("")) {
 				rgb = possiblergb;
-				customrgb = true;
 				continue;
 			}
-
-			if (hasZonePrefix(line)) {
+			
+			if (ZoneFunctions.hasZonePrefix(line)) {
 				continue;
 			}
-
-			if (!areaname.toString().equals("")) {
-				areaname.append(" ");
+			
+			if (!areaNameBuilder.toString().equals("")) {
+				areaNameBuilder.append(" ");
 			}
-			areaname.append(line);
+			areaNameBuilder.append(line);
 		}
 
+		String areaName = areaNameBuilder.toString();
+
+		return new AreaObject(level, signPos, areaName, radius, rgb, signLines);
+	}
+
+	public static void updateAreaSign(Level level, BlockPos signPos, SignBlockEntity signBlockEntity, List<String> signLines, String areaName, String zonePrefix, String rgb, int radius, boolean customrgb) {
 		boolean setradius = false;
 		int maxradius = ConfigHandler.radiusAroundPlayerToCheckForSigns;
 		if (radius > maxradius) {
@@ -125,171 +120,151 @@ public class Util {
 			setradius = true;
 		}
 
-		boolean updatesign = false;
-		if (areaname.toString().trim().equals("")) {
-			if (ConfigHandler.giveUnnamedAreasRandomName) {
-				List<String> newsigncontentlist = new ArrayList<String>();
+		int i;
+		StringBuilder areaNameBuilder = new StringBuilder();
 
-				newsigncontentlist.add("[" + zoneprefix + "] " + radius);
-				if (customrgb) {
-					newsigncontentlist.add("[RGB] " + rgb);
-				}
-				else {
-					newsigncontentlist.add("");
-				}
+		boolean shouldUpdateSign = false;
+		if (areaName.trim().equals("")) {
+			List<String> newSignContentList = new ArrayList<String>();
 
-				areaname = new StringBuilder();
-				String randomname = getRandomAreaName();
-				for (String word : randomname.split(" ")) {
-					if (newsigncontentlist.size() == 4) {
-						break;
-					}
-					newsigncontentlist.add(word);
-					if (!areaname.toString().equals("")) {
-						areaname.append(" ");
-					}
-					areaname.append(word);
-				}
-
-				i = 0;
-				for (String line : newsigncontentlist) {
-					signentity.setMessage(i, Component.literal(line));
-					i+=1;
-				}
-
-				updatesign = true;
+			newSignContentList.add("[" + zonePrefix + "] " + radius);
+			if (customrgb) {
+				newSignContentList.add("[RGB] " + rgb);
 			}
 			else {
-				areaname = new StringBuilder("Unnamed area");
+				newSignContentList.add("");
 			}
+
+			if (ConfigHandler.giveUnnamedAreasRandomName) {
+				String randomname = getRandomAreaName();
+				for (String word : randomname.split(" ")) {
+					if (newSignContentList.size() == 8) {
+						break;
+					}
+					newSignContentList.add(word);
+				}
+			}
+			else {
+				newSignContentList.add("Unnamed area");
+			}
+
+			i = 0;
+			for (String line : newSignContentList) {
+				signBlockEntity.setMessage(i, Component.literal(line));
+				i+=1;
+			}
+
+			shouldUpdateSign = true;
 		}
 
-		if (!updatesign) {
+		if (!shouldUpdateSign) {
 			if (radius == 0 || setradius) {
 				i = 0;
-				for (String line : signlines) {
+				for (String line : signLines) {
 					if (i == 0) {
-						line = "[" + zoneprefix + "] " + radius;
+						line = "[" + zonePrefix + "] " + radius;
 					}
 
-					signentity.setMessage(i, Component.literal(line));
+					signBlockEntity.setMessage(i, Component.literal(line));
 					i+=1;
 				}
 
-				updatesign = true;
+				shouldUpdateSign = true;
 			}
 		}
 
-		if (updatesign) {
-			TileEntityFunctions.updateTileEntity(level, signpos, signentity);
+		if (shouldUpdateSign) {
+			TileEntityFunctions.updateTileEntity(level, signPos, signBlockEntity);
 		}
-		if (radius < 0) {
-			return null;
+	}
+
+	public static void enterArea(AreaObject areaObject, Player player) {
+		if (playerIsEditingASign()) {
+			return;
 		}
 
-		return new AreaObject(level, signpos, areaname.toString(), radius, rgb);
-	}
-	
-	private static boolean hasZonePrefix(String line) {
-		for (String prefix : zoneprefixes) {
-			if (line.toLowerCase().startsWith(prefix)) {
-				return true;
-			}
+		AreaObject currentAreaObject = getAreaSign(areaObject.level, areaObject.location);
+		if (currentAreaObject.signLines != areaObject.signLines) {
+			AreaVariables.enteredAreas.remove(areaObject);
+			AreaVariables.areaObjects.get(areaObject.level).put(areaObject.location, currentAreaObject);
+			areaObject = currentAreaObject;
 		}
-		return false;
-	}
-	
-	public static boolean hasZonePrefix(SignBlockEntity signentity) {
-		int i = -1;
-		for (String line : SignFunctions.getSignText(signentity)) {
-			i += 1;
 
-			if (i == 0 && hasZonePrefix(line)) {
-				return true;
-			}
-			break;
+		boolean shouldMessage = shouldMessagePlayer(areaObject, true);
+
+		if (!AreaVariables.enteredAreas.contains(areaObject)) {
+			AreaVariables.enteredAreas.add(areaObject);
 		}
 		
-		return false;
+		if (shouldMessage) {
+			String message = ConfigHandler.enterPrefix + areaObject.areaName + ConfigHandler.enterSuffix;
+			areaChangeMessage(player, message, areaObject.customRGB);
+		}
 	}
-	
-	private static Integer getZonePrefixgetRadius(String line) {
-		for (String prefix : zoneprefixes) {
-			if (line.startsWith(prefix)) {
-				String[] linespl = line.split("]");
-				if (linespl.length < 2) {
-					return -1;
-				}
-				
-				String rest = linespl[1].trim();
-				if (NumberFunctions.isNumeric(rest)) {
-					return Integer.parseInt(rest);
-				}
+	public static void exitArea(AreaObject areaObject, Player player) {
+		AreaVariables.enteredAreas.remove(areaObject);
+
+		boolean shouldMessage = shouldMessagePlayer(areaObject, false);
+
+		if (shouldMessage) {
+			String message = ConfigHandler.leavePrefix + areaObject.areaName + ConfigHandler.leaveSuffix;
+			areaChangeMessage(player, message, areaObject.customRGB);
+		}
+	}
+
+	public static void removedArea(AreaObject areaObject, Player player) {
+		AreaVariables.areaObjects.get(areaObject.level).remove(areaObject.location);
+		AreaVariables.enteredAreas.remove(areaObject);
+
+		boolean shouldMessage = shouldMessagePlayer(areaObject, false);
+
+		if (shouldMessage) {
+			String message = "The area " + areaObject.areaName + " no longer exists.";
+			areaChangeMessage(player, message, areaObject.customRGB);
+		}
+	}
+
+	public static boolean playerIsEditingASign() {
+		Screen screen = ClientConstants.mc.screen;
+		return screen instanceof SignEditScreen;
+	}
+
+	public static boolean shouldMessagePlayer(AreaObject areaObject, boolean isEntering) {
+		if (areaObject.areaName.equals("")) {
+			return false;
+		}
+
+		for (AreaObject enteredAreaObject : AreaVariables.enteredAreas) {
+			if (enteredAreaObject.equals(areaObject)) {
+				continue;
+			}
+
+			if (areaObject.signLines.equals(enteredAreaObject.signLines)) {
+				return false;
 			}
 		}
-		
-		return -1;
-	}
-	
-	private static String getZoneRGB(String line) {
-		String prefix = "[rgb]";
-		if (line.startsWith(prefix)) {
-			String[] linespl = line.split("]");
-			if (linespl.length < 2) {
-				return "";
-			}
-			
-			String rest = linespl[1].replace(" ", "");
-			String[] restspl = rest.split(",");
-			if (restspl.length != 3) {
-				return "";
-			}
-			
-			for (String value : restspl) {
-				if (!NumberFunctions.isNumeric(value)) {
-					return "";
-				}
-			}	
-			return rest;
+
+		if (isEntering) {
+			return ConfigHandler.showEnterMessage;
 		}
-		return "";
+
+		return ConfigHandler.showLeaveMessage;
 	}
-	
-	public static void enterArea(AreaObject ao, Player player) {
-		enterArea(ao, player, true);
-	}
-	public static void enterArea(AreaObject ao, Player player, boolean shouldmessage) {
-		if (!ao.containsplayers.contains(player)) {
-			ao.containsplayers.add(player);
-		}
-		
-		if (shouldmessage) {
-			String message = ConfigHandler.joinPrefix + ao.areaname + ConfigHandler.joinSuffix;
-			areaChangeMessage(player, message, ao.customrgb);
-		}
-	}
-	public static void exitArea(AreaObject ao, Player player) {
-		exitArea(ao, player, true);
-	}
-	public static void exitArea(AreaObject ao, Player player, boolean shouldmessage) {
-		ao.containsplayers.remove(player);
-		
-		if (shouldmessage) {
-			String message = ConfigHandler.leavePrefix + ao.areaname + ConfigHandler.leaveSuffix;
-			areaChangeMessage(player, message, ao.customrgb);
-		}
-	}
+
 	public static void areaChangeMessage(Player player, String message, String rgb) {
 		if (ConfigHandler.sendChatMessages) {
 			StringFunctions.sendMessage(player, message, ChatFormatting.DARK_GREEN);
 		}
 		if (ConfigHandler.showHUDMessages) {
-			Services.PACKETTOCLIENT.createGUIMessageBuffer((ServerPlayer)player, message, rgb);
+			GUIVariables.ticksLeftBeforeFade = ConfigHandler.HUDMessageFadeDelayMs/50;
+			GUIVariables.hudMessage = message;
+			GUIVariables.rgb = rgb;
+			GUIVariables.guiOpacity = 255;
 		}		
 	}
 	
 	public static Boolean isSignBlock(Block block) {
-		return block instanceof StandingSignBlock || block instanceof WallSignBlock;
+		return block instanceof SignBlock;
 	}
 	public static Boolean isSignItem(Item item) {
 		return isSignBlock(Block.byItem(item));

@@ -17,10 +17,14 @@
 package com.natamus.areas;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.natamus.areas.events.ClientEvent;
 import com.natamus.areas.events.GUIEvent;
-import com.natamus.areas.fabric.network.PacketToClientShowGUI;
+import com.natamus.areas.fabric.cmds.FabricClientCommandAreas;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.minecraft.client.Minecraft;
 
 public class ModFabricClient implements ClientModInitializer {
 	@Override
@@ -29,7 +33,13 @@ public class ModFabricClient implements ClientModInitializer {
 	}
 	
 	private void registerEvents() {
-		PacketToClientShowGUI.registerHandle();
+		ClientTickEvents.START_CLIENT_TICK.register((Minecraft mc) -> {
+			ClientEvent.onClientTick(mc);
+		});
+
+		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+			FabricClientCommandAreas.register(dispatcher);
+		});
 
 		HudRenderCallback.EVENT.register((PoseStack poseStack, float tickDelta) -> {
 			GUIEvent.renderOverlay(poseStack, tickDelta);

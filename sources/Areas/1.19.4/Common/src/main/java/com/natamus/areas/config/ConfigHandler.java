@@ -16,8 +16,8 @@
 
 package com.natamus.areas.config;
 
-import com.natamus.collective.config.DuskConfig;
 import com.natamus.areas.util.Reference;
+import com.natamus.collective.config.DuskConfig;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -28,13 +28,17 @@ public class ConfigHandler extends DuskConfig {
 
 	@Entry public static boolean giveUnnamedAreasRandomName = true;
 	@Entry(min = 0, max = 1000) public static int radiusAroundPlayerToCheckForSigns = 100;
+	@Entry(min = 0, max = 1000) public static int defaultAreaRadius = 30;
 	@Entry public static boolean sendChatMessages = false;
 	@Entry public static boolean showHUDMessages = true;
-	@Entry public static String joinPrefix = "Entering ";
-	@Entry public static String joinSuffix = ".";
+	@Entry public static boolean showEnterMessage = true;
+	@Entry public static String enterPrefix = "Entering ";
+	@Entry public static String enterSuffix = ".";
+	@Entry public static boolean showLeaveMessage = true;
 	@Entry public static String leavePrefix = "Leaving ";
 	@Entry public static String leaveSuffix = ".";
-	@Entry public static boolean HUDOnlyAreaName = false;
+
+	@Entry public static boolean showHUDTextShadow = true;
 	@Entry(min = 100, max = 360000) public static int HUDMessageFadeDelayMs = 4000;
 	@Entry(min = 0, max = 3000) public static int HUDMessageHeightOffset = 10;
 	@Entry(min = 0, max = 10.0) public static double HUD_FontSizeScaleModifier = 1.0;
@@ -49,17 +53,26 @@ public class ConfigHandler extends DuskConfig {
 		configMetaData.put("radiusAroundPlayerToCheckForSigns", Arrays.asList(
 			"The radius in blocks around the player in which to check for area signs."
 		));
+		configMetaData.put("defaultAreaRadius", Arrays.asList(
+			"The default radius for areas when it's left empty on the sign. It will be added automatically."
+		));
 		configMetaData.put("sendChatMessages", Arrays.asList(
 			"When enabled, sends the player the area notifications in chat."
 		));
 		configMetaData.put("showHUDMessages", Arrays.asList(
 			"When enabled, sends the player the area notifications in the HUD on screen."
 		));
-		configMetaData.put("joinPrefix", Arrays.asList(
+		configMetaData.put("showEnterMessage", Arrays.asList(
+			"Whether a message should be sent when a player enters an area."
+		));
+		configMetaData.put("enterPrefix", Arrays.asList(
 			"The prefix of the message whenever a player enters an area."
 		));
-		configMetaData.put("joinSuffix", Arrays.asList(
+		configMetaData.put("enterSuffix", Arrays.asList(
 			"The suffix of the message whenever a player enters an area."
+		));
+		configMetaData.put("showLeaveMessage", Arrays.asList(
+			"Whether a message should be sent when a player leaves an area."
 		));
 		configMetaData.put("leavePrefix", Arrays.asList(
 			"The prefix of the message whenever a player leaves an area."
@@ -67,8 +80,8 @@ public class ConfigHandler extends DuskConfig {
 		configMetaData.put("leaveSuffix", Arrays.asList(
 			"The suffix of the message whenever a player leaves an area."
 		));
-		configMetaData.put("HUDOnlyAreaName", Arrays.asList(
-			"When enabled, only shows the areaname in the HUD. When disabled, the prefixes and suffices will also be used."
+		configMetaData.put("showHUDTextShadow", Arrays.asList(
+			"Whether the text shown should be drawn with a shadow."
 		));
 		configMetaData.put("HUDMessageFadeDelayMs", Arrays.asList(
 			"The delay in ms after which the HUD message should fade out."
