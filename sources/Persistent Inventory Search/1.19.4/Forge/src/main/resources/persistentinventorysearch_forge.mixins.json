@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.natamus.persistentinventorysearch.forge.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "persistentinventorysearch_forge.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+    "CreativeModeInventoryScreenMixin"
+  ],
+  "server": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -33,7 +33,10 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
 
 public class DoorEvent {
 	private static final List<BlockPos> prevpoweredpos = new ArrayList<BlockPos>();
@@ -94,11 +97,9 @@ public class DoorEvent {
 		}
 
 		int radius = block instanceof ButtonBlock ? 2 : 1;
-		Iterator<BlockPos> blocksaround = BlockPos.betweenClosedStream(pos.getX()-radius, pos.getY(), pos.getZ()-radius, pos.getX()+radius, pos.getY()+1, pos.getZ()+radius).iterator();
 
 		BlockPos doorpos = null;
-		while (blocksaround.hasNext()) {
-			BlockPos npos = blocksaround.next().immutable();
+		for (BlockPos npos : BlockPos.betweenClosed(pos.getX()-radius, pos.getY()-1, pos.getZ()-radius, pos.getX()+radius, pos.getY()+1, pos.getZ()+radius)) {
 			BlockState ostate = world.getBlockState(npos);
 			if (Util.isDoorBlock(ostate)) {
 				doorpos = npos;

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "doubledoors",
-  "version": "4.5",
+  "version": "5.0",
 
   "name": "Double Doors",
   "description": "Adds the ability for identical double doors, trapdoors and fence gates to be opened simultaneously via click or pressure plates and buttons.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.19",
     "java": ">=17",
-    "collective": ">=6.53"
+    "collective": ">=6.62"
   },
 
   "custom": {
@@ -46,15 +46,13 @@
 	  " Alister",
 	  " aternosorg",
 	  " Cherriesaurus",
+	  " FireStriker",
 	  " Greg Johnson",
 	  " Kreezxil",
 	  " Michael W. S.",
 	  " Mir3JonCZ",
-	  " nbtc971",
 	  " Rebecca Hb.",
-	  " Robert Gilbert",
 	  " Shana Gitnick",
-	  " Sija",
 	  " silver Bowsman",
 	  " Tyler Behl"
   ]

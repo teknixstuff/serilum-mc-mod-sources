@@ -94,11 +94,9 @@ public class DoorEvent {
 		}
 
 		int radius = block instanceof ButtonBlock ? 2 : 1;
-		Iterator<BlockPos> blocksaround = BlockPos.betweenClosedStream(pos.getX()-radius, pos.getY(), pos.getZ()-radius, pos.getX()+radius, pos.getY()+1, pos.getZ()+radius).iterator();
 
 		BlockPos doorpos = null;
-		while (blocksaround.hasNext()) {
-			BlockPos npos = blocksaround.next().immutable();
+		for (BlockPos npos : BlockPos.betweenClosed(pos.getX()-radius, pos.getY()-1, pos.getZ()-radius, pos.getX()+radius, pos.getY()+1, pos.getZ()+radius)) {
 			BlockState ostate = world.getBlockState(npos);
 			if (Util.isDoorBlock(ostate)) {
 				doorpos = npos;
