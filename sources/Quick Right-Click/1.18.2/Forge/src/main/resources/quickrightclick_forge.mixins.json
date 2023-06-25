@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.natamus.quickrightclick.forge.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "quickrightclick_forge.refmap.json",
+  "mixins": [
+    "LivingEntityMixin",
+    "ServerPlayerMixin",
+    "ShulkerBoxBlockEntityMixin"
+  ],
+  "client": [
+  ],
+  "server": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
