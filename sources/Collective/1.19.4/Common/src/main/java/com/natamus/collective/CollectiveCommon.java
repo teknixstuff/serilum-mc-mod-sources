@@ -27,5 +27,11 @@ public class CollectiveCommon {
 
         CollectiveConfigHandler.initConfig();
         GlobalVariables.generateHashMaps();
+
+		loadEvents();
     }
+
+	public static void loadEvents() {
+
+	}
 }

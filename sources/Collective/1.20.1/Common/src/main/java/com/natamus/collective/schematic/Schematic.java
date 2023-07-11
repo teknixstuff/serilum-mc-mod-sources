@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@SuppressWarnings("deprecated")
 public class Schematic {
 	private int size;
 	private short width;

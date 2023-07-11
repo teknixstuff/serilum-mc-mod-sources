@@ -1,16 +1,19 @@
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' } // mixin
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7.+' // mixin
     }
 }
 apply plugin: 'java'
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+apply plugin: 'org.spongepowered.mixin' // mixin
 
 archivesBaseName = "${mod_name}-forge-${minecraft_version}"
 
@@ -22,6 +25,7 @@ minecraft {
     runs {
         client {
             workingDirectory project.file('run')
+            args "-mixin.config=collective_forge.mixins.json", 
             ideaModule "${rootProject.name}.${project.name}.main"
             taskName 'Client'
             property 'mixin.env.remapRefMap', 'true'
@@ -36,6 +40,7 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
+            args "-mixin.config=collective_forge.mixins.json", 
             ideaModule "${rootProject.name}.${project.name}.main"
             taskName 'Server'
             property 'mixin.env.remapRefMap', 'true'
@@ -50,6 +55,7 @@ minecraft {
 
         data {
             workingDirectory project.file('run')
+            args "-mixin.config=collective_forge.mixins.json", 
             ideaModule "${rootProject.name}.${project.name}.main"
             args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             taskName 'Data'
@@ -69,8 +75,20 @@ sourceSets.main.resources.srcDir 'src/generated/resources'
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor' // mixin
+
     compileOnly project(":Common")
 }
+
+mixin { // mixin
+    add sourceSets.main, "collective_forge.refmap.json" // mixin
+    add sourceSets.main, "collective_forge.refmap.json" // mixin
+    config 'collective_forge.mixins.json' // mixin
+    config 'collective_forge.mixins.json' // mixin
+    
+    debug.verbose = true // mixin
+    debug.export = true // mixin
+} // mixin
 
 tasks.withType(JavaCompile) {
     source(project(":Common").sourceSets.main.allSource)
