@@ -4,7 +4,8 @@
   "package": "com.natamus.grabbymobs.fabric.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MobMixin"
+    "MobMixin",
+    "PiglinBruteMixin"
   ],
   "client": [
   ],

@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="grabbymobs"
-version="1.0"
+version="1.1"
 displayName="Grabby Mobs"
 displayURL="https://curseforge.com/minecraft/mc-mods/grabby-mobs"
 authors="Rick South"

@@ -6,8 +6,7 @@
   "refmap": "grabbymobs_forge.refmap.json",
   "mixins": [
     "MobMixin",
-    "PiglinBruteMixin",
-    "PillagerMixin"
+    "PiglinBruteMixin"
   ],
   "client": [
   ],
