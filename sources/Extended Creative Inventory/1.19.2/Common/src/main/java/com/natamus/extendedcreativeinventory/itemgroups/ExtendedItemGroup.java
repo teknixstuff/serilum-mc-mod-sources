@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 public class ExtendedItemGroup extends CreativeModeTab {
 
 	public ExtendedItemGroup(int index, String label) {
-		super(index == -1 ? ((CreativeModeTab) (Object) this).TABS.length : index, label);
+		super(index == -1 ? CreativeModeTab.TABS.length : index, label);
 	}
 
 	@Override
